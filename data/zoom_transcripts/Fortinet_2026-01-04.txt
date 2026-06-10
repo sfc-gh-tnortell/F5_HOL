@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Robert Chen: Thanks for joining, John Murphy. Good to connect with you and the Fortinet team.
+
+00:00:38.945 --> 00:00:44.500
+John Murphy: Good to see you both. Robert Chen, Priya Sharma - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Robert Chen: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:11.957
+John Murphy: We deployed XC App Connect across three clouds in two weeks. The multi-cloud networking story is genuinely differentiated.
+
+00:01:11.957 --> 00:01:19.352
+Robert Chen: That's great to hear! We love when the technology delivers real value.
+
+00:01:19.352 --> 00:01:44.735
+John Murphy: Absolutely. In fact, that success is why we're looking at expanding. The security team wants to extend WAF coverage to our new microservices platform.
+
+00:01:44.735 --> 00:01:59.106
+John Murphy: The CFO is pushing for multi-year agreements across all vendors to lock in pricing. What kind of terms can you offer on a 3-year for Distributed Cloud?
+
+00:01:59.106 --> 00:02:27.807
+Robert Chen: Let me connect you with our finance team. We have some creative options around payment terms and ramp structures that might help with the timing.
+
+00:02:27.807 --> 00:02:35.330
+Robert Chen: This has been really productive. Let me summarize the action items.
+
+00:02:35.330 --> 00:02:50.198
+Robert Chen: I'll loop in our executive sponsor for a joint roadmap session. We want to make sure Fortinet has early access to what's coming.
+
+00:02:50.198 --> 00:02:55.831
+John Murphy: Appreciate it. Let's keep the momentum going.
+
+00:02:55.831 --> 00:03:00.679
+Robert Chen: Thank you, John Murphy. Talk soon.
+

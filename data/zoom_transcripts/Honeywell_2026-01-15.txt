@@ -1,0 +1,32 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Christopher Davis: Thanks for joining, Karen Zhang. Good to connect with you and the Honeywell team.
+
+00:00:38.945 --> 00:00:44.500
+Karen Zhang: Good to see you both. Christopher Davis, Emily Rodriguez - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Christopher Davis: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:11.957
+Karen Zhang: We deployed XC App Connect across three clouds in two weeks. The multi-cloud networking story is genuinely differentiated.
+
+00:01:11.957 --> 00:01:19.352
+Christopher Davis: That's great to hear! We love when the technology delivers real value.
+
+00:01:19.352 --> 00:01:49.597
+Karen Zhang: Absolutely. In fact, that success is why we're looking at expanding. Bot Defense has proven itself on our main site. Now we want it across all customer-facing properties.
+
+00:01:49.597 --> 00:01:57.914
+Christopher Davis: This has been really productive. Let me summarize the action items.
+
+00:01:57.914 --> 00:02:12.110
+Christopher Davis: I'll send over the expansion proposal by end of week. Emily Rodriguez will schedule a technical deep-dive with your architecture team.
+
+00:02:12.110 --> 00:02:17.971
+Karen Zhang: Thanks. We'll review on our end and circle back.
+
+00:02:17.971 --> 00:02:22.330
+Christopher Davis: Thank you, Karen Zhang. Talk soon.
+

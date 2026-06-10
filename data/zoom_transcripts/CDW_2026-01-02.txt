@@ -1,0 +1,47 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Amanda Nguyen: Thanks for joining, Karen Anderson. Good to connect with you and the CDW team.
+
+00:00:38.945 --> 00:00:44.500
+Karen Anderson: Good to see you both. Amanda Nguyen, Eric Johnson - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Amanda Nguyen: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Karen Anderson: The NGINX licensing model is confusing. We can't figure out what we're paying for versus what's open source versus what needs Plus.
+
+00:01:16.691 --> 00:01:24.862
+Amanda Nguyen: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Eric Johnson: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Karen Anderson: Sure. The main pain point is feature parity. Competitors are shipping faster and their UX is more modern.
+
+00:02:02.604 --> 00:02:17.971
+Karen Anderson: Finance froze all new capital expenditure until next quarter. We can't commit to any hardware refresh right now, but SaaS models might still fit our opex budget.
+
+00:02:17.971 --> 00:02:40.432
+Amanda Nguyen: Let me connect you with our finance team. We have some creative options around payment terms and ramp structures that might help with the timing.
+
+00:02:40.432 --> 00:02:55.831
+Karen Anderson: Our DevOps team was reduced but workload didn't change. We need to automate more. NGINX Ingress Controller could help reduce the operational burden.
+
+00:02:55.831 --> 00:03:23.724
+Eric Johnson: A lot of customers in your situation are moving to Distributed Cloud precisely because it reduces operational overhead. No boxes to patch, no hardware to lifecycle.
+
+00:03:23.724 --> 00:03:31.111
+Amanda Nguyen: This has been really productive. Let me summarize the action items.
+
+00:03:31.111 --> 00:03:46.905
+Amanda Nguyen: First priority is getting your support experience fixed. I'm escalating to our VP of Customer Success today. Eric Johnson will set up weekly technical check-ins.
+
+00:03:46.905 --> 00:03:51.284
+Karen Anderson: Sounds good. Thanks both for the time today.
+
+00:03:51.284 --> 00:03:56.081
+Amanda Nguyen: Thank you, Karen Anderson. Talk soon.
+

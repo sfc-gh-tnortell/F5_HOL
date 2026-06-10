@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Robert Chen: Thanks for joining, Karen Murphy. Good to connect with you and the Nvidia team.
+
+00:00:38.945 --> 00:00:44.500
+Karen Murphy: Good to see you both. Robert Chen, Priya Sharma - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Robert Chen: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Karen Murphy: We're evaluating Fastly for CDN and edge security. Their developer experience is significantly better than what we've seen from F5.
+
+00:01:16.691 --> 00:01:24.862
+Robert Chen: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Priya Sharma: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Karen Murphy: Sure. The main pain point is lack of integration with our CI/CD pipeline. Everything else is GitOps but F5 config is still manual.
+
+00:02:02.604 --> 00:02:17.971
+Karen Murphy: The CFO is pushing for multi-year agreements across all vendors to lock in pricing. What kind of terms can you offer on a 3-year for Distributed Cloud?
+
+00:02:17.971 --> 00:02:45.370
+Robert Chen: We can definitely work with you on that. Let me put together a total value summary showing your current investment and ROI across all F5 products.
+
+00:02:45.370 --> 00:02:53.822
+Robert Chen: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+Robert Chen: I hear the frustration. Let me come back with a concrete remediation plan within 48 hours. We're not going to lose Nvidia over something we can fix.
+
+00:03:08.051 --> 00:03:13.346
+Karen Murphy: Sounds good. Thanks both for the time today.
+
+00:03:13.346 --> 00:03:18.309
+Robert Chen: Thank you, Karen Murphy. Talk soon.
+

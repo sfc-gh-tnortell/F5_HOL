@@ -1,0 +1,32 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+David Morrison: Thanks for joining, Maria Miller. Good to connect with you and the AT&T team.
+
+00:00:38.945 --> 00:00:44.500
+Maria Miller: Good to see you both. David Morrison, Nicole Martinez - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+David Morrison: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:14.432
+Maria Miller: We're adopting a service mesh architecture with Istio. How does NGINX or F5 Distributed Cloud fit into that? We don't want overlapping tools.
+
+00:01:14.432 --> 00:01:24.862
+Nicole Martinez: Great question. Let me share what we're seeing with customers in similar situations.
+
+00:01:24.862 --> 00:01:56.982
+Nicole Martinez: For Kubernetes workloads, NGINX Ingress Controller is the most deployed solution in production. It handles north-south traffic while your service mesh handles east-west.
+
+00:01:56.982 --> 00:02:04.035
+David Morrison: This has been really productive. Let me summarize the action items.
+
+00:02:04.035 --> 00:02:19.318
+David Morrison: I'll send over the comparison document and pricing options. Nicole Martinez can set up a lab environment if you want hands-on time with the platform.
+
+00:02:19.318 --> 00:02:24.869
+Maria Miller: Appreciate it. Let's keep the momentum going.
+
+00:02:24.869 --> 00:02:29.993
+David Morrison: Thank you, Maria Miller. Talk soon.
+

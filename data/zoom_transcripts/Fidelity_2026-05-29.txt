@@ -1,0 +1,35 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Rachel Patel: Thanks for joining, Alex Anderson. Good to connect with you and the Fidelity team.
+
+00:00:38.945 --> 00:00:44.500
+Alex Anderson: Good to see you both. Rachel Patel, Marcus Thompson - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Rachel Patel: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Alex Anderson: The upgrade path from BIG-IP v15 to v17 broke our iRules. Three weeks of regression testing we didn't plan for. Not happy.
+
+00:01:16.691 --> 00:01:24.862
+Rachel Patel: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Marcus Thompson: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:07.475
+Alex Anderson: Sure. The main pain point is feature parity. Competitors are shipping faster and their UX is more modern.
+
+00:02:07.475 --> 00:02:15.812
+Rachel Patel: This has been really productive. Let me summarize the action items.
+
+00:02:15.812 --> 00:02:30.641
+Rachel Patel: I hear the frustration. Let me come back with a concrete remediation plan within 48 hours. We're not going to lose Fidelity over something we can fix.
+
+00:02:30.641 --> 00:02:35.330
+Alex Anderson: Appreciate it. Let's keep the momentum going.
+
+00:02:35.330 --> 00:02:40.432
+Rachel Patel: Thank you, Alex Anderson. Talk soon.
+

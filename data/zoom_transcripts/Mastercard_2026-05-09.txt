@@ -1,0 +1,32 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+James O'Brien: Thanks for joining, Alex Anderson. Good to connect with you and the Mastercard team.
+
+00:00:38.945 --> 00:00:44.500
+Alex Anderson: Good to see you both. James O'Brien, Aisha Washington - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+James O'Brien: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:11.957
+Alex Anderson: NGINX Plus performance has been incredible. We went from 50ms latency on our old gateway to sub-5ms. The engineering team loves it.
+
+00:01:11.957 --> 00:01:19.352
+James O'Brien: That's great to hear! We love when the technology delivers real value.
+
+00:01:19.352 --> 00:01:49.597
+Alex Anderson: Absolutely. In fact, that success is why we're looking at expanding. NGINX Ingress is working great in staging. We want to roll it out to production clusters.
+
+00:01:49.597 --> 00:01:57.914
+James O'Brien: This has been really productive. Let me summarize the action items.
+
+00:01:57.914 --> 00:02:12.110
+James O'Brien: I'll send over the expansion proposal by end of week. Aisha Washington will schedule a technical deep-dive with your architecture team.
+
+00:02:12.110 --> 00:02:17.971
+Alex Anderson: Sounds good. Thanks both for the time today.
+
+00:02:17.971 --> 00:02:22.330
+James O'Brien: Thank you, Alex Anderson. Talk soon.
+

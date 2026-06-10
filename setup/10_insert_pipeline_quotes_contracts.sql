@@ -1,0 +1,321 @@
+-- ============================================================
+-- F5 Hands-On Lab: Insert Pipeline Snapshots, Quotes, 
+-- Contracts, Security, and Enriched Line Items
+-- ============================================================
+-- Populates remaining analytics tables
+-- Run as SYSADMIN after 09_insert_telemetry_and_consumption.sql
+-- ============================================================
+
+USE ROLE SYSADMIN;
+USE WAREHOUSE COMPUTE_WH;
+USE DATABASE F5_PROD;
+USE SCHEMA RAW;
+
+-- ============================================================
+-- FACT_SALES_PIPELINE_SNAPSHOT (Weekly point-in-time snapshots)
+-- 12 weeks of weekly pipeline history
+-- ============================================================
+INSERT INTO FACT_SALES_PIPELINE_SNAPSHOT (
+    FACT_SALES_PIPELINE_SNAPSHOT_KEY, SNAPSHOT_DATE, OPPORTUNITY_ID,
+    LINE_ITEM_ID, ACCT_NAME, OPPORTUNITY_NAME, OPPORTUNITY_STAGE_NAME,
+    OPPORTUNITY_CLOSE_DATE, OPPORTUNITY_CLOSE_PROBABILITY_PCT,
+    OPPORTUNITY_OWNER_NAME, FORECAST_CATEGORY_NAME, PI_TOTAL_PRICE_AMT,
+    PRODUCT_SKU_ID, BRAND_NAME, INDUSTRY_NAME, TERRITORY_NAME,
+    TERRITORY_REGION_NAME, TERRITORY_THEATER_NAME, WEEKLY_SNAPSHOT_FLAG
+)
+WITH weeks AS (
+    SELECT DISTINCT
+        DATEADD(week, -seq, CURRENT_DATE() - EXTRACT(DOW FROM CURRENT_DATE()))::DATE AS snapshot_dt
+    FROM TABLE(GENERATOR(ROWCOUNT => 12)) t(seq)
+)
+SELECT
+    MD5(o.OPPORTUNITY_ID || w.snapshot_dt::VARCHAR),
+    w.snapshot_dt,
+    o.OPPORTUNITY_ID,
+    li.LINE_ITEM_ID,
+    a.ACCT_NAME,
+    o.OPPORTUNITY_NAME,
+    -- Simulate stage progression for open opps over time
+    CASE
+        WHEN o.OPPORTUNITY_CLOSED_IND THEN o.OPPORTUNITY_STAGE_NAME
+        WHEN w.snapshot_dt < DATEADD(week, -8, CURRENT_DATE()) THEN 'Discovery'
+        WHEN w.snapshot_dt < DATEADD(week, -4, CURRENT_DATE()) THEN
+            CASE WHEN o.OPPORTUNITY_STAGE_NAME IN ('Negotiation', 'Proposal Sent') THEN 'Technical Evaluation' ELSE o.OPPORTUNITY_STAGE_NAME END
+        ELSE o.OPPORTUNITY_STAGE_NAME
+    END,
+    o.OPPORTUNITY_CLOSE_DATE,
+    o.OPPORTUNITY_CLOSE_PROBABILITY_PCT,
+    o.OPPORTUNITY_OWNER_NAME,
+    o.FORECAST_CATEGORY_NAME,
+    li.TOTAL_PRICE_AMT::NUMBER(18,2),
+    li.PRODUCT_SKU_ID,
+    li.BRAND_NAME,
+    a.INDUSTRY_NAME,
+    sat.TERRITORY_NAME,
+    sat.REGION_NAME,
+    'Americas',
+    'Y'
+FROM DIM_SALES_OPPORTUNITY o
+JOIN FACT_SALES_OPPORTUNITY_LINE_ITEM li ON o.OPPORTUNITY_ID = li.OPPORTUNITY_ID
+JOIN DIM_CUST_ACCT_SFDC a ON o.SFDCF5_ACCT_ID = a.SFDCF5_ACCT_ID
+LEFT JOIN SALES_ACCOUNT_TEAM sat ON o.SFDCF5_ACCT_ID = sat.SFDCF5_ACCT_ID
+CROSS JOIN weeks w
+WHERE (
+    -- Include all open pipeline in all snapshots
+    (o.OPPORTUNITY_CLOSED_IND = FALSE)
+    -- Include closed deals only in snapshots before their close date
+    OR (o.OPPORTUNITY_CLOSED_IND AND w.snapshot_dt <= o.OPPORTUNITY_CLOSE_DATE)
+)
+-- Limit to manageable size
+AND MOD(ABS(HASH(o.OPPORTUNITY_ID || w.snapshot_dt::VARCHAR)), 100) < 60;
+
+-- ============================================================
+-- QUOTE (Quotes tied to opportunities)
+-- ============================================================
+INSERT INTO QUOTE (
+    ID, SOURCE_ID, OPPORTUNITY_ID, SFDCF5_ACCT_ID,
+    QUOTE_APPROVED_DATE, AMOUNT, IS_PRIMARY_FLAG, STATUS_CODE,
+    START_DATETIME, END_DATETIME, ACTIVE_FLAG
+)
+SELECT
+    MD5(o.OPPORTUNITY_ID || '-quote-' || ROW_NUMBER() OVER (ORDER BY o.OPPORTUNITY_ID)),
+    'QT' || LPAD(ROW_NUMBER() OVER (ORDER BY o.OPPORTUNITY_ID)::VARCHAR, 8, '0'),
+    o.OPPORTUNITY_ID,
+    o.SFDCF5_ACCT_ID,
+    CASE WHEN o.OPPORTUNITY_WON_IND THEN DATEADD(day, -5, o.OPPORTUNITY_CLOSE_DATE) ELSE NULL END,
+    f.OPPORTUNITY_AMT,
+    CASE WHEN ROW_NUMBER() OVER (PARTITION BY o.OPPORTUNITY_ID ORDER BY RANDOM()) = 1 THEN 'Y' ELSE 'N' END,
+    CASE
+        WHEN o.OPPORTUNITY_WON_IND THEN 'Accepted'
+        WHEN o.OPPORTUNITY_CLOSED_IND AND NOT o.OPPORTUNITY_WON_IND THEN 'Rejected'
+        ELSE 'Draft'
+    END,
+    o.OPPORTUNITY_CREATED_DATE::TIMESTAMP_NTZ,
+    DATEADD(day, 90, o.OPPORTUNITY_CREATED_DATE)::TIMESTAMP_NTZ,
+    CASE WHEN o.OPPORTUNITY_CLOSED_IND THEN 'N' ELSE 'Y' END
+FROM DIM_SALES_OPPORTUNITY o
+JOIN FACT_SALES_OPPORTUNITY f ON o.OPPORTUNITY_ID = f.OPPORTUNITY_ID
+WHERE o.OPPORTUNITY_STAGE_NAME IN ('Closed Won', 'Closed Lost', 'Proposal Sent', 'Negotiation', 'Renewal Pending');
+
+-- ============================================================
+-- USER_ENTRY_HEADER (ELA/Contract headers)
+-- ~30% of accounts have enterprise agreements
+-- ============================================================
+INSERT INTO USER_ENTRY_HEADER (
+    LEGAL_CONTRACT_ID, SFDCF5_ACCT_ID, LEGAL_CONTRACT_START_DATE,
+    LEGAL_CONTRACT_END_DATE, TRUE_FORWARD_METHOD_NAME,
+    TOTAL_DISCOUNT_OFF_LIST_PCT, NGINX_COMMIT_AMT, BIG_IP_VE_COMMIT_AMT,
+    LOGIN_NAME
+)
+SELECT
+    'ELA-' || LPAD(ROW_NUMBER() OVER (ORDER BY a.SFDCF5_ACCT_ID)::VARCHAR, 6, '0'),
+    a.SFDCF5_ACCT_ID,
+    DATEADD(month, -MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 'ela_start')), 24), CURRENT_DATE())::DATE,
+    DATEADD(month, MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 'ela_end')), 24) + 12, CURRENT_DATE())::DATE,
+    CASE MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 'tf')), 2) WHEN 0 THEN 'Cumul' ELSE 'Annual' END,
+    MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 'disc')), 30) + 10,
+    CASE WHEN MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 'ng')), 100) < 40
+        THEN (MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 'ngamt')), 200000) + 50000)::NUMBER(38,3) ELSE NULL END,
+    CASE WHEN MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 've')), 100) < 50
+        THEN (MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 'veamt')), 300000) + 75000)::NUMBER(38,3) ELSE NULL END,
+    sat.AE_EMAIL
+FROM DIM_CUST_ACCT_SFDC a
+LEFT JOIN SALES_ACCOUNT_TEAM sat ON a.SFDCF5_ACCT_ID = sat.SFDCF5_ACCT_ID
+WHERE MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 'ela')), 100) < 30;
+
+-- ============================================================
+-- SALES_SECURITY_ETM_TERRITORY (RBAC for territory access)
+-- ============================================================
+INSERT INTO SALES_SECURITY_ETM_TERRITORY (
+    ETM_TERRITORY_ID, ETM_TERRITORY_NAME, VARICENT_TERRITORY_CODE,
+    PERMITTED_USER_EMAIL_ADDRESS_TEXT, PERMITTED_USER_ROLE
+)
+SELECT DISTINCT
+    'TER-' || LPAD(ROW_NUMBER() OVER (ORDER BY sat.TERRITORY_NAME, u.EMAIL_ADDRESS_TEXT)::VARCHAR, 5, '0'),
+    sat.TERRITORY_NAME,
+    'VTC-' || sat.REGION_NAME || '-001',
+    u.EMAIL_ADDRESS_TEXT,
+    CASE u.ROLE_NAME
+        WHEN 'AE - West 1' THEN 'AE'
+        WHEN 'AE - West 2' THEN 'AE'
+        WHEN 'AE - West 3' THEN 'AE'
+        WHEN 'AE - Mountain 1' THEN 'AE'
+        WHEN 'AE - Central 1' THEN 'AE'
+        WHEN 'AE - Central 2' THEN 'AE'
+        WHEN 'AE - Central 3' THEN 'AE'
+        WHEN 'AE - East 1' THEN 'AE'
+        WHEN 'AE - East 2' THEN 'AE'
+        WHEN 'AE - East 3' THEN 'AE'
+        ELSE 'SE'
+    END
+FROM SALES_ACCOUNT_TEAM sat
+JOIN DIM_SALES_USER u ON u.USER_ID IN (sat.AE_USER_ID, sat.SE_USER_ID)
+WHERE sat.TERRITORY_NAME IS NOT NULL;
+
+-- ============================================================
+-- COL_SALES_OPPORTUNITY_LINE_ITEM (Enriched flat view)
+-- ============================================================
+INSERT INTO COL_SALES_OPPORTUNITY_LINE_ITEM (
+    COL_SALES_OPPORTUNITY_LINE_ITEM_KEY, SFDCF5_ACCT_ID, ACCT_NAME,
+    OPPORTUNITY_ID, OPPORTUNITY_NAME, OPPORTUNITY_CREATED_DATE,
+    OPPORTUNITY_CLOSE_DATE, OPPORTUNITY_CLOSE_PROBABILITY_PCT,
+    LINE_ITEM_ID, PRODUCT_SKU_ID, PRODUCT_QTY, TOTAL_PRICE_AMT,
+    THEATER_NAME, BILLING_COUNTRY_NAME, INDUSTRY_GROUPING_CODE,
+    VARICENT_TERRITORY_CODE, ACCT_REGION_NAME, ACCT_DISTRICT_NAME,
+    ACCT_TERRITORY_NAME
+)
+SELECT
+    MD5(li.LINE_ITEM_ID || '-col'),
+    li.SFDCF5_ACCT_ID,
+    a.ACCT_NAME,
+    li.OPPORTUNITY_ID,
+    o.OPPORTUNITY_NAME,
+    o.OPPORTUNITY_CREATED_DATE::TIMESTAMP_NTZ,
+    li.OPPORTUNITY_CLOSE_DATE,
+    o.OPPORTUNITY_CLOSE_PROBABILITY_PCT,
+    li.LINE_ITEM_ID,
+    li.PRODUCT_SKU_ID,
+    li.PRODUCT_QTY,
+    li.TOTAL_PRICE_AMT::FLOAT,
+    a.THEATER_NAME,
+    a.BILLING_COUNTRY_NAME,
+    a.INDUSTRY_GROUPING_CODE,
+    a.VARICENT_TERRITORY_CODE,
+    sat.REGION_NAME,
+    sat.DISTRICT_NAME,
+    sat.TERRITORY_NAME
+FROM FACT_SALES_OPPORTUNITY_LINE_ITEM li
+JOIN DIM_SALES_OPPORTUNITY o ON li.OPPORTUNITY_ID = o.OPPORTUNITY_ID
+JOIN DIM_CUST_ACCT_SFDC a ON li.SFDCF5_ACCT_ID = a.SFDCF5_ACCT_ID
+LEFT JOIN SALES_ACCOUNT_TEAM sat ON li.SFDCF5_ACCT_ID = sat.SFDCF5_ACCT_ID;
+
+-- ============================================================
+-- COL_CORP_CUSTOMER_CENTRAL_PRODUCT_OFFER_CUST_VALUE
+-- (Full customer product/service view)
+-- ============================================================
+INSERT INTO COL_CORP_CUSTOMER_CENTRAL_PRODUCT_OFFER_CUST_VALUE (
+    DIM_CUST_PROF_EBS_SITE_KEY, CUST_SFDCF5_ACCT_ID,
+    SALES_SFDCF5_ACCT_ID, OFFER_SKU_ID, OFFER_DESC,
+    CORE_PRODUCT_NAME, HARDWARE_PLATFORM_CODE, SERIAL_NUM,
+    SHIP_DATE, SUBSCRIPTION_NUM, SUBSCRIPTION_START_DATE,
+    SUBSCRIPTION_END_DATE, SERVICE_END_DATETIME,
+    SOFTWARE_VERSION_NUM, PRODUCT_OFFERING_SUB_TYPE_NAME,
+    PARTY_NAME, CITY_NAME, STATE_NAME, COUNTRY_NAME
+)
+SELECT
+    MD5(ib.CUST_SFDCF5_ACCT_ID || ib.SERIAL_NUM),
+    ib.CUST_SFDCF5_ACCT_ID,
+    ib.SALES_SFDCF5_ACCT_ID,
+    ib.OFFER_SKU_ID,
+    ib.OFFER_DESC,
+    ib.CORE_PRODUCT_NAME,
+    ib.HARDWARE_PLATFORM_CODE,
+    ib.SERIAL_NUM,
+    ib.SHIP_DATE::DATE,
+    'SUB-' || ib.SERIAL_NUM,
+    ib.SHIP_DATE,
+    ib.SERVICE_END_DATETIME,
+    ib.SERVICE_END_DATETIME,
+    ib.SOFTWARE_VERSION_NUM,
+    CASE WHEN ib.PLATFORM = 'Virtual' THEN 'Virtual Edition' ELSE 'Appliance' END,
+    ib.ACCOUNT_NAME,
+    a.BILLING_CITY_NAME,
+    a.BILLING_STATE_PROVINCE_NAME,
+    'United States'
+FROM COL_INSTALL_BASE ib
+JOIN DIM_CUST_ACCT_SFDC a ON ib.CUST_SFDCF5_ACCT_ID = a.SFDCF5_ACCT_ID;
+
+-- ============================================================
+-- DIM_WORKER (F5 employees for the sales org)
+-- ============================================================
+INSERT INTO DIM_WORKER (
+    DIM_WORKER_KEY, EMPLOYEE_ID, WORKER_TYPE_CODE, EMPLOYEE_TYPE_CODE,
+    WORKER_HIRE_DATE, LEGAL_FIRST_NAME, LEGAL_LAST_NAME, LEGAL_FULL_NAME,
+    PREFERRED_FULL_NAME, BUSINESS_TITLE_NAME, JOB_FAMILY_NAME,
+    JOB_LEVEL_CODE, MANAGER_IND, MANAGER_EMPLOYEE_ID,
+    F5_EMAIL_ADDRESS_TEXT, COST_CENTER_NAME, FUNCTIONAL_AREA_NAME,
+    LOCATION_CITY_NAME, LOCATION_COUNTRY_NAME, ACTIVE_STATUS_IND,
+    COMPANY_NAME
+)
+SELECT
+    MD5(u.USER_ID),
+    'EMP-' || LPAD(ROW_NUMBER() OVER (ORDER BY u.USER_ID)::VARCHAR, 5, '0'),
+    'Employee',
+    'Regular',
+    DATEADD(day, -MOD(ABS(HASH(u.USER_ID || 'hire')), 2000) - 365, CURRENT_DATE())::DATE,
+    u.FIRST_NAME,
+    u.LAST_NAME,
+    u.FULL_NAME,
+    u.FULL_NAME,
+    u.TITLE_NAME,
+    CASE
+        WHEN u.ROLE_NAME LIKE 'AE%' THEN 'Sales'
+        WHEN u.ROLE_NAME LIKE 'SE%' THEN 'Pre-Sales Engineering'
+        WHEN u.ROLE_NAME LIKE 'SDR%' THEN 'Sales Development'
+        ELSE 'Sales Operations'
+    END,
+    CASE
+        WHEN u.ROLE_NAME LIKE 'AE%' THEN 'IC3'
+        WHEN u.ROLE_NAME LIKE 'SE%' THEN 'IC3'
+        WHEN u.ROLE_NAME LIKE 'SDR%' THEN 'IC2'
+        ELSE 'IC2'
+    END,
+    FALSE,
+    NULL,
+    u.EMAIL_ADDRESS_TEXT,
+    CASE
+        WHEN u.ROLE_NAME LIKE 'AE%' THEN 'Sales - Americas'
+        WHEN u.ROLE_NAME LIKE 'SE%' THEN 'SE - Americas'
+        ELSE 'Inside Sales - Americas'
+    END,
+    CASE
+        WHEN u.ROLE_NAME LIKE 'AE%' THEN 'Sales'
+        WHEN u.ROLE_NAME LIKE 'SE%' THEN 'Sales Engineering'
+        ELSE 'Marketing'
+    END,
+    u.CITY_NAME,
+    'United States',
+    TRUE,
+    'F5, Inc.'
+FROM DIM_SALES_USER u;
+
+-- ============================================================
+-- DIM_GEOGRAPHIC_AREA (Territory hierarchy)
+-- ============================================================
+INSERT INTO DIM_GEOGRAPHIC_AREA (
+    DIM_GEOGRAPHIC_AREA_KEY, GEOGRAPHIC_AREA_ID, GEOGRAPHIC_AREA_CODE,
+    GEOGRAPHIC_AREA_TYPE_CODE, TERRITORY_ID, TERRITORY_NAME,
+    DISTRICT_ID, DISTRICT_NAME, REGION_ID, REGION_NAME,
+    THEATER_ID, THEATER_NAME, GEOGRAPHIC_AREA_OWNER_NAME,
+    STATUS_CODE, SOURCE_START_DATE
+)
+SELECT DISTINCT
+    MD5(sat.TERRITORY_NAME),
+    'GA-' || LPAD(ROW_NUMBER() OVER (ORDER BY sat.TERRITORY_NAME)::VARCHAR, 4, '0'),
+    'AMER-' || sat.REGION_NAME || '-' || ROW_NUMBER() OVER (PARTITION BY sat.REGION_NAME ORDER BY sat.TERRITORY_NAME),
+    'Territory',
+    'TER-' || LPAD(ROW_NUMBER() OVER (ORDER BY sat.TERRITORY_NAME)::VARCHAR, 4, '0'),
+    sat.TERRITORY_NAME,
+    'DIS-' || sat.REGION_NAME,
+    sat.DISTRICT_NAME,
+    'REG-' || sat.REGION_NAME,
+    sat.REGION_NAME,
+    'THE-AMER',
+    'Americas',
+    sat.AE_NAME,
+    'Active',
+    '2024-02-01'::DATE
+FROM SALES_ACCOUNT_TEAM sat
+WHERE sat.TERRITORY_NAME IS NOT NULL;
+
+-- ============================================================
+-- Verification - Full table census
+-- ============================================================
+SELECT 'FACT_SALES_PIPELINE_SNAPSHOT' AS tbl, COUNT(*) AS cnt FROM FACT_SALES_PIPELINE_SNAPSHOT
+UNION ALL SELECT 'QUOTE', COUNT(*) FROM QUOTE
+UNION ALL SELECT 'USER_ENTRY_HEADER', COUNT(*) FROM USER_ENTRY_HEADER
+UNION ALL SELECT 'SALES_SECURITY_ETM_TERRITORY', COUNT(*) FROM SALES_SECURITY_ETM_TERRITORY
+UNION ALL SELECT 'COL_SALES_OPPORTUNITY_LINE_ITEM', COUNT(*) FROM COL_SALES_OPPORTUNITY_LINE_ITEM
+UNION ALL SELECT 'COL_CORP_CUSTOMER_CENTRAL', COUNT(*) FROM COL_CORP_CUSTOMER_CENTRAL_PRODUCT_OFFER_CUST_VALUE
+UNION ALL SELECT 'DIM_WORKER', COUNT(*) FROM DIM_WORKER
+UNION ALL SELECT 'DIM_GEOGRAPHIC_AREA', COUNT(*) FROM DIM_GEOGRAPHIC_AREA;

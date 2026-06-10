@@ -1,0 +1,35 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Jessica Torres: Thanks for joining, Tom Miller. Good to connect with you and the Alphabet team.
+
+00:00:38.945 --> 00:00:44.500
+Tom Miller: Good to see you both. Jessica Torres, Daniel Kim - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Jessica Torres: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Tom Miller: Kong Gateway handles our API management today. Adding F5 API Security on top feels like vendor sprawl. Convince me otherwise.
+
+00:01:16.691 --> 00:01:24.862
+Jessica Torres: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Daniel Kim: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:07.475
+Tom Miller: Sure. The main pain point is reliability. We've had too many incidents that impacted production workloads.
+
+00:02:07.475 --> 00:02:15.812
+Jessica Torres: This has been really productive. Let me summarize the action items.
+
+00:02:15.812 --> 00:02:30.641
+Jessica Torres: Let's schedule a call with our engineering leadership next week. I want them to hear directly from you what needs to change.
+
+00:02:30.641 --> 00:02:35.330
+Tom Miller: Appreciate it. Let's keep the momentum going.
+
+00:02:35.330 --> 00:02:40.432
+Jessica Torres: Thank you, Tom Miller. Talk soon.
+

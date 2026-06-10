@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Lauren Kim: Thanks for joining, John Lee. Good to connect with you and the ExxonMobil team.
+
+00:00:38.945 --> 00:00:44.500
+John Lee: Good to see you both. Lauren Kim, Chris Anderson - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Lauren Kim: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:14.432
+John Lee: We're migrating 70% of workloads to AWS and Azure over the next 18 months. The on-prem BIG-IP strategy needs to evolve. What does F5 offer for multi-cloud?
+
+00:01:14.432 --> 00:01:24.862
+Chris Anderson: Great question. Let me share what we're seeing with customers in similar situations.
+
+00:01:24.862 --> 00:01:51.290
+Chris Anderson: XC App Connect creates encrypted tunnels between your cloud environments with a single control plane. No need to manage VPN gateways or transit architectures.
+
+00:01:51.290 --> 00:02:06.251
+John Lee: Finance froze all new capital expenditure until next quarter. We can't commit to any hardware refresh right now, but SaaS models might still fit our opex budget.
+
+00:02:06.251 --> 00:02:34.041
+Lauren Kim: I understand the budget pressure. One option is to transition from capex hardware to opex SaaS models. That often fits better in today's financial planning.
+
+00:02:34.041 --> 00:02:42.943
+Lauren Kim: This has been really productive. Let me summarize the action items.
+
+00:02:42.943 --> 00:02:57.750
+Lauren Kim: Let's reconvene in two weeks after you've had a chance to review the proposal. We'll bring our architect to address the integration questions.
+
+00:02:57.750 --> 00:03:02.525
+John Lee: Thanks. We'll review on our end and circle back.
+
+00:03:02.525 --> 00:03:07.857
+Lauren Kim: Thank you, John Lee. Talk soon.
+

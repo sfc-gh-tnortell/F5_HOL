@@ -1,0 +1,47 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Rachel Patel: Thanks for joining, Tom Garcia. Good to connect with you and the Fidelity team.
+
+00:00:38.945 --> 00:00:44.500
+Tom Garcia: Good to see you both. Rachel Patel, Marcus Thompson - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Rachel Patel: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Tom Garcia: The upgrade path from BIG-IP v15 to v17 broke our iRules. Three weeks of regression testing we didn't plan for. Not happy.
+
+00:01:16.691 --> 00:01:24.862
+Rachel Patel: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Marcus Thompson: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Tom Garcia: Sure. The main pain point is cost per transaction. When we benchmark against cloud-native alternatives, the economics don't always work.
+
+00:02:02.604 --> 00:02:17.971
+Tom Garcia: We just got approval for a major security initiative in FY26. There's budget earmarked for WAF and bot protection modernization. Your timing is actually perfect.
+
+00:02:17.971 --> 00:02:40.432
+Rachel Patel: Let me connect you with our finance team. We have some creative options around payment terms and ramp structures that might help with the timing.
+
+00:02:40.432 --> 00:02:55.831
+Tom Garcia: We lost our lead network engineer who managed all the F5 config. Can you connect us with professional services to bridge the gap?
+
+00:02:55.831 --> 00:03:23.724
+Marcus Thompson: A lot of customers in your situation are moving to Distributed Cloud precisely because it reduces operational overhead. No boxes to patch, no hardware to lifecycle.
+
+00:03:23.724 --> 00:03:31.111
+Rachel Patel: This has been really productive. Let me summarize the action items.
+
+00:03:31.111 --> 00:03:46.905
+Rachel Patel: First priority is getting your support experience fixed. I'm escalating to our VP of Customer Success today. Marcus Thompson will set up weekly technical check-ins.
+
+00:03:46.905 --> 00:03:51.284
+Tom Garcia: Appreciate it. Let's keep the momentum going.
+
+00:03:51.284 --> 00:03:56.081
+Rachel Patel: Thank you, Tom Garcia. Talk soon.
+

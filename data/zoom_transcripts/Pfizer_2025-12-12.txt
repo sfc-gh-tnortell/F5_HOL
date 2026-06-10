@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+James O'Brien: Thanks for joining, Alex Miller. Good to connect with you and the Pfizer team.
+
+00:00:38.945 --> 00:00:44.500
+Alex Miller: Good to see you both. James O'Brien, Aisha Washington - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+James O'Brien: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Alex Miller: Support response times have gotten worse. Our last P1 took 6 hours for initial response. That's not enterprise-grade.
+
+00:01:16.691 --> 00:01:24.862
+James O'Brien: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Aisha Washington: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Alex Miller: Sure. The main pain point is reliability. We've had too many incidents that impacted production workloads.
+
+00:02:02.604 --> 00:02:17.971
+Alex Miller: After the layoffs, we're moving to a platform engineering model. Manual infrastructure management is out. Everything needs to be API-driven and self-service.
+
+00:02:17.971 --> 00:02:45.370
+Aisha Washington: Automation is where we're investing heavily. BIG-IP Next and NGINX One both support full GitOps workflows. Less manual, fewer people needed.
+
+00:02:45.370 --> 00:02:53.822
+James O'Brien: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+James O'Brien: Let's schedule a call with our engineering leadership next week. I want them to hear directly from you what needs to change.
+
+00:03:08.051 --> 00:03:13.346
+Alex Miller: Appreciate it. Let's keep the momentum going.
+
+00:03:13.346 --> 00:03:18.309
+James O'Brien: Thank you, Alex Miller. Talk soon.
+

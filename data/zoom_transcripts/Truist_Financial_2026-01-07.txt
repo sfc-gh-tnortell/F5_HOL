@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Christopher Davis: Thanks for joining, Mike Williams. Good to connect with you and the Truist Financial team.
+
+00:00:38.945 --> 00:00:44.500
+Mike Williams: Good to see you both. Christopher Davis, Emily Rodriguez - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Christopher Davis: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Mike Williams: Cloudflare Workers has been getting a lot of internal attention. Their edge compute + security bundle is compelling at the price point.
+
+00:01:16.691 --> 00:01:24.862
+Christopher Davis: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Emily Rodriguez: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Mike Williams: Sure. The main pain point is cost per transaction. When we benchmark against cloud-native alternatives, the economics don't always work.
+
+00:02:02.604 --> 00:02:17.971
+Mike Williams: Finance froze all new capital expenditure until next quarter. We can't commit to any hardware refresh right now, but SaaS models might still fit our opex budget.
+
+00:02:17.971 --> 00:02:45.370
+Christopher Davis: Let me connect you with our finance team. We have some creative options around payment terms and ramp structures that might help with the timing.
+
+00:02:45.370 --> 00:02:53.822
+Christopher Davis: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+Christopher Davis: Let's schedule a call with our engineering leadership next week. I want them to hear directly from you what needs to change.
+
+00:03:08.051 --> 00:03:13.346
+Mike Williams: Thanks. We'll review on our end and circle back.
+
+00:03:13.346 --> 00:03:18.309
+Christopher Davis: Thank you, Mike Williams. Talk soon.
+

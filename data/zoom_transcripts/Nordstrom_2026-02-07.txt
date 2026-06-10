@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Sarah Mitchell: Thanks for joining, Jennifer Zhang. Good to connect with you and the Nordstrom team.
+
+00:00:38.945 --> 00:00:44.500
+Jennifer Zhang: Good to see you both. Sarah Mitchell, Kevin Nakamura - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Sarah Mitchell: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Jennifer Zhang: Distributed Cloud onboarding took 4 months. Your professional services team was overwhelmed. We expected better from a $200K deal.
+
+00:01:16.691 --> 00:01:24.862
+Sarah Mitchell: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Kevin Nakamura: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Jennifer Zhang: Sure. The main pain point is lack of integration with our CI/CD pipeline. Everything else is GitOps but F5 config is still manual.
+
+00:02:02.604 --> 00:02:17.971
+Jennifer Zhang: The CFO is pushing for multi-year agreements across all vendors to lock in pricing. What kind of terms can you offer on a 3-year for Distributed Cloud?
+
+00:02:17.971 --> 00:02:45.370
+Sarah Mitchell: Let me connect you with our finance team. We have some creative options around payment terms and ramp structures that might help with the timing.
+
+00:02:45.370 --> 00:02:53.822
+Sarah Mitchell: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+Sarah Mitchell: First priority is getting your support experience fixed. I'm escalating to our VP of Customer Success today. Kevin Nakamura will set up weekly technical check-ins.
+
+00:03:08.051 --> 00:03:13.346
+Jennifer Zhang: Appreciate it. Let's keep the momentum going.
+
+00:03:13.346 --> 00:03:18.309
+Sarah Mitchell: Thank you, Jennifer Zhang. Talk soon.
+

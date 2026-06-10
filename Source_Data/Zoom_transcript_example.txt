@@ -1,0 +1,752 @@
+WEBVTT
+
+00:00:33.000 --> 00:00:35.000
+Travis Nortell: What's up, DJ?
+
+00:00:34.000 --> 00:00:36.000
+Trent Jones: Hey Travis, how you doing?
+
+00:00:36.000 --> 00:00:38.000
+Travis Nortell: Pretty good, boss. How are you?
+
+00:00:38.000 --> 00:00:48.000
+Trent Jones: Great. Yeah, we just had a little hackathon yesterday using Coco with DAT. Went super well. Yeah, it was good.
+
+00:00:46.000 --> 00:00:48.000
+Travis Nortell: Sweet.
+
+00:00:48.000 --> 00:00:49.000
+Travis Nortell: I like it.
+
+00:00:49.000 --> 00:00:52.000
+Trent Jones: Yeah, man. Um…
+
+00:00:52.000 --> 00:00:57.000
+Trent Jones: We've had a bunch of stuff roll in from these guys at F5 on…
+
+00:00:57.000 --> 00:01:05.000
+Trent Jones: AI, like, cost controls, and I'll share all of it with you. But, we'll probably talk about it today.
+
+00:01:05.000 --> 00:01:06.000
+Travis Nortell: Cool.
+
+00:01:05.000 --> 00:01:06.000
+Trent Jones: Hey, Brendan.
+
+00:01:06.000 --> 00:01:08.000
+Brendan Asta: Adrian.
+
+00:01:07.000 --> 00:01:09.000
+Trent Jones: How you doing, man?
+
+00:01:07.000 --> 00:01:09.000
+Travis Nortell: Everyone.
+
+00:01:09.000 --> 00:01:11.000
+Brendan Asta: All right.
+
+00:01:11.000 --> 00:01:12.000
+Brendan Asta: How are you?
+
+00:01:12.000 --> 00:01:27.000
+Trent Jones: Good, good. Um, hey, I don't know if you've had a chance to meet Travis. Um, so Jacqueline… Jacqueline's normally my counterpart on the SE side, obviously here. She's gonna be getting married, uh, next month, and so she'll be out.
+
+00:01:26.000 --> 00:01:28.000
+Brendan Asta: That's exciting.
+
+00:01:27.000 --> 00:01:41.000
+Trent Jones: Yeah, yeah, um, it's exciting for her, we're happy for her, she's gonna be gone for this hands-on lab that we're talking about doing, so we're looping in Travis, who's on the same team as her, but, um, Trav, I'll let you introduce yourself.
+
+00:01:35.000 --> 00:01:36.000
+Brendan Asta: Okay.
+
+00:01:40.000 --> 00:01:56.000
+Travis Nortell: Yeah, Brendan, nice to meet you first off. I love your sign in the background. I literally run on coffee myself. So this is great good company. A little background. I have been here stuff like I just had my 6 year anniversary and then was a customer.
+
+00:01:46.000 --> 00:01:47.000
+Brendan Asta: Thank you.
+
+00:01:55.000 --> 00:01:57.000
+Brendan Asta: Congrats.
+
+00:01:56.000 --> 00:01:58.000
+Travis Nortell: for this. Thank you. Thank you.
+
+00:01:58.000 --> 00:02:14.000
+Travis Nortell: I actually also have been covering Okta in the past. So Lauren and I have some history there. And so I'm excited to work with you guys a little bit on this Trent and Jacqueline have been giving me some info about 5 before we had this meeting.
+
+00:02:14.000 --> 00:02:26.000
+Travis Nortell: But I'm excited to come kind of build out a hands-on lab with you guys and understand how you want to use Snowflake, how you want to use AI, what we can help you with there, and just kind of give you a curated experience, so…
+
+00:02:26.000 --> 00:02:30.000
+Travis Nortell: It's nice to meet you, and I'm looking forward to hear what you guys are working on.
+
+00:02:31.000 --> 00:02:39.000
+Brendan Asta: So at the highest level, we have — are you aware of the structure of F5?
+
+00:02:39.000 --> 00:02:40.000
+Brendan Asta: Back in.
+
+00:02:41.000 --> 00:02:43.000
+Brendan Asta: Or do you need me to walk through that?
+
+00:02:44.000 --> 00:02:46.000
+Brendan Asta: Sorry, my microphone is not there.
+
+00:02:46.000 --> 00:02:52.000
+Brendan Asta: Are you, do you know the sort of structure on our backend or do you want me to give you a quick overview and where we're taking things?
+
+00:02:51.000 --> 00:02:55.000
+Trent Jones: Let's do it, Brendan. Yeah, we're probably due for a refresh anyways.
+
+00:02:55.000 --> 00:02:58.000
+Brendan Asta: Okay. All right. So.
+
+00:02:58.000 --> 00:03:14.000
+Brendan Asta: Laura and I sit on the data and insights team, which is part of the sort of internal technology services team. It's called the digital group. And so I oversee the data platform and engineering for the internal sort of corporate services data warehouse, right? Data lake, whatever you want to call it.
+
+00:03:14.000 --> 00:03:25.000
+Brendan Asta: And we use Snowflake for that. For our product telemetry, so the products that we sell to our customers, we have 4 main product lines right now. We have Big IP, which is how.
+
+00:03:25.000 --> 00:03:29.000
+Brendan Asta: F5 got famous and grew. That's load balancers, right?
+
+00:03:29.000 --> 00:03:37.000
+Brendan Asta: Over half of the internet traffic goes through our load balancers. We then pivoted to software on hardware, and then made a security SaaS play.
+
+00:03:37.000 --> 00:03:41.000
+Brendan Asta: about 10 years ago. So we have BIG-IP, we have NGINX.
+
+00:03:40.000 --> 00:03:42.000
+Trent Jones: Thank you.
+
+00:03:41.000 --> 00:03:53.000
+Brendan Asta: Then we have our SaaS product offering, and we recently have acquired a company called Calypso, which is part of our AI offering to sort of protect, look at prompts as they're coming in, try to attack whatever LLM.
+
+00:03:53.000 --> 00:04:03.000
+Brendan Asta: space you have. So, those products, or the ones that are generating telemetry, land it all, sort of, in S3 buckets on AWS, and are using Databricks for.
+
+00:04:03.000 --> 00:04:22.000
+Brendan Asta: data science. For all of our internal use cases, all of our BI, we are currently using Snowflake. So a subset of that data, we will send across, and then this coming year, we're probably looking at, you know, whether or not we actually have to physically push it, or can we do some sort, now that you guys play nicely together, more nicely than you used to in the past, between Databricks and Snowflake.
+
+00:04:22.000 --> 00:04:24.000
+Brendan Asta: Can we do some sort of shares there?
+
+00:04:24.000 --> 00:04:40.000
+Brendan Asta: But then everything internally, so our CRM system or Salesforce, our Oracle data, we have 90 different applications data that comes into Snowflake. And then we take that data, land into a raw area, then we curate it. We don't have sort of three areas, we basically have raw and then different.
+
+00:04:40.000 --> 00:04:56.000
+Brendan Asta: Levels of curated, we're looking to add certification. And that connects to our primary BI reporting tool, which is Tableau, as well as Power BI, FNAP, and we do APIs also to provide that back to other applications.
+
+00:04:56.000 --> 00:05:02.000
+Brendan Asta: take in data from Salesforce, for example, and we push data back to Salesforce to help them with insights.
+
+00:05:02.000 --> 00:05:18.000
+Brendan Asta: one of the things that we are currently working on is, effectively, we want Snowflake to be our interface for any structured data that we're looking to do. And so what we're trying to build out with Cortex is basically that extensible model. So the thought is, effectively, that.
+
+00:05:18.000 --> 00:05:31.000
+Brendan Asta: anything that has a natural language interface, or an agent, maybe it's directly in Cortex, or maybe we do extensions with APIs, we're looking at other things there, but effectively, if it's an MCP call, whatever it is, it effectively calls into.
+
+00:05:31.000 --> 00:05:48.000
+Brendan Asta: Cortex, right, because that gives us our role-based access controls. What we'd like to do is make sure that basically it's either running through verified queries, or we have a robust enough set of verified queries that when it crafts a new query, um, it will look very similar. We are trying to have.
+
+00:05:48.000 --> 00:06:06.000
+Brendan Asta: dbt own our semantic models for instantiation, and we… both Snowflake and dbt use OpenSemantics, so we'd actually port that in. We'll let users do some of the development work if they want for the semantic in Snowflake, and we'll actually use Outlimiter Data Catalog to basically be the clearinghouse. So.
+
+00:06:06.000 --> 00:06:23.000
+Brendan Asta: If we have our company model and someone builds something out, we say, hey, these two definitions don't match, which one do you want to pick? Then we update that. Allen also has our business definitions, and as we're thinking of a sort of our front door for discovery, but the actual build out and use would either be Cortex or extensions on top of Cortex with.
+
+00:06:23.000 --> 00:06:40.000
+Brendan Asta: Calls into Cortex. And so what we're doing right now is we've identified sales as the primary use case. Again, you guys have built something internally as well. You showed us earlier, Trent. So something very similar, right? Like, what can you tell me about this customer? I have a call coming up, et cetera.
+
+00:06:40.000 --> 00:06:57.000
+Brendan Asta: And so we're actively working with the sales team in order to review the queries. So they've written, I think now, 90 queries. And so what we're doing is we're going through and saying, are the queries looking at raw data or curated? If they're not curated data, can we move them all to curated? Then we're going to do things like object reference checks to see, can we.
+
+00:06:57.000 --> 00:07:15.000
+Brendan Asta: collapse those queries, but not overly collapse, because we don't want one query that returns a thousand things, and it's super expensive. So doing that sort of query tuning optimization. So the object reference, we'll do profiling, we'll then use AI to help us figure out how we want to query tune it, and that's where my team is more focused on sort of the.
+
+00:06:59.000 --> 00:07:00.000
+Travis Nortell: Yep.
+
+00:07:15.000 --> 00:07:20.000
+Brendan Asta: Getting the queries, looking at raw, doing the optimization of query tuning.
+
+00:07:20.000 --> 00:07:37.000
+Brendan Asta: As well. Additionally, we're starting to work on some of the features that we don't currently have that we know we want. So things like a pattern for how do you identify or share back to a user that you've requested information, you've gotten back an answer, but you actually don't have access to see everything without exposing.
+
+00:07:37.000 --> 00:07:48.000
+Brendan Asta: what they don't have access to. So, for example, our sellers often can't see across territories, we call it territory model, so if you are in North America, you might not be able to see Asia sales. If you ask for global sales.
+
+00:07:48.000 --> 00:08:03.000
+Brendan Asta: and it excludes all of Asia, we don't want someone to think that they have the correct number, but we don't want to tell them explicitly what they're missing. So, what is the pattern? So, we want to build that out, that ideally is, we identify it once, you know, there's two or three options, and we build that out across, starting with those.
+
+00:08:03.000 --> 00:08:15.000
+Brendan Asta: sort of verify queries the objects that was hit, so that it'll respond back to the user and say, here's the value, but you don't have permission to see everything, so be wary of this, etc. Um…
+
+00:08:16.000 --> 00:08:34.000
+Brendan Asta: We are going to continue with sort of, we have role-based access already, but my team will also make sure that when we're doing a review, it's in addition to our role-based access, are there additionally row-based access controls that need to be appended, making sure that review is done appropriately. That's part of the reason why we really.
+
+00:08:34.000 --> 00:08:49.000
+Brendan Asta: Like Snowflake, I want to use it, right? We get to store all of our controls in one place and not have to sort of go back and look at it. And then one of the things we're also experimenting with right now is sort of the feedback loops. I know you can give like a thumbs up, thumbs down, and then trying to figure out.
+
+00:08:49.000 --> 00:09:05.000
+Brendan Asta: you know, how to best use the insights there. I know there's different selection options. I don't know if we can change those. And then the other thing that we're going to be implementing that we haven't done yet is we have controlled areas for where you can use Streamlit apps, but effectively, if you're in what we call an experimental zone.
+
+00:09:05.000 --> 00:09:23.000
+Brendan Asta: we're gonna wanna have some sort of thing that has to be inserted so it basically pops up whenever they create the stream that says, like, this is running on raw or experimental, don't trust the results, right? And then we probably have two or three versions of that, so as you promote it, if someone's looking at it, we can clearly identify or force someone to identify.
+
+00:09:23.000 --> 00:09:27.000
+Brendan Asta: Like this has been verified or this is not. So those are the things that.
+
+00:09:27.000 --> 00:09:42.000
+Brendan Asta: my team is focused on. Lauren's team is going to be more helping to define what are those queries initially, not necessarily, like, okay, we have four overlapping queries, can we consolidate them? There's going to be some overlap with my team. Our team will try to do that, but I think that's going to be probably more.
+
+00:09:42.000 --> 00:09:43.000
+Travis Nortell: Yep.
+
+00:09:42.000 --> 00:09:55.000
+Brendan Asta: on the engineering? And then also, do we collapse those queries? Do we make a new set of objects, whether those are views, tables, etc, that support those queries? And so, from our perspective, it's really more query tuning.
+
+00:09:52.000 --> 00:09:53.000
+Travis Nortell: Okay.
+
+00:09:55.000 --> 00:09:59.000
+Brendan Asta: Sort of like, what's that feedback loop and security?
+
+00:09:59.000 --> 00:10:18.000
+Travis Nortell: Okay, cool. Um, I have a couple of questions for you. Thank you for the overview here. Um, so it sounds like the sales data agent piece is already being built, right? So you're curating those 90 queries, you guys are consolidating and doing that. Have you guys created semantics, agents, things like that for it yet, or still in the…
+
+00:10:10.000 --> 00:10:11.000
+Brendan Asta: Correct.
+
+00:10:17.000 --> 00:10:35.000
+Brendan Asta: So the, it started with the business and we're basically hardening. So they have a semantic layer, but they haven't, what part of what we're doing now is verifying it with the current sort of business model that exists in Atlan. So they've gone in and they've created a semantic model, but it doesn't necessarily equate to what's there. And we haven't had the conversation of like.
+
+00:10:35.000 --> 00:10:42.000
+Brendan Asta: hey, you say this thing is A, it says B in the catalog, should it be A or B? Um, and so…
+
+00:10:40.000 --> 00:10:42.000
+Travis Nortell: Gotcha.
+
+00:10:42.000 --> 00:10:53.000
+Brendan Asta: we're doing that. We're currently in the process of… we just reviewed all the queries, and we're saying these are the things that we need to add curation to. The… my team should be starting to do the query sort of optimization of that.
+
+00:10:53.000 --> 00:10:55.000
+Brendan Asta: Object reference.
+
+00:10:55.000 --> 00:11:10.000
+Brendan Asta: et cetera, right? Like, tuning it, do we need new structures, et cetera. Um, and then after we do that, then we'll do that sort of clearinghouse of the semantics. So we've decided, like, hey, you actually don't need half of these, you don't need some of these attributes, et cetera. We would purge that.
+
+00:11:09.000 --> 00:11:10.000
+Travis Nortell: Yep.
+
+00:11:10.000 --> 00:11:16.000
+Brendan Asta: And then we'll do that review, and then some of the things that we talked about, like, we don't currently have.
+
+00:11:16.000 --> 00:11:29.000
+Brendan Asta: a proposal, but we would want to come back with how do we identify to a user that they don't have access to see all the data, make sure how we're thinking through the feedback loop when we start rolling this out more broadly is done appropriately. And then…
+
+00:11:29.000 --> 00:11:36.000
+Brendan Asta: Um, separate, not necessarily this, but just more context of, like, we are going to want a streamlit promotion process as well.
+
+00:11:35.000 --> 00:11:43.000
+Travis Nortell: Okay. Okay. Um, are you guys using… are you doing that manually, or are you using, like, Coco to do optimization?
+
+00:11:43.000 --> 00:11:48.000
+Travis Nortell: query, consolidation, semantic generation, anything like that.
+
+00:11:46.000 --> 00:11:48.000
+Brendan Asta: Great.
+
+00:11:48.000 --> 00:12:05.000
+Brendan Asta: we're looking at Cocoa, we're also comparing the results with other things, like if we just run it, you know, through Quad on the side, which one gives us a better one? I mean, ideally, we would just use Cocoa because it's embedded, um, but we do want to compare and say, like, okay, if it's not as effective, and ideally we could then give you feedback on what we're seeing, but.
+
+00:12:05.000 --> 00:12:23.000
+Brendan Asta: Basically it's like starting from there and then also we were just starting it. So I literally said like, Hey, I want you to run object reference. I want you to do profiling and then I want you to throw it through something and then compare that something versus cocoa. Um, and the other thing that'll be interesting to see as we do this is does it just suggest.
+
+00:12:23.000 --> 00:12:30.000
+Brendan Asta: Query optimizations, or can we add that layer of… actually go create another table, or create a materialized view, or create a something, because then…
+
+00:12:30.000 --> 00:12:32.000
+Brendan Asta: Then you can consolid.
+
+00:12:38.000 --> 00:12:49.000
+Travis Nortell: If you want to test, I will let you know that we use the same models that Claude does under the hood. So what you'll get with Coco is just the skill curation.
+
+00:12:46.000 --> 00:12:48.000
+Brendan Asta: Yep.
+
+00:12:48.000 --> 00:12:57.000
+Brendan Asta: Yeah, I'm always… I mean, the caveat, though, right, is you put a bunch of stuff into your prompt, right, to help, right? So there's context that's eaten up every time we…
+
+00:12:57.000 --> 00:13:03.000
+Brendan Asta: run it. Um, and then also, I'm just, you know, it shrank in the other thread, as you saw, like, wary.
+
+00:13:03.000 --> 00:13:19.000
+Brendan Asta: We can do some pretty bad things pretty quickly when we don't necessarily know, particularly at Snowflake. Just for context, we had a query run for 10 minutes that cost us 15K. So I'm very cognizant of the…
+
+00:13:19.000 --> 00:13:23.000
+Brendan Asta: How quickly things can go sideways, and that there's…
+
+00:13:23.000 --> 00:13:30.000
+Brendan Asta: less guardrails there, then there could be another place. It's just because of the sheer volume that we can push through.
+
+00:13:30.000 --> 00:13:32.000
+Brendan Asta: Inadvertently.
+
+00:13:31.000 --> 00:13:34.000
+Travis Nortell: Yep. Yep. Um…
+
+00:13:35.000 --> 00:13:43.000
+Travis Nortell: OK, so in terms of use cases for the hands-on lab, that would be helpful for you guys, Brendan.
+
+00:13:43.000 --> 00:13:55.000
+Travis Nortell: I think between you and Lauren, I'd like to understand maybe a domain that would be helpful to see if you guys are already doing sales, and you've already seen Raven from our equivalent.
+
+00:13:55.000 --> 00:14:03.000
+Travis Nortell: Does it make sense to pick something else, or would you like to see it centered around that type of work that you guys are already doing?
+
+00:14:03.000 --> 00:14:16.000
+Brendan Asta: So, I'd want to try to get a feeling from Lauren, I think depending on how far sales is, it could be helpful to sort of finish sales, or it could be like, hey, sales are POC, like, let's work through, can we get the patterns.
+
+00:14:16.000 --> 00:14:25.000
+Brendan Asta: in place, like, can we do in the next 3 weeks, decide if we want to use COCO, if we want to do something else externally, and then pick another domain, um…
+
+00:14:25.000 --> 00:14:37.000
+Brendan Asta: May have a lot of overlap, but it'd be kind of cool to be like, hey, if we do this, and then even if it's in a month or two, once we figure out what data we need to pull it, you could do, like, an agent day or an agent week, where it's like, alright, every function.
+
+00:14:37.000 --> 00:14:43.000
+Brendan Asta: Um, great, let's go build you an agent. And I think some of it's gonna be overlap here, like, support, customer success.
+
+00:14:43.000 --> 00:14:49.000
+Brendan Asta: Sales, a lot of them want customer, they want to know the assets, um, a lot of them want.
+
+00:14:49.000 --> 00:15:04.000
+Brendan Asta: Cases information, um, and then it's just more of an extension. So the hope is that you can sort of get that done centrally and it's much faster to build agents. And one thing we don't have context for, 'cause we don't have them in the wild, is do you want a bunch of customized agents and then one over the top? Do you want one?
+
+00:15:04.000 --> 00:15:12.000
+Brendan Asta: one general agent, do you want three sort of general agents? And I don't think we're gonna know that until we actually test it out and see what's live in the wild. I know…
+
+00:15:12.000 --> 00:15:17.000
+Brendan Asta: you can give an answer of, like, what you theoretically think makes sense, but I think we just need to see it.
+
+00:15:16.000 --> 00:15:39.000
+Travis Nortell: Yeah, no, I agree. I talk to a lot of my customers about modularizing these things to begin with, right? And that means a lot of different things depending on your business context. We have a preview right now for an agent router. So we're making this easier for you guys as well in the future where you can hook multiple agents into an agent router. So you guys can still modularize things at an agent level if you want.
+
+00:15:39.000 --> 00:15:51.000
+Travis Nortell: You know, a customer experience, a support, sales, and then submit those out to various teams individually, but then if you have, you know, like, a director level that wants across all of those, the agent router can just.
+
+00:15:51.000 --> 00:15:56.000
+Travis Nortell: route to the appropriate agent based off of the question you're answering. So you guys can curate that, um…
+
+00:15:56.000 --> 00:15:59.000
+Travis Nortell: Okay, cool. So…
+
+00:15:59.000 --> 00:16:20.000
+Trent Jones: I can jump in and just give a little more context, Brendan. So where this idea came from with Lauren was they just did something exactly like this at her last company, what Travis, a month, month and a half ago. And it went really well and it was really all centered around basically replicating what we've built for Raven for Okta.
+
+00:16:10.000 --> 00:16:12.000
+Brendan Asta: Yep.
+
+00:16:13.000 --> 00:16:14.000
+Travis Nortell: Yep.
+
+00:16:20.000 --> 00:16:39.000
+Trent Jones: And so that's what inspired this idea. And then, you know, we jumped in and said, hold on. People like Callian and others have actually done a lot of building in that regard already. And so her suggestion was to have this conversation to say, hey, Brendan's got more context on the business and like what we're focused on right now.
+
+00:16:39.000 --> 00:16:54.000
+Trent Jones: Maybe a good use case could come from that, that conversation. And it sounds like there might be follow ups here, whether, you know, that decision to continue building against that, that GTM agent that's already in the works or to start from something fresh and new that's.
+
+00:16:54.000 --> 00:16:59.000
+Trent Jones: you know, perhaps similar. But yeah, that that's kind of what's behind all of this, if you if you will.
+
+00:16:59.000 --> 00:17:17.000
+Brendan Asta: Yeah, and I can sync with Lauren, and I was out, and she was out. So we're both just back in today for the first time. But I do think that's going to be the question of, like, okay, we have sales. We have sales, which we sort of think is one of our highest ROI internally. We have a much smaller example one that will be done.
+
+00:17:17.000 --> 00:17:23.000
+Brendan Asta: ahead of this. And then the very clear next ones are customer success and customer support. So customer success.
+
+00:17:23.000 --> 00:17:28.000
+Brendan Asta: focused more on churn for specific products, is already thinking of more of, like, a Streamlit.
+
+00:17:28.000 --> 00:17:29.000
+Brendan Asta: App.
+
+00:17:29.000 --> 00:17:40.000
+Brendan Asta: but you could basically have the app, or you could have natural language interface, you could have a combination of the two, and then support also is very invested. So I think the natural question would be, do you extend it.
+
+00:17:40.000 --> 00:17:52.000
+Brendan Asta: to support or, you know, success. And then one of the… unfortunately, one of the gaps we have with support, which won't be solved for another couple months, is the explicit linking of our accounts to our, sort of, support work. We…
+
+00:17:52.000 --> 00:18:08.000
+Brendan Asta: create things in our CRM system, which is Salesforce, and we use Oracle for the actual finance and fulfillment system. Some of it's homegrown, and there's currently not a hard link between the Salesforce data and that data, and our support basically lives on top of that. And so one of the things that we're cleaning up is.
+
+00:18:08.000 --> 00:18:13.000
+Brendan Asta: having a clear link of, like, this EBS party, which is their equivalent of account.
+
+00:18:13.000 --> 00:18:19.000
+Brendan Asta: ties to this account. And that mapping work is ongoing, but until you have that.
+
+00:18:19.000 --> 00:18:23.000
+Brendan Asta: fleshed out, it might be harder to do support, although we'll be in a…
+
+00:18:23.000 --> 00:18:35.000
+Brendan Asta: I think we're probably, like, 80% or 85% by the time we do that, so it might be… make sense to try to do support, um, or a success, or some combination of those two, and you could probably re-leverage a lot of the same things that we're using for sales, because effectively, it's…
+
+00:18:35.000 --> 00:18:44.000
+Brendan Asta: it's parts of the customer 360, right? So sales will be like, I need this 250%, and support's gonna be like, I want this 200%, which overlaps.
+
+00:18:44.000 --> 00:18:47.000
+Brendan Asta: 150 of the 360 width.
+
+00:18:47.000 --> 00:18:49.000
+Brendan Asta: you know, fails.
+
+00:18:48.000 --> 00:18:49.000
+Travis Nortell: Yep.
+
+00:18:49.000 --> 00:19:04.000
+Trent Jones: Yeah, makes sense. The only last piece of context I'll give that I chatted with Lauren about was like, hey, there are broader missions, I guess is the word, within F5 that are in play. And a big one is this telemetry mission, right?
+
+00:19:04.000 --> 00:19:15.000
+Trent Jones: how do we take this telemetry data that we have and start to inform better product decisions, start to better inform the field, if you will? And so my thought was, would it…
+
+00:19:15.000 --> 00:19:35.000
+Trent Jones: behoove us to try to attach this project to a broader mission at F5, right? And I think we're doing that with the things that we're talking about, right? We're talking about enabling customer and telemetry usage data with the various GTM agents that we're talking about, but that was the overarching kind of theme I had suggested to Lauren was.
+
+00:19:35.000 --> 00:19:41.000
+Trent Jones: Hey, is there a way for us to tie this hands-on lab or this initiative into something bigger?
+
+00:19:37.000 --> 00:19:39.000
+Brendan Asta: Yes.
+
+00:19:40.000 --> 00:19:46.000
+Brendan Asta: So there is an AI mission. There's also a go-to-market mission, and there's a telemetry mission. I think the…
+
+00:19:46.000 --> 00:20:02.000
+Brendan Asta: Caveat for the telemetry mission, as I said, right now, we only bring in a subset. Right now, we focus primarily on billing data, or if we know there's a specific use case, then we pull it into Snowflake. So you won't have access to the full, sort of, gamut of telemetry data. Like, the petabytes of telemetry data sits.
+
+00:20:00.000 --> 00:20:04.000
+Trent Jones: The rest lives in Databricks at this point.
+
+00:20:02.000 --> 00:20:06.000
+Brendan Asta: In AWS, yeah, with a Databricks on top.
+
+00:20:05.000 --> 00:20:06.000
+Trent Jones: Yep.
+
+00:20:06.000 --> 00:20:16.000
+Travis Nortell: And that's fine. So the one thing I want to note is the way that we did this in the past, Brendan, is I actually had Lauren's team give me.
+
+00:20:16.000 --> 00:20:24.000
+Travis Nortell: the table names for what existed in Snowflake, and I built the whole thing off of their, like, actual schema.
+
+00:20:23.000 --> 00:20:45.000
+Brendan Asta: Yeah, essentially, we can give you what we have. Currently, it's very focused. We priority was commercial. So metrics. So when we bill on something, we have to mediate. So the unit of measure is not necessarily what we charge on. So for example, you are entitled to a certain number of load balancers. The way we actually compute load balancers is every hour we see how many load balancers.
+
+00:20:24.000 --> 00:20:25.000
+Travis Nortell: I'm just…
+
+00:20:25.000 --> 00:20:27.000
+Travis Nortell: Yeah.
+
+00:20:45.000 --> 00:20:59.000
+Brendan Asta: are up, then we log that, and then we, at the end of the month, we divide by 720. So if you have a thousand load balancers up for one hour, it's the same as one load balancer up for a thousand hours, and so that step is mediation. So the primary data that we've pushed currently is.
+
+00:20:59.000 --> 00:21:08.000
+Brendan Asta: commercial metrics, things we need to mediate, and there's a subset of telemetry that we've pushed. So that exists, you can pull that, it's in Snowflake.
+
+00:21:08.000 --> 00:21:15.000
+Brendan Asta: a ton of rich insights, or we are actively saying, well. the models will pull from Snowflake, and they can also pull from.
+
+00:21:15.000 --> 00:21:26.000
+Brendan Asta: Databricks, and then we take the output of those models and we try to push them back to Snowflake for consumption and things like the Streamlit app, but we're still building that outside of Snowflake.
+
+00:21:25.000 --> 00:21:35.000
+Travis Nortell: Gotcha. Um, okay, so it sounds like, and obviously you want to, you know, convene with Lauren on this too, but it sounds like the easiest one.
+
+00:21:35.000 --> 00:21:43.000
+Travis Nortell: That makes the most sense that's mission driven would be, like, using the existing sales piece to do the support and customer success, as, like, a hand.
+
+00:21:42.000 --> 00:21:53.000
+Brendan Asta: Yes, or if sales isn't done, like let's use this to supercharge the sales or do all three, right? Like supercharge the sales while in parallel working on those.
+
+00:21:52.000 --> 00:21:54.000
+Travis Nortell: Yep.
+
+00:21:53.000 --> 00:21:55.000
+Brendan Asta: other two use cases.
+
+00:21:54.000 --> 00:21:59.000
+Travis Nortell: Okay. Okay, cool. Um, I have one follow-up question for you on…
+
+00:21:59.000 --> 00:22:07.000
+Travis Nortell: expectations for the Hands-On Lab. Like, what would be best for your team to do during it? Because obviously we can go…
+
+00:22:07.000 --> 00:22:18.000
+Travis Nortell: soup to nuts building tables all the way through delivering an agent, but you guys are already doing a lot of that stuff. So, like, what would be helpful to see and do during the hands-on?
+
+00:22:17.000 --> 00:22:33.000
+Brendan Asta: So I think the thing, so for context, the way that we're rolling it out is we're having a handful of the team basically do it and they're doing it now and trying to do best practice. I think it would be helpful to have you guys like review it. And then part of that is like the broader rollout to the other team. So right now it's like, okay.
+
+00:22:33.000 --> 00:22:47.000
+Brendan Asta: four people are doing the process I described, not all 20 of my engineers are doing it. I'd rather have all 20 of them, even if it's redundant, if it's not gonna be, like, crazy expensive, like, hey, four of you can query tune and see if you got the same result, right? And what is that?
+
+00:22:48.000 --> 00:22:50.000
+Travis Nortell: Yep, okay.
+
+00:22:50.000 --> 00:22:51.000
+Travis Nortell: Okay.
+
+00:22:52.000 --> 00:23:00.000
+Travis Nortell: And then, I guess, Trent, have we talked to the team yet about how we want to do Hanza Labs for…
+
+00:23:00.000 --> 00:23:03.000
+Travis Nortell: Separate accounts, dummy data, things of that nature.
+
+00:23:03.000 --> 00:23:04.000
+Travis Nortell: Okay.
+
+00:23:04.000 --> 00:23:20.000
+Trent Jones: Nope, yeah. Greenfield. So far here, I mean, that that was one thing I was gonna talk about is, and maybe a question for you, Travis, just like when you guys did this a month ago. How did you think about splitting out? Who's doing? What is everybody working on the same thing? If there's like, you know.
+
+00:23:20.000 --> 00:23:32.000
+Trent Jones: swim lanes, if you will, and, um, you know, making sure everybody's really clear on what their, their specific individual mission is. But, um, but yeah, lots of, lots of room to start from scratch, if you will. There hasn't been a ton of planning yet in that regard.
+
+00:23:32.000 --> 00:23:36.000
+Travis Nortell: Yeah, I mean, just to give you, Brendan, I think the background of what we did is we…
+
+00:23:36.000 --> 00:23:38.000
+Travis Nortell: I got…
+
+00:23:39.000 --> 00:23:56.000
+Travis Nortell: schemas from Lauren's team, and I built it based off of those with fake data. So essentially, I pointed it at APIs, websites, things like that, to build out the equivalent of what their telemetry would look like for Okta logs, things of that nature, and then use that along with.
+
+00:23:56.000 --> 00:24:08.000
+Travis Nortell: sales data that came from the Salesforce objects that she provided for us. We can do something similar for you guys, and the way we… how we delivered it then was building the whole end-to-end demo.
+
+00:24:08.000 --> 00:24:24.000
+Travis Nortell: Um, hands on with loading the data, doing unstructured parsing. Uh, we did like a confidence score. So you were talking about, um, like propensity to churn, things of that nature. We build a propensity model, stuff like that. Um, but all of this was done in.
+
+00:24:24.000 --> 00:24:38.000
+Travis Nortell: hands-on lab accounts, so it wasn't done in their actual account, so that way you don't have to worry about spend at that point. Like, we can spin up an account for each attendee, and then you can keep those for a time period after that to play around in.
+
+00:24:27.000 --> 00:24:29.000
+Brendan Asta: Okay.
+
+00:24:29.000 --> 00:24:30.000
+Brendan Asta: So then.
+
+00:24:37.000 --> 00:24:40.000
+Brendan Asta: So then, another thing that potentially, I think, could be…
+
+00:24:40.000 --> 00:24:48.000
+Brendan Asta: useful to try to do, if we could do it in the lab, is right now we're also reviewing, like, what do we do with Zoom transcripts? Um, right, so…
+
+00:24:48.000 --> 00:24:51.000
+Brendan Asta: Everything under the sun has an embedded.
+
+00:24:51.000 --> 00:25:06.000
+Brendan Asta: agent that needs transcripts. Challenge the transcript is, how do you make sure it's business context? How do you tag it? Zoom can tell you who is in the call. That's it. So you don't know who has access, etc. And so, one of the things we're thinking through, and if we can do it, would potentially be, like.
+
+00:24:54.000 --> 00:24:55.000
+Travis Nortell: Yep.
+
+00:25:06.000 --> 00:25:22.000
+Brendan Asta: how do you… and maybe it's just you pull in a subset of fake transcripts, and this could be something where we're… I don't know where we would store if we would take, like, the Zoom transcripts, and we do some sort of processing on them, and if we try to get the sentiment out of it, or whatever, but I think that would be cool to try to actually do a working POC of.
+
+00:25:22.000 --> 00:25:26.000
+Brendan Asta: With some sort of RBAC on the transcript.
+
+00:25:25.000 --> 00:25:27.000
+Travis Nortell: Yep.
+
+00:25:26.000 --> 00:25:38.000
+Brendan Asta: Um, I think that'd be very helpful, because that could help us actually design the future state version of it. And I do think that if you're… we're using fake data, I think it would be really interesting for everyone on my team to actually try to do the…
+
+00:25:38.000 --> 00:25:44.000
+Brendan Asta: like, you know, do that, what I'm calling, like, query tuning, but it's all the things of, like.
+
+00:25:44.000 --> 00:25:59.000
+Brendan Asta: both performance tuning the queries by identifying what queries can collapse, what new objects need to be made, and then basically, if we do it in groups, see, like, what is the outcome that the different groups come to, and then be like, okay, this… this one is the best, and then we turn that into, from our standpoint.
+
+00:25:59.000 --> 00:26:03.000
+Brendan Asta: The patterns that we would reproduce on a going forward basis.
+
+00:26:03.000 --> 00:26:14.000
+Travis Nortell: I have no problem doing any of that. I think that's actually a really good way to go through this. So, I think… and I'm just gonna summarize really quick, um…
+
+00:26:09.000 --> 00:26:10.000
+Trent Jones: Okay.
+
+00:26:14.000 --> 00:26:31.000
+Travis Nortell: customer success support mirrored with some of the sales information. So I think one of the things that I would need from you and Lauren would be objects you guys already have. So it would just be just be table names. And what database? Or if you've already started to curate some of the semantics like the semantic.
+
+00:26:31.000 --> 00:26:41.000
+Travis Nortell: like object name, and that way I can get to at least more of like a baseline of what you guys are doing, and then I'll build the other portions of this customer success support.
+
+00:26:41.000 --> 00:26:56.000
+Travis Nortell: The zoom transcripts is a really good call out. We did gong transcripts for the last one. So I have some interesting stuff we can do there in terms of like sentiment, and then pulling in the unstructured and feeding that through. So we can go through that.
+
+00:26:56.000 --> 00:26:57.000
+Travis Nortell: um…
+
+00:26:57.000 --> 00:27:14.000
+Travis Nortell: And then the last one you mentioned that your team's already working on is maybe walking through using something like Coco for automating the consolidation of those like 80 to 90 queries, like doing some analysis to see what the overlap is, where to focus.
+
+00:27:14.000 --> 00:27:16.000
+Travis Nortell: Um…
+
+00:27:15.000 --> 00:27:17.000
+Brendan Asta: Yeah.
+
+00:27:16.000 --> 00:27:18.000
+Travis Nortell: So making it an existing.
+
+00:27:17.000 --> 00:27:18.000
+Brendan Asta: That'd be very helpful.
+
+00:27:18.000 --> 00:27:20.000
+Travis Nortell: Okay, cool.
+
+00:27:19.000 --> 00:27:24.000
+Brendan Asta: Yeah, I was just, the one caveat is I'm saying can tell a bit, but I actually really want to think of like.
+
+00:27:24.000 --> 00:27:28.000
+Brendan Asta: What is the optimal set of queries, and in order to support that.
+
+00:27:28.000 --> 00:27:36.000
+Brendan Asta: Do we need to change, like, especially with AI, like, we can go from a star schema to a normalized schema or create a materialized view.
+
+00:27:36.000 --> 00:27:51.000
+Brendan Asta: in, say, days, if not faster, right? I think there's a… it's a huge difference from if I go back a year ago, or two years ago, make a decision to normalize everything, and you want to pivot to Star Schema, I'm like, alright, I'll see you in three months, right? So this is now, like.
+
+00:27:44.000 --> 00:27:45.000
+Travis Nortell: Yeah.
+
+00:27:48.000 --> 00:27:50.000
+Travis Nortell: Yes.
+
+00:27:50.000 --> 00:27:51.000
+Travis Nortell: Thank you.
+
+00:27:51.000 --> 00:28:08.000
+Brendan Asta: we can, if that doesn't make sense, or we need to, like, we have base and then two something, and we want to double layer, whatever it is, like, that's part of when I'm saying query optimization, it's not just straight up tuning the query, it's thinking through both how do we collapse and or not collapse, and then also being conscious of cost, so…
+
+00:28:08.000 --> 00:28:20.000
+Brendan Asta: the agent doesn't store in memory what it's pulled, right? So I don't want to collapse… like, we could theoretically collapse it to a single query that returns everything, and then it's going to be very expensive for it to hit. So it might actually make.
+
+00:28:20.000 --> 00:28:23.000
+Brendan Asta: Five queries because we actually get very specific.
+
+00:28:23.000 --> 00:28:34.000
+Brendan Asta: questions, and it's actually optimal to have those as separate entities, but I think that… I don't think the team has thought through that. They're just like, I write a query for if I get this question, right? And so trying to look at that.
+
+00:28:34.000 --> 00:28:40.000
+Brendan Asta: using Cocoa, I think, would be very helpful, because that's where I see a lot of the team pivoting to, is…
+
+00:28:40.000 --> 00:28:42.000
+Brendan Asta: We spend a lot less time.
+
+00:28:42.000 --> 00:28:50.000
+Brendan Asta: Sort of, like, chasing documentation and other things, and a lot more time actually building and seeing what the ramifications are, and…
+
+00:28:50.000 --> 00:28:57.000
+Brendan Asta: doing a lot more of that tuning and reconstructing, and being much more flexible in terms of the objects that live inside Snowflake.
+
+00:28:56.000 --> 00:29:01.000
+Travis Nortell: Okay, cool. I think… I think this is extremely helpful. If you want to…
+
+00:29:01.000 --> 00:29:12.000
+Travis Nortell: validate some of that with Lauren, and I know, Trent, you can probably help stitch that together here to see if that's the use case we want to move forward with. My last question, Brendan, I think for you is.
+
+00:29:12.000 --> 00:29:15.000
+Travis Nortell: A lot of what we're talking about is how you guys.
+
+00:29:15.000 --> 00:29:18.000
+Travis Nortell: do this and then serve it to the business. Right?
+
+00:29:17.000 --> 00:29:19.000
+Brendan Asta: Correct, yep.
+
+00:29:19.000 --> 00:29:27.000
+Travis Nortell: Um, what about skill creation and engineering automation as we go through some of this? So…
+
+00:29:27.000 --> 00:29:40.000
+Travis Nortell: we're talking about, like, curating this, like, 90-some-odd repository of queries. You're probably going to get something similar for the next domain you go to. Do you want to look at how you create skills to do that to help make it faster the next time, or…
+
+00:29:39.000 --> 00:29:55.000
+Brendan Asta: Yeah, that's what I was saying. So how do I turn that into a process for my team? Because that's the expectation. So that's what I was saying. If we do, like, a bake-off of, like, hey, you think this, like, I have outlined what I think the process is, Travis, you outline it, the team goes off and does something, and we're like.
+
+00:29:55.000 --> 00:30:01.000
+Brendan Asta: okay, which of these three is the best, or can we take a combination of all three? Then that becomes a pattern I ask the team to do.
+
+00:30:01.000 --> 00:30:17.000
+Brendan Asta: consistently as sort of the default going forward. And that's what I was saying, we're learning on the fly or doing that with sales, but I think that would be very powerful, because it gives everyone hands-on experience, and it means that the playbook that we come up with is actually sort of like a team come up with playbook that we've verified across.
+
+00:30:10.000 --> 00:30:11.000
+Travis Nortell: Yep.
+
+00:30:20.000 --> 00:30:22.000
+Travis Nortell: I like it. I can do that.
+
+00:30:23.000 --> 00:30:38.000
+Trent Jones: I know we're at time. Um, so I think it's pretty clear, like, we'll… we'll package all this up into some sort of working doc here, and I'll sync with Travis, and then, Brendan, if you can connect with Lauren. I know she's out, but, um, separate from that, I will be…
+
+00:30:38.000 --> 00:30:46.000
+Trent Jones: I will be with her in person next week at Summit, and we're gonna do a dinner with them, with Alexa, Lauren.
+
+00:30:46.000 --> 00:30:58.000
+Trent Jones: Prati and Chidmai, so, like, we'll be with a lot of the people that can help inform this stuff, too, so probably a lot of updates will come next week on this stuff, too, but, um, this is a great start, I'd say, yeah.
+
+00:30:53.000 --> 00:30:55.000
+Brendan Asta: Yep.
+
+00:30:58.000 --> 00:31:08.000
+Trent Jones: Um, anything else, Brendan, you need from us, or questions you had for us? I know there's the cost stuff, we'll certainly handle that, kind of in a separate stream, but, um, anything else for this call?
+
+00:31:09.000 --> 00:31:12.000
+Brendan Asta: No, I'm excited for the direction. I'll be up there.
+
+00:31:12.000 --> 00:31:15.000
+Trent Jones: Oh, you're… you're coming to Summit?
+
+00:31:14.000 --> 00:31:20.000
+Brendan Asta: Not Summit, the lab in June. Yeah.
+
+00:31:17.000 --> 00:31:21.000
+Trent Jones: You'll come to the… okay, perfect, yeah, because you're East Coast, right?
+
+00:31:21.000 --> 00:31:22.000
+Brendan Asta: I am.
+
+00:31:22.000 --> 00:31:30.000
+Trent Jones: Yeah, nice. Um, are you coming in the day before, by chance? On, like, the 23rd?
+
+00:31:28.000 --> 00:31:33.000
+Brendan Asta: I am. I'm getting in, I think, like, around noon-ish the day before.
+
+00:31:33.000 --> 00:31:35.000
+Trent Jones: Okay.
+
+00:31:33.000 --> 00:31:36.000
+Brendan Asta: And I'm leaving at, like, 4 the day after.
+
+00:31:37.000 --> 00:31:52.000
+Trent Jones: Nice. Alright, I am, uh… stay tuned. I'm poking the team to see if we want to do, like, some group dinner or something the night before, and we can host, obviously, so… Anyway, this'll be fun, appreciate the insights, and uh…
+
+00:31:42.000 --> 00:31:43.000
+Brendan Asta: Okay.
+
+00:31:52.000 --> 00:31:55.000
+Trent Jones: We'll keep playing this. I'm sure we'll be talking a lot more leading up to it.
+
+00:31:55.000 --> 00:31:58.000
+Brendan Asta: Alright, awesome. Thanks both of you.
+
+00:31:56.000 --> 00:31:59.000
+Travis Nortell: Thanks, Brandon. Nice to meet you.
+
+00:31:56.000 --> 00:31:58.000
+Trent Jones: Thanks, man.
+

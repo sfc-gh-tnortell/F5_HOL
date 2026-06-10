@@ -1,0 +1,47 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Sarah Mitchell: Thanks for joining, Karen Murphy. Good to connect with you and the Intel team.
+
+00:00:38.945 --> 00:00:44.500
+Karen Murphy: Good to see you both. Sarah Mitchell, Kevin Nakamura - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Sarah Mitchell: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Karen Murphy: We had three unplanned outages on the Distributed Cloud platform in the past quarter. For a security product, that's unacceptable.
+
+00:01:16.691 --> 00:01:24.862
+Sarah Mitchell: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Kevin Nakamura: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Karen Murphy: Sure. The main pain point is reliability. We've had too many incidents that impacted production workloads.
+
+00:02:02.604 --> 00:02:17.971
+Karen Murphy: We just got approval for a major security initiative in FY26. There's budget earmarked for WAF and bot protection modernization. Your timing is actually perfect.
+
+00:02:17.971 --> 00:02:40.432
+Sarah Mitchell: We can definitely work with you on that. Let me put together a total value summary showing your current investment and ROI across all F5 products.
+
+00:02:40.432 --> 00:02:55.831
+Karen Murphy: We went through a 20% reduction in IT staff last month. The team running our BIG-IP infrastructure was cut in half, so we need to discuss managed services options.
+
+00:02:55.831 --> 00:03:23.724
+Kevin Nakamura: Professional Services can bridge that gap immediately. We have certified engineers who can manage your environment while you rebuild the team.
+
+00:03:23.724 --> 00:03:31.111
+Sarah Mitchell: This has been really productive. Let me summarize the action items.
+
+00:03:31.111 --> 00:03:46.905
+Sarah Mitchell: Let's schedule a call with our engineering leadership next week. I want them to hear directly from you what needs to change.
+
+00:03:46.905 --> 00:03:51.284
+Karen Murphy: Appreciate it. Let's keep the momentum going.
+
+00:03:51.284 --> 00:03:56.081
+Sarah Mitchell: Thank you, Karen Murphy. Talk soon.
+

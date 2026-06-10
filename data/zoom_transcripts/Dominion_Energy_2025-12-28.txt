@@ -1,0 +1,47 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Christopher Davis: Thanks for joining, Tom Jackson. Good to connect with you and the Dominion Energy team.
+
+00:00:38.945 --> 00:00:44.500
+Tom Jackson: Good to see you both. Christopher Davis, Emily Rodriguez - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Christopher Davis: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Tom Jackson: The NGINX licensing model is confusing. We can't figure out what we're paying for versus what's open source versus what needs Plus.
+
+00:01:16.691 --> 00:01:24.862
+Christopher Davis: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Emily Rodriguez: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Tom Jackson: Sure. The main pain point is operational complexity. Our team is stretched thin and managing the platform takes too much effort.
+
+00:02:02.604 --> 00:02:17.971
+Tom Jackson: The CFO is pushing for multi-year agreements across all vendors to lock in pricing. What kind of terms can you offer on a 3-year for Distributed Cloud?
+
+00:02:17.971 --> 00:02:40.432
+Christopher Davis: I understand the budget pressure. One option is to transition from capex hardware to opex SaaS models. That often fits better in today's financial planning.
+
+00:02:40.432 --> 00:02:55.831
+Tom Jackson: We went through a 20% reduction in IT staff last month. The team running our BIG-IP infrastructure was cut in half, so we need to discuss managed services options.
+
+00:02:55.831 --> 00:03:23.724
+Emily Rodriguez: Automation is where we're investing heavily. BIG-IP Next and NGINX One both support full GitOps workflows. Less manual, fewer people needed.
+
+00:03:23.724 --> 00:03:31.111
+Christopher Davis: This has been really productive. Let me summarize the action items.
+
+00:03:31.111 --> 00:03:46.905
+Christopher Davis: Let's schedule a call with our engineering leadership next week. I want them to hear directly from you what needs to change.
+
+00:03:46.905 --> 00:03:51.284
+Tom Jackson: Appreciate it. Let's keep the momentum going.
+
+00:03:51.284 --> 00:03:56.081
+Christopher Davis: Thank you, Tom Jackson. Talk soon.
+

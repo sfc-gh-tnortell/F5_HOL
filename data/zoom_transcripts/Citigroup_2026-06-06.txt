@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Rachel Patel: Thanks for joining, Mike Patel. Good to connect with you and the Citigroup team.
+
+00:00:38.945 --> 00:00:44.500
+Mike Patel: Good to see you both. Rachel Patel, Marcus Thompson - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Rachel Patel: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:14.432
+Mike Patel: We're migrating 70% of workloads to AWS and Azure over the next 18 months. The on-prem BIG-IP strategy needs to evolve. What does F5 offer for multi-cloud?
+
+00:01:14.432 --> 00:01:24.862
+Marcus Thompson: Great question. Let me share what we're seeing with customers in similar situations.
+
+00:01:24.862 --> 00:01:51.290
+Marcus Thompson: For zero trust, our Access Policy Manager integrates with your IdP and enforces per-request authentication. Combined with XC, you get identity-aware routing.
+
+00:01:51.290 --> 00:02:06.251
+Mike Patel: We're in Q4 budget planning right now, and the board wants a 15% reduction across all vendor spend. We need to understand our total F5 commitment before renewals hit.
+
+00:02:06.251 --> 00:02:34.041
+Rachel Patel: We hear this a lot right now. The good news is F5 consolidates what would otherwise be 3-4 separate vendor contracts for ADC, WAF, bot, and API security.
+
+00:02:34.041 --> 00:02:42.943
+Rachel Patel: This has been really productive. Let me summarize the action items.
+
+00:02:42.943 --> 00:02:57.750
+Rachel Patel: I'll send over the comparison document and pricing options. Marcus Thompson can set up a lab environment if you want hands-on time with the platform.
+
+00:02:57.750 --> 00:03:02.525
+Mike Patel: Good. Send me the follow-up and we'll get it on the calendar.
+
+00:03:02.525 --> 00:03:07.857
+Rachel Patel: Thank you, Mike Patel. Talk soon.
+

@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Robert Chen: Thanks for joining, Karen Garcia. Good to connect with you and the Salesforce team.
+
+00:00:38.945 --> 00:00:44.500
+Karen Garcia: Good to see you both. Robert Chen, Priya Sharma - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Robert Chen: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:11.957
+Karen Garcia: The BIG-IP LTM has been rock solid for us. Zero unplanned downtime in 3 years. When it works, it really works.
+
+00:01:11.957 --> 00:01:19.352
+Robert Chen: That's great to hear! We love when the technology delivers real value.
+
+00:01:19.352 --> 00:01:44.735
+Karen Garcia: Absolutely. In fact, that success is why we're looking at expanding. The security team wants to extend WAF coverage to our new microservices platform.
+
+00:01:44.735 --> 00:01:59.106
+Karen Garcia: We just got approval for a major security initiative in FY26. There's budget earmarked for WAF and bot protection modernization. Your timing is actually perfect.
+
+00:01:59.106 --> 00:02:27.807
+Robert Chen: I understand the budget pressure. One option is to transition from capex hardware to opex SaaS models. That often fits better in today's financial planning.
+
+00:02:27.807 --> 00:02:35.330
+Robert Chen: This has been really productive. Let me summarize the action items.
+
+00:02:35.330 --> 00:02:50.198
+Robert Chen: I'll send over the expansion proposal by end of week. Priya Sharma will schedule a technical deep-dive with your architecture team.
+
+00:02:50.198 --> 00:02:55.831
+Karen Garcia: Thanks. We'll review on our end and circle back.
+
+00:02:55.831 --> 00:03:00.679
+Robert Chen: Thank you, Karen Garcia. Talk soon.
+

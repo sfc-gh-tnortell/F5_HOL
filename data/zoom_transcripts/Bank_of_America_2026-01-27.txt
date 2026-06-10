@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Christopher Davis: Thanks for joining, Tom Garcia. Good to connect with you and the Bank of America team.
+
+00:00:38.945 --> 00:00:44.500
+Tom Garcia: Good to see you both. Christopher Davis, Emily Rodriguez - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Christopher Davis: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:14.432
+Tom Garcia: We're adopting a service mesh architecture with Istio. How does NGINX or F5 Distributed Cloud fit into that? We don't want overlapping tools.
+
+00:01:14.432 --> 00:01:24.862
+Emily Rodriguez: Great question. Let me share what we're seeing with customers in similar situations.
+
+00:01:24.862 --> 00:01:51.290
+Emily Rodriguez: For zero trust, our Access Policy Manager integrates with your IdP and enforces per-request authentication. Combined with XC, you get identity-aware routing.
+
+00:01:51.290 --> 00:02:06.251
+Tom Garcia: We just got approval for a major security initiative in FY26. There's budget earmarked for WAF and bot protection modernization. Your timing is actually perfect.
+
+00:02:06.251 --> 00:02:34.041
+Christopher Davis: I understand the budget pressure. One option is to transition from capex hardware to opex SaaS models. That often fits better in today's financial planning.
+
+00:02:34.041 --> 00:02:42.943
+Christopher Davis: This has been really productive. Let me summarize the action items.
+
+00:02:42.943 --> 00:02:57.750
+Christopher Davis: Good discussion. I'll get the multi-year pricing from deal desk and Emily Rodriguez will put together a technical architecture for the migration path.
+
+00:02:57.750 --> 00:03:02.525
+Tom Garcia: Sounds good. Thanks both for the time today.
+
+00:03:02.525 --> 00:03:07.857
+Christopher Davis: Thank you, Tom Garcia. Talk soon.
+

@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Christopher Davis: Thanks for joining, John Miller. Good to connect with you and the Boeing team.
+
+00:00:38.945 --> 00:00:44.500
+John Miller: Good to see you both. Christopher Davis, Emily Rodriguez - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Christopher Davis: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:11.957
+John Miller: NGINX Plus performance has been incredible. We went from 50ms latency on our old gateway to sub-5ms. The engineering team loves it.
+
+00:01:11.957 --> 00:01:19.352
+Christopher Davis: That's great to hear! We love when the technology delivers real value.
+
+00:01:19.352 --> 00:01:44.735
+John Miller: Absolutely. In fact, that success is why we're looking at expanding. Bot Defense has proven itself on our main site. Now we want it across all customer-facing properties.
+
+00:01:44.735 --> 00:01:59.106
+John Miller: The CFO is pushing for multi-year agreements across all vendors to lock in pricing. What kind of terms can you offer on a 3-year for Distributed Cloud?
+
+00:01:59.106 --> 00:02:27.807
+Christopher Davis: We hear this a lot right now. The good news is F5 consolidates what would otherwise be 3-4 separate vendor contracts for ADC, WAF, bot, and API security.
+
+00:02:27.807 --> 00:02:35.330
+Christopher Davis: This has been really productive. Let me summarize the action items.
+
+00:02:35.330 --> 00:02:50.198
+Christopher Davis: I'll send over the expansion proposal by end of week. Emily Rodriguez will schedule a technical deep-dive with your architecture team.
+
+00:02:50.198 --> 00:02:55.831
+John Miller: Good. Send me the follow-up and we'll get it on the calendar.
+
+00:02:55.831 --> 00:03:00.679
+Christopher Davis: Thank you, John Miller. Talk soon.
+

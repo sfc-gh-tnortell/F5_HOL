@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+James O'Brien: Thanks for joining, Jennifer Miller. Good to connect with you and the JPMorgan Chase team.
+
+00:00:38.945 --> 00:00:44.500
+Jennifer Miller: Good to see you both. James O'Brien, Aisha Washington - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+James O'Brien: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:11.957
+Jennifer Miller: Distributed Cloud WAF caught a zero-day exploitation attempt last month before our SOC even saw it. That justified the entire investment.
+
+00:01:11.957 --> 00:01:19.352
+James O'Brien: That's great to hear! We love when the technology delivers real value.
+
+00:01:19.352 --> 00:01:44.735
+Jennifer Miller: Absolutely. In fact, that success is why we're looking at expanding. The multi-cloud networking piece is interesting. We're adding GCP and need consistent policy.
+
+00:01:44.735 --> 00:01:59.106
+Jennifer Miller: We're in Q4 budget planning right now, and the board wants a 15% reduction across all vendor spend. We need to understand our total F5 commitment before renewals hit.
+
+00:01:59.106 --> 00:02:27.807
+James O'Brien: Multi-year commitments are something we actively encourage. I can get our deal desk to model out 2-year and 3-year options with the associated discounts.
+
+00:02:27.807 --> 00:02:35.330
+James O'Brien: This has been really productive. Let me summarize the action items.
+
+00:02:35.330 --> 00:02:50.198
+James O'Brien: I'll send over the expansion proposal by end of week. Aisha Washington will schedule a technical deep-dive with your architecture team.
+
+00:02:50.198 --> 00:02:55.831
+Jennifer Miller: Appreciate it. Let's keep the momentum going.
+
+00:02:55.831 --> 00:03:00.679
+James O'Brien: Thank you, Jennifer Miller. Talk soon.
+

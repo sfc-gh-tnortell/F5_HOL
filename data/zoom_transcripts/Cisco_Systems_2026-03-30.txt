@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Sarah Mitchell: Thanks for joining, Alex Lee. Good to connect with you and the Cisco Systems team.
+
+00:00:38.945 --> 00:00:44.500
+Alex Lee: Good to see you both. Sarah Mitchell, Kevin Nakamura - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Sarah Mitchell: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:11.957
+Alex Lee: NGINX Plus performance has been incredible. We went from 50ms latency on our old gateway to sub-5ms. The engineering team loves it.
+
+00:01:11.957 --> 00:01:19.352
+Sarah Mitchell: That's great to hear! We love when the technology delivers real value.
+
+00:01:19.352 --> 00:01:44.735
+Alex Lee: Absolutely. In fact, that success is why we're looking at expanding. The security team wants to extend WAF coverage to our new microservices platform.
+
+00:01:44.735 --> 00:01:59.106
+Alex Lee: We just got approval for a major security initiative in FY26. There's budget earmarked for WAF and bot protection modernization. Your timing is actually perfect.
+
+00:01:59.106 --> 00:02:27.807
+Sarah Mitchell: Multi-year commitments are something we actively encourage. I can get our deal desk to model out 2-year and 3-year options with the associated discounts.
+
+00:02:27.807 --> 00:02:35.330
+Sarah Mitchell: This has been really productive. Let me summarize the action items.
+
+00:02:35.330 --> 00:02:50.198
+Sarah Mitchell: I'll send over the expansion proposal by end of week. Kevin Nakamura will schedule a technical deep-dive with your architecture team.
+
+00:02:50.198 --> 00:02:55.831
+Alex Lee: Good. Send me the follow-up and we'll get it on the calendar.
+
+00:02:55.831 --> 00:03:00.679
+Sarah Mitchell: Thank you, Alex Lee. Talk soon.
+
