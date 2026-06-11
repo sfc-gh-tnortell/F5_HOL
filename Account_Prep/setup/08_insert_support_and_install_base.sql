@@ -13,7 +13,10 @@ USE SCHEMA RAW;
 
 -- ============================================================
 -- SUPPORT CASES (DIM_SUPPORT_CASE)
--- ~3-5 cases per account = ~600-1000 cases
+-- ~1000+ cases correlated to each account's telemetry signal
+-- Cases from last 2 months = Open/In Progress
+-- Cases from months 3-12 = Closed/Resolved
+-- No duplicate symptoms within a single calendar month per account
 -- ============================================================
 INSERT INTO DIM_SUPPORT_CASE (
     DIM_SUPPORT_CASE_KEY, SUPPORT_CASE_ID, SUPPORT_CASE_NUM,
@@ -25,68 +28,119 @@ INSERT INTO DIM_SUPPORT_CASE (
     FIRST_RESPONSE_DATETIME, CONTACT_FULL_NAME,
     CONTACT_EMAIL_ADDRESS_TEXT, SERVICE_LEVEL_CODE
 )
-WITH case_templates AS (
-    SELECT column1 AS title_template, column2 AS area, column3 AS sub_area,
-           column4 AS product, column5 AS sku, column6 AS case_type
-    FROM VALUES
-        ('BIG-IP LTM failover not triggering during health check failure', 'Networking', 'High Availability', 'BIG-IP LTM', 'F5-BIG-LTM', 'Technical'),
-        ('iRule performance degradation after upgrade to v17.1', 'Software', 'Performance', 'BIG-IP LTM', 'F5-BIG-LTM', 'Technical'),
-        ('SSL certificate renewal failing on BIG-IP cluster', 'Security', 'Certificates', 'BIG-IP LTM', 'F5-BIG-LTM', 'Technical'),
-        ('WAF false positives blocking legitimate API traffic', 'Security', 'WAF Policy', 'BIG-IP ASM', 'F5-BIG-ASM', 'Technical'),
-        ('NGINX Plus upstream health checks timing out intermittently', 'Networking', 'Load Balancing', 'NGINX Plus', 'F5-NGINX-PLUS', 'Technical'),
-        ('NGINX Ingress Controller OOM kills in Kubernetes cluster', 'Software', 'Kubernetes', 'NGINX Ingress', 'F5-NGINX-INGRESS', 'Technical'),
-        ('Distributed Cloud WAF rule update not propagating to all PoPs', 'Security', 'WAF Policy', 'XC WAF', 'F5-XC-WAF', 'Technical'),
-        ('XC Bot Defense blocking Googlebot crawler', 'Security', 'Bot Management', 'XC Bot Defense', 'F5-XC-BOT-DEFENSE', 'Technical'),
-        ('API Security discovery not detecting new endpoints after deploy', 'Security', 'API Discovery', 'XC API Security', 'F5-XC-API-SECURITY', 'Technical'),
-        ('Multi-cloud networking latency spike between AWS and Azure sites', 'Networking', 'Connectivity', 'XC App Connect', 'F5-XC-APP-CONNECT', 'Technical'),
-        ('BIG-IP hardware fan failure alert on i5600 chassis', 'Hardware', 'Appliance', 'BIG-IP i5600', 'F5-BIG-IP-I5600', 'Hardware'),
-        ('License activation failure after RMA replacement unit received', 'Licensing', 'Activation', 'BIG-IP', 'F5-BIG-IP-I4600', 'Administrative'),
-        ('Request to increase XC WAF request rate limit for Black Friday', 'Configuration', 'Capacity', 'XC WAF', 'F5-XC-WAF', 'Service Request'),
-        ('Need assistance configuring DNS load balancing for disaster recovery', 'Networking', 'DNS', 'XC DNS', 'F5-XC-DNS', 'Technical'),
-        ('BIG-IP memory utilization at 95% causing connection drops', 'Software', 'Performance', 'BIG-IP LTM', 'F5-BIG-IP-I7600', 'Technical'),
-        ('XC DDoS mitigation did not activate during volumetric attack', 'Security', 'DDoS', 'XC DDoS', 'F5-XC-DDoS', 'Escalation'),
-        ('APM session persistence failing after IdP SAML metadata rotation', 'Security', 'Access Management', 'BIG-IP APM', 'F5-BIG-APM', 'Technical'),
-        ('Client-Side Defense script injection detection false alarm', 'Security', 'Client Protection', 'XC Client-Side', 'F5-XC-CLIENT-SIDE', 'Technical'),
-        ('Request for product roadmap briefing - AI Gateway capabilities', 'Sales', 'Product Info', 'AI Gateway', 'F5-AI-GATEWAY', 'Service Request'),
-        ('GTM GSLB not failing over to DR site during primary outage', 'Networking', 'DNS', 'BIG-IP GTM', 'F5-BIG-GTM', 'Escalation')
+WITH acct_signals AS (
+    SELECT a.ACCT_NAME, a.SFDCF5_ACCT_ID,
+        CASE
+            WHEN AVG(t.BOT_ADVANCED_TRANSACTION_CNT) > 300000 THEN 'bot-defense'
+            WHEN AVG(t.WAF_USAGE_QTY) > 25 THEN 'waf'
+            WHEN AVG(t.ACTIVE_ENDPOINT_QTY) > 150 THEN 'capacity'
+            WHEN AVG(t.ACTIVE_HTTP_LOAD_BALANCER_QTY) > 40 THEN 'load-balancer'
+            WHEN AVG(t.DNS_ZONES_QTY) > 7 THEN 'dns'
+            ELSE 'performance'
+        END as primary_signal
+    FROM COL_XC_TELEMETRY t
+    JOIN DIM_CUST_ACCT_SFDC a ON t.SFDCF5_ACCT_ID = a.SFDCF5_ACCT_ID
+    GROUP BY 1, 2
 ),
-accounts AS (
-    SELECT SFDCF5_ACCT_ID, ACCT_NAME,
-           ROW_NUMBER() OVER (ORDER BY SFDCF5_ACCT_ID) AS rn
-    FROM DIM_CUST_ACCT_SFDC
+case_templates AS (
+    SELECT column1 AS signal_cat, column2 AS template_idx, column3 AS title,
+           column4 AS product, column5 AS sku, column6 AS area, column7 AS sub_area, column8 AS case_type
+    FROM VALUES
+    -- bot-defense (8)
+    ('bot-defense', 1, 'Legitimate checkout flow being challenged during flash sale event', 'XC Bot Defense', 'F5-XC-BOT-DEFENSE', 'Security', 'Bot Management', 'Technical'),
+    ('bot-defense', 2, 'Mobile app users blocked after OS update - bot SDK false positive', 'XC Bot Defense', 'F5-XC-BOT-DEFENSE', 'Security', 'Bot Management', 'Technical'),
+    ('bot-defense', 3, 'Partner API integration classified as automated traffic', 'XC Bot Defense', 'F5-XC-BOT-DEFENSE', 'Security', 'Bot Management', 'Technical'),
+    ('bot-defense', 4, 'Credential stuffing bypassing detection on /auth endpoint', 'XC Bot Defense', 'F5-XC-BOT-DEFENSE', 'Security', 'Bot Management', 'Escalation'),
+    ('bot-defense', 5, 'Bot score regression after model update causing false positives', 'XC Bot Defense', 'F5-XC-BOT-DEFENSE', 'Security', 'Bot Management', 'Technical'),
+    ('bot-defense', 6, 'JavaScript challenge breaking single-page application navigation', 'XC Bot Defense', 'F5-XC-BOT-DEFENSE', 'Security', 'Bot Management', 'Technical'),
+    ('bot-defense', 7, 'Geo-distributed scraping attack evading IP-based detection', 'XC Bot Defense', 'F5-XC-BOT-DEFENSE', 'Security', 'Bot Management', 'Escalation'),
+    ('bot-defense', 8, 'Webhook callbacks from payment processors being blocked', 'XC Bot Defense', 'F5-XC-BOT-DEFENSE', 'Security', 'Bot Management', 'Technical'),
+    -- waf (8)
+    ('waf', 1, 'GraphQL introspection queries triggering SQL injection rules', 'XC WAF', 'F5-XC-WAF', 'Security', 'WAF Policy', 'Technical'),
+    ('waf', 2, 'CORS preflight requests denied after WAF rule propagation', 'XC WAF', 'F5-XC-WAF', 'Security', 'WAF Policy', 'Technical'),
+    ('waf', 3, 'File upload endpoint blocking legitimate PDF attachments', 'BIG-IP ASM', 'F5-BIG-ASM', 'Security', 'WAF Policy', 'Technical'),
+    ('waf', 4, 'REST API request body exceeding WAF inspection buffer limit', 'XC WAF', 'F5-XC-WAF', 'Configuration', 'Capacity', 'Technical'),
+    ('waf', 5, 'Rate limiting rules conflicting with internal service mesh traffic', 'XC WAF', 'F5-XC-WAF', 'Security', 'WAF Policy', 'Technical'),
+    ('waf', 6, 'Custom security header stripped by WAF transformation rules', 'BIG-IP ASM', 'F5-BIG-ASM', 'Security', 'WAF Policy', 'Technical'),
+    ('waf', 7, 'WebSocket upgrade blocked after rule set version change', 'XC WAF', 'F5-XC-WAF', 'Security', 'WAF Policy', 'Escalation'),
+    ('waf', 8, 'Multipart form data with unicode filenames triggering encoding rule', 'XC WAF', 'F5-XC-WAF', 'Security', 'WAF Policy', 'Technical'),
+    -- capacity (8)
+    ('capacity', 1, 'Endpoint count at 92% of contracted entitlement growing 3% weekly', 'XC WAF', 'F5-XC-WAF', 'Configuration', 'Capacity', 'Service Request'),
+    ('capacity', 2, 'Namespace resource quota preventing new service deployments', 'XC App Connect', 'F5-XC-APP-CONNECT', 'Configuration', 'Capacity', 'Technical'),
+    ('capacity', 3, 'Concurrent connection count exceeding tier during peak hours', 'XC WAF', 'F5-XC-WAF', 'Configuration', 'Capacity', 'Technical'),
+    ('capacity', 4, 'WAF request processing at capacity causing increased latency', 'XC WAF', 'F5-XC-WAF', 'Configuration', 'Capacity', 'Escalation'),
+    ('capacity', 5, 'API call volume projected to exceed monthly quota within 2 weeks', 'XC API Security', 'F5-XC-API-SECURITY', 'Configuration', 'Capacity', 'Service Request'),
+    ('capacity', 6, 'Security event log storage exceeding retention policy threshold', 'XC WAF', 'F5-XC-WAF', 'Configuration', 'Capacity', 'Technical'),
+    ('capacity', 7, 'Site count approaching hard limit for current subscription tier', 'XC App Connect', 'F5-XC-APP-CONNECT', 'Configuration', 'Capacity', 'Service Request'),
+    ('capacity', 8, 'Load balancer pool member count maxed causing health check overhead', 'BIG-IP LTM', 'F5-BIG-LTM', 'Configuration', 'Capacity', 'Technical'),
+    -- load-balancer (8)
+    ('load-balancer', 1, 'Health check failures during blue-green deployment cutover', 'BIG-IP LTM', 'F5-BIG-LTM', 'Networking', 'High Availability', 'Technical'),
+    ('load-balancer', 2, 'Connection draining not completing before new deployment activates', 'NGINX Plus', 'F5-NGINX-PLUS', 'Networking', 'Load Balancing', 'Technical'),
+    ('load-balancer', 3, 'Origin TLS certificate chain validation failing intermittently', 'BIG-IP LTM', 'F5-BIG-LTM', 'Security', 'Certificates', 'Technical'),
+    ('load-balancer', 4, 'Sticky session persistence breaking during horizontal scale events', 'BIG-IP LTM', 'F5-BIG-LTM', 'Networking', 'High Availability', 'Technical'),
+    ('load-balancer', 5, 'Weighted routing not reflecting updated backend capacity ratios', 'BIG-IP LTM', 'F5-BIG-LTM', 'Networking', 'Load Balancing', 'Technical'),
+    ('load-balancer', 6, 'IPv6 to IPv4 translation causing source IP preservation issues', 'NGINX Plus', 'F5-NGINX-PLUS', 'Networking', 'Load Balancing', 'Technical'),
+    ('load-balancer', 7, 'TCP connection pool exhaustion under sustained high throughput', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Escalation'),
+    ('load-balancer', 8, 'HTTP/2 server push not functioning through load balancer proxy', 'NGINX Plus', 'F5-NGINX-PLUS', 'Networking', 'Load Balancing', 'Technical'),
+    -- dns (8)
+    ('dns', 1, 'Zone transfer propagation taking 18 minutes between edge PoPs', 'XC DNS', 'F5-XC-DNS', 'Networking', 'DNS', 'Technical'),
+    ('dns', 2, 'GSLB not detecting primary site health degradation', 'BIG-IP GTM', 'F5-BIG-GTM', 'Networking', 'DNS', 'Escalation'),
+    ('dns', 3, 'CNAME flattening producing unexpected resolution for apex domain', 'XC DNS', 'F5-XC-DNS', 'Networking', 'DNS', 'Technical'),
+    ('dns', 4, 'Geo-routing sending VPN users to incorrect regional endpoint', 'BIG-IP GTM', 'F5-BIG-GTM', 'Networking', 'DNS', 'Technical'),
+    ('dns', 5, 'DNSSEC validation failures for records signed with expiring ZSK', 'XC DNS', 'F5-XC-DNS', 'Networking', 'DNS', 'Technical'),
+    ('dns', 6, 'Split-horizon DNS not separating internal from external resolution', 'BIG-IP GTM', 'F5-BIG-GTM', 'Networking', 'DNS', 'Technical'),
+    ('dns', 7, 'DNS failover SLA breach during datacenter maintenance window', 'XC DNS', 'F5-XC-DNS', 'Networking', 'DNS', 'Escalation'),
+    ('dns', 8, 'Recursive resolver timeout causing intermittent name resolution', 'BIG-IP GTM', 'F5-BIG-GTM', 'Networking', 'DNS', 'Technical'),
+    -- performance (8)
+    ('performance', 1, 'P99 latency regression after configuration deployment last Tuesday', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Technical'),
+    ('performance', 2, 'Cache hit ratio collapsed from 82% to 34% after origin failover', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Technical'),
+    ('performance', 3, 'TLS handshake overhead adding 65ms for clients with older ciphers', 'BIG-IP LTM', 'F5-BIG-LTM', 'Security', 'Certificates', 'Technical'),
+    ('performance', 4, 'Edge function cold start latency exceeding 800ms SLA threshold', 'XC App Connect', 'F5-XC-APP-CONNECT', 'Software', 'Performance', 'Technical'),
+    ('performance', 5, 'Connection keep-alive timeout mismatch causing premature resets', 'NGINX Plus', 'F5-NGINX-PLUS', 'Networking', 'Load Balancing', 'Technical'),
+    ('performance', 6, 'Response compression not activating for application/json content', 'NGINX Plus', 'F5-NGINX-PLUS', 'Software', 'Performance', 'Technical'),
+    ('performance', 7, 'iRule execution time degradation after upgrade to v17.1', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Escalation'),
+    ('performance', 8, 'Memory utilization at 95% causing intermittent connection drops', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Technical')
+),
+month_template_combos AS (
+    SELECT
+        s.value::INT as month_offset,
+        t.value::INT as template_pick
+    FROM TABLE(FLATTEN(ARRAY_GENERATE_RANGE(0, 12))) s,
+         TABLE(FLATTEN(ARRAY_GENERATE_RANGE(1, 9))) t
 ),
 generated AS (
     SELECT
-        a.SFDCF5_ACCT_ID,
-        a.ACCT_NAME,
-        ct.title_template,
-        ct.area,
-        ct.sub_area,
-        ct.product,
-        ct.sku,
-        ct.case_type,
-        ROW_NUMBER() OVER (ORDER BY a.SFDCF5_ACCT_ID, ct.title_template) AS case_num
-    FROM accounts a
-    CROSS JOIN case_templates ct
-    WHERE MOD(ABS(HASH(a.SFDCF5_ACCT_ID || ct.title_template)), 100) < 25
+        a.SFDCF5_ACCT_ID, a.ACCT_NAME, a.primary_signal,
+        ct.title, ct.product, ct.sku, ct.area, ct.sub_area, ct.case_type,
+        ct.template_idx, mc.month_offset,
+        ROW_NUMBER() OVER (ORDER BY a.SFDCF5_ACCT_ID, mc.month_offset, ct.template_idx) as case_num
+    FROM acct_signals a
+    JOIN month_template_combos mc ON 1=1
+    JOIN case_templates ct ON ct.signal_cat = a.primary_signal AND ct.template_idx = mc.template_pick
+    WHERE MOD(ABS(HASH(a.SFDCF5_ACCT_ID || ct.template_idx::VARCHAR || mc.month_offset::VARCHAR)), 100) < 9
+),
+deduped AS (
+    SELECT *, ROW_NUMBER() OVER (
+        PARTITION BY SFDCF5_ACCT_ID, title, FLOOR(month_offset)
+        ORDER BY case_num
+    ) as rn
+    FROM generated
 )
 SELECT
     MD5(SFDCF5_ACCT_ID || '-case-' || case_num) AS DIM_SUPPORT_CASE_KEY,
     'CS' || LPAD(case_num::VARCHAR, 8, '0') AS SUPPORT_CASE_ID,
     'C-' || LPAD(case_num::VARCHAR, 7, '0') AS SUPPORT_CASE_NUM,
     SFDCF5_ACCT_ID,
-    title_template AS SUPPORT_CASE_TITLE_TEXT,
-    CASE MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'st')), 10)
-        WHEN 0 THEN 'Open'
-        WHEN 1 THEN 'Open'
-        WHEN 2 THEN 'In Progress'
-        WHEN 3 THEN 'In Progress'
-        WHEN 4 THEN 'Waiting on Customer'
-        WHEN 5 THEN 'Resolved'
-        WHEN 6 THEN 'Resolved'
-        WHEN 7 THEN 'Closed'
-        WHEN 8 THEN 'Closed'
-        ELSE 'Closed'
+    title AS SUPPORT_CASE_TITLE_TEXT,
+    CASE
+        WHEN month_offset < 2 THEN
+            CASE MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'st')), 2)
+                WHEN 0 THEN 'Open' ELSE 'In Progress' END
+        ELSE
+            CASE MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'st')), 5)
+                WHEN 0 THEN 'Resolved' WHEN 1 THEN 'Resolved'
+                WHEN 2 THEN 'Closed' WHEN 3 THEN 'Closed'
+                ELSE 'Waiting on Customer' END
     END AS SUPPORT_CASE_STATUS_CODE,
     NULL AS SUPPORT_CASE_SUB_STATUS_CODE,
     CASE MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'pri')), 4)
@@ -106,23 +160,26 @@ SELECT
     sku AS PRODUCT_SKU_ID,
     area AS AREA_NAME,
     sub_area AS SUB_AREA_NAME,
-    DATEADD(day, -MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'cdt')), 365), CURRENT_TIMESTAMP()) AS CREATED_DATETIME,
-    DATEADD(day, -MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'cdt')), 365), CURRENT_TIMESTAMP()) AS OPENED_DATETIME,
-    CASE WHEN MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'st')), 10) >= 5
-        THEN DATEADD(hour,
+    DATEADD(day,
+        -(month_offset * 30 + MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'day')), 28)),
+        CURRENT_TIMESTAMP()) AS CREATED_DATETIME,
+    DATEADD(day,
+        -(month_offset * 30 + MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'day')), 28)),
+        CURRENT_TIMESTAMP()) AS OPENED_DATETIME,
+    CASE WHEN month_offset >= 2 THEN
+        DATEADD(hour,
             MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'res')), 720) + 4,
-            DATEADD(day, -MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'cdt')), 365), CURRENT_TIMESTAMP()))
-        ELSE NULL
-    END AS RESOLVED_DATETIME,
-    CASE WHEN MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'st')), 10) >= 7
-        THEN DATEADD(hour,
+            DATEADD(day, -(month_offset * 30 + MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'day')), 28)), CURRENT_TIMESTAMP()))
+        ELSE NULL END AS RESOLVED_DATETIME,
+    CASE WHEN month_offset >= 2 AND MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'st')), 5) IN (2,3) THEN
+        DATEADD(hour,
             MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'cls')), 720) + 8,
-            DATEADD(day, -MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'cdt')), 365), CURRENT_TIMESTAMP()))
+            DATEADD(day, -(month_offset * 30 + MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'day')), 28)), CURRENT_TIMESTAMP()))
         ELSE NULL
     END AS CLOSED_DATETIME,
     DATEADD(minute,
         MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'fr')), 240) + 15,
-        DATEADD(day, -MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'cdt')), 365), CURRENT_TIMESTAMP())
+        DATEADD(day, -(month_offset * 30 + MOD(ABS(HASH(SFDCF5_ACCT_ID || case_num::VARCHAR || 'day')), 28)), CURRENT_TIMESTAMP())
     ) AS FIRST_RESPONSE_DATETIME,
     'Contact ' || MOD(case_num, 50) AS CONTACT_FULL_NAME,
     LOWER(REPLACE(ACCT_NAME, ' ', '.')) || '@' || LOWER(REPLACE(ACCT_NAME, ' ', '')) || '.com' AS CONTACT_EMAIL_ADDRESS_TEXT,
@@ -131,7 +188,8 @@ SELECT
         WHEN 1 THEN 'Premium Plus'
         ELSE 'Standard'
     END AS SERVICE_LEVEL_CODE
-FROM generated;
+FROM deduped
+WHERE rn = 1;
 
 -- ============================================================
 -- FACT_SUPPORT_CASE (Metrics)

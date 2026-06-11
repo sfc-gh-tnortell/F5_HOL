@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F5 Telemetry & Support Intelligence - Hands-On Lab</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1, h2, h3, h4 {
+            color: #1a1a2e;
+        }
+        h1 {
+            border-bottom: 3px solid #e4002b;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #e4002b;
+            margin-top: 30px;
+        }
+        pre {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 13px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        code {
+            background-color: #e8e8e8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            white-space: pre;
+            display: block;
+        }
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; }
+        .function { color: #dcdcaa; }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #e4002b;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .important {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .coco {
+            background-color: #e8f4fc;
+            border-left: 4px solid #0066cc;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .coco::before {
+            content: "Cortex Code Prompt";
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #0066cc;
+        }
+        .toc {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        .toc > ul {
+            padding-left: 0;
+        }
+        .toc a {
+            color: #e4002b;
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        .architecture {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 40px 0;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        .badge-coco {
+            background-color: #0066cc;
+            color: white;
+        }
+        .badge-manual {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<h1>F5 Telemetry & Support Intelligence - Hands-On Lab</h1>
+
+<p>Build a Cortex Agent that discovers hidden correlations between F5 Distributed Cloud telemetry signals and customer support cases. You'll analyze historical SQL queries, create semantic views, build agents, and train a churn propensity model — all using Snowflake Cortex Code and Intelligence.</p>
+
+<hr>
+
+<div class="toc">
+<h2>Table of Contents</h2>
+<ul>
+    <li><a href="#overview">1. Overview</a></li>
+    <li><a href="#prerequisites">2. Prerequisites</a></li>
+    <li><a href="#module1">3. Module 1: Support & Telemetry Agent</a>
+        <ul>
+            <li><a href="#m1s1">Step 1: Analyze SQL Query Patterns (CoCo)</a></li>
+            <li><a href="#m1s2">Step 2: Create Support/Telemetry Semantic View (CoCo)</a></li>
+            <li><a href="#m1s3">Step 3: Create Customer Support Agent (Manual)</a></li>
+            <li><a href="#m1s4">Step 4: Connect Jira via MCP (Manual)</a></li>
+            <li><a href="#m1s5">Step 5: Combine into Sales Agent (Manual)</a></li>
+            <li><a href="#m1s6">Step 6: Test - Find Telemetry/Case Correlations (Manual)</a></li>
+        </ul>
+    </li>
+    <li><a href="#module2">4. Module 2: Churn Propensity Model</a>
+        <ul>
+            <li><a href="#m2s1">Step 1: Build Churn Propensity Model (CoCo)</a></li>
+            <li><a href="#m2s2">Step 2: Feature Engineering (CoCo)</a></li>
+            <li><a href="#m2s3">Step 3: Add Model to Agent (Manual)</a></li>
+            <li><a href="#m2s4">Step 4: Proactive Investigation (Manual)</a></li>
+        </ul>
+    </li>
+    <li><a href="#data-summary">5. Data Summary</a></li>
+    <li><a href="#troubleshooting">6. Troubleshooting</a></li>
+</ul>
+</div>
+
+<hr>
+
+<h2 id="overview">1. Overview</h2>
+
+<h3>What You'll Build</h3>
+<ul>
+    <li><strong>Support/Telemetry Semantic View</strong> derived from analyzing 60 real SQL queries</li>
+    <li><strong>Cortex Agent</strong> that queries telemetry + support cases + Jira via MCP</li>
+    <li><strong>Churn Propensity Model</strong> predicting declining accounts from telemetry trends</li>
+    <li><strong>Proactive Case Detection</strong> using telemetry spikes to predict support issues before they're reported</li>
+</ul>
+
+<h3>Architecture</h3>
+<div class="architecture">
+<pre>
++-----------------------------------------------------------------------+
+|                      Snowflake Intelligence                            |
+|  +---------------------------------------------------------------+    |
+|  |                F5 Customer Support Agent                       |    |
+|  |  +--------------+  +--------------+  +---------------------+  |    |
+|  |  |Cortex Analyst|  |Cortex Search |  |    Jira MCP         |  |    |
+|  |  |(Support +    |  |(Zoom         |  |(External Tickets)   |  |    |
+|  |  | Telemetry SV)|  | Transcripts) |  |                     |  |    |
+|  |  +--------------+  +--------------+  +---------------------+  |    |
+|  +---------------------------------------------------------------+    |
+|                              |                                         |
+|  +---------------------------------------------------------------+    |
+|  |                    F5_PROD Database                             |    |
+|  |  +----------------+  +-----------------+  +----------------+   |    |
+|  |  | RAW Schema     |  | FINAL Schema    |  | ML Predictions |   |    |
+|  |  | - Telemetry    |  | - Semantic View |  | - Churn Score  |   |    |
+|  |  | - Support Cases|  | - Search Svc    |  | - Risk Table   |   |    |
+|  |  | - Health Score |  | - Agent         |  |                |   |    |
+|  |  +----------------+  +-----------------+  +----------------+   |    |
+|  +---------------------------------------------------------------+    |
++-----------------------------------------------------------------------+
+                               |
+        Jira MCP Connector     |     Cortex Code (CoCo)
+    +-----------------------+  |  +-----------------------+
+    | f5snowhol.atlassian   |  |  | SQL Analysis          |
+    | - KAN-xxx tickets     |  |  | Semantic View Builder |
+    | - Open/Closed cases   |  |  | ML Model Training     |
+    +-----------------------+  |  +-----------------------+
+</pre>
+</div>
+
+<h3>Data Already Available</h3>
+<table>
+    <tr><th>Table</th><th>Description</th><th>Rows</th></tr>
+    <tr><td><code>COL_XC_TELEMETRY</code></td><td>Daily XC usage metrics (12 months)</td><td>~47,000</td></tr>
+    <tr><td><code>DIM_SUPPORT_CASE</code></td><td>Support cases correlated to telemetry</td><td>~1,100</td></tr>
+    <tr><td><code>FACT_SUPPORT_CASE</code></td><td>Case resolution metrics (SLA, time-to-close)</td><td>~1,100</td></tr>
+    <tr><td><code>COL_XC_PRODUCT_HEALTHSCORE</code></td><td>Account health scores</td><td>~130</td></tr>
+    <tr><td><code>DIM_CUST_ACCT_SFDC</code></td><td>184 Fortune 500 customer accounts</td><td>184</td></tr>
+    <tr><td><code>COL_TERM_SUB_MONTHLY_USAGE_V2</code></td><td>Monthly consumption/billing data</td><td>~6,000</td></tr>
+</table>
+
+<hr>
+
+<h2 id="prerequisites">2. Prerequisites</h2>
+<ul>
+    <li>Snowflake account: <code>sfsenorthamerica-demo351_aws</code></li>
+    <li>Role: <code>SYSADMIN</code></li>
+    <li>Warehouse: <code>COMPUTE_WH</code></li>
+    <li>Database <code>F5_PROD</code> with all setup scripts already executed (steps 01-11)</li>
+    <li>Cortex Code desktop installed and connected</li>
+    <li>Jira MCP connector configured (see <code>scripts/Jira_MCP_Setup.sql</code>)</li>
+</ul>
+
+<hr>
+
+<h2 id="module1">3. Module 1: Support & Telemetry Agent</h2>
+
+<p>In this module you'll build a Cortex Agent specialized for customer support and telemetry analysis. The goal: discover which customers have telemetry signals that correlate with open support cases.</p>
+
+<hr>
+
+<h3 id="m1s1">Step 1: Analyze SQL Query Patterns <span class="badge badge-coco">CoCo</span></h3>
+
+<p>We have 60 historical SQL queries written by different personas (Support Analyst, Data Engineer, Sales Ops, CSM, Executive). Analyze them to identify the most important patterns and distill them into 5 verified queries for a Cortex Skill.</p>
+
+<div class="coco">
+<p>Open <code>Account_Prep/setup/12_query_repository_support_cs.sql</code> and use the following prompt:</p>
+<pre><code>Analyze the 60 SQL queries in this file. These were written by different personas 
+to answer support and telemetry questions. I need you to:
+
+1. Identify the key dimensions, metrics, and join patterns used across all queries
+2. Group queries by intent (case analysis, telemetry correlation, SLA tracking, etc.)
+3. Find inconsistencies where different queries calculate the same metric differently 
+   and recommend which calculation to standardize on
+4. Distill the top 5 most impactful queries that cover the broadest analytical needs
+5. For each of the 5 queries, write it as a clean SELECT statement with a comment 
+   explaining the business question it answers and which persona asks it
+
+These will be used as verified query representations (VQRs) when building 
+a semantic view. Write them as plain SELECT statements, not functions.
+
+Also create a reusable Cortex Code skill (SKILL.md) that captures this 
+analysis workflow so I can repeat it on a different query repository in 
+another domain. Install it to ~/.snowflake/cortex/skills/query-analysis/</code></pre>
+</div>
+
+<p><strong>Expected Output:</strong></p>
+<ul>
+    <li><code>HOL/verified_queries.sql</code> — 5 SELECT statements, each with business question + persona header</li>
+    <li><code>~/.snowflake/cortex/skills/query-analysis/SKILL.md</code> — Reusable Cortex Code skill for any domain</li>
+    <li>Analysis summary: table frequency, join patterns, identified inconsistencies with recommendations</li>
+</ul>
+
+<hr>
+
+<h3 id="m1s2">Step 2: Create Support/Telemetry Semantic View</h3>
+
+<p>Using the verified queries from Step 1, create a semantic view. Choose one of the two options below:</p>
+
+<h4>Option A: Cortex Code <span class="badge badge-coco">CoCo</span></h4>
+
+<p>Open the verified queries file generated in Step 1 and use the following prompt:</p>
+
+<div class="coco">
+<pre><code>Using the verified queries in HOL/verified_queries.sql, create a semantic view 
+for support and telemetry analysis. The queries show the tables, joins, 
+dimensions, and metrics that matter most.
+
+Create it as: F5_PROD.FINAL.F5_SUPPORT_TELEMETRY_SEMANTIC_VIEW
+
+Include the verified queries as VQRs in the semantic view definition.</code></pre>
+</div>
+
+<h4>Option B: Snowsight UI (Semantic Auto-Generator) <span class="badge badge-manual">Manual</span></h4>
+
+<ol>
+    <li>Navigate to <strong>AI &amp; ML &rarr; Cortex Analyst &rarr; Semantic Views</strong></li>
+    <li>Click <strong>+ Create Semantic View</strong></li>
+    <li>Select <strong>Generate from verified queries</strong></li>
+    <li>Upload or paste the contents of <code>HOL/verified_queries.sql</code></li>
+    <li>The auto-generator will infer tables, relationships, dimensions, metrics, and facts from the SQL</li>
+    <li>Review the generated semantic view structure:
+        <ul>
+            <li>Confirm tables: DIM_SUPPORT_CASE, FACT_SUPPORT_CASE, COL_XC_TELEMETRY, COL_XC_PRODUCT_HEALTHSCORE, DIM_CUST_ACCT_SFDC</li>
+            <li>Confirm relationships are joined on SFDCF5_ACCT_ID and SUPPORT_CASE_ID</li>
+            <li>Confirm metrics include: open_case_count, avg_resolution_hours, sla_breach_rate, avg_bot_transactions</li>
+        </ul>
+    </li>
+    <li>Set the name to <code>F5_PROD.FINAL.F5_SUPPORT_TELEMETRY_SEMANTIC_VIEW</code></li>
+    <li>Click <strong>Create</strong></li>
+</ol>
+
+<div class="note">
+<strong>Key Insight:</strong> The telemetry signals (bot-defense, waf, capacity, load-balancer, dns, performance) map directly to support case categories. This is the correlation the agent will discover — but it's not explicit in the schema.
+</div>
+
+<hr>
+
+<h3 id="m1s3">Step 3: Create Customer Support Agent <span class="badge badge-manual">Manual</span></h3>
+
+<p>Create the agent in the Snowflake UI that combines the semantic view with search and MCP tools.</p>
+
+<ol>
+    <li>Navigate to <strong>AI & ML &rarr; Snowflake Intelligence</strong></li>
+    <li>Click <strong>+ Create Agent</strong></li>
+    <li>Configure:
+        <table>
+            <tr><th>Setting</th><th>Value</th></tr>
+            <tr><td>Name</td><td><code>F5_SUPPORT_AGENT</code></td></tr>
+            <tr><td>Model</td><td><code>auto</code></td></tr>
+            <tr><td>Database</td><td><code>F5_PROD</code></td></tr>
+            <tr><td>Schema</td><td><code>FINAL</code></td></tr>
+            <tr><td>Time Limit</td><td><code>600</code> seconds</td></tr>
+            <tr><td>Token Limit</td><td><code>32000</code></td></tr>
+        </table>
+    </li>
+    <li>Add tools:
+        <table>
+            <tr><th>Tool Type</th><th>Name</th><th>Configuration</th></tr>
+            <tr><td>Cortex Analyst</td><td>SupportAnalyst</td><td>Semantic View: <code>F5_PROD.FINAL.F5_SUPPORT_TELEMETRY_SEMANTIC_VIEW</code></td></tr>
+        </table>
+    </li>
+    <li>Set the system prompt:
+        <pre><code>You are an F5 customer support intelligence agent. You help identify accounts 
+where telemetry signals correlate with open support cases. When you find matches:
+1. Query telemetry data for anomalous signals (high bot traffic, WAF spikes, 
+   endpoint growth, etc.)
+2. Check if matching support cases exist for those accounts
+3. Recommend proactive actions based on the correlation</code></pre>
+    </li>
+    <li>Click <strong>Save</strong></li>
+</ol>
+
+<hr>
+
+<h3 id="m1s4">Step 4: Connect Jira via MCP <span class="badge badge-manual">Manual</span></h3>
+
+<p>Set up the Atlassian MCP connector so the agent can read and create Jira tickets.</p>
+
+<div class="important">
+<strong>Requires ACCOUNTADMIN role.</strong> The API integration and MCP server are account-level objects.
+</div>
+
+<ol>
+    <li>Run the following SQL in a Snowsight worksheet:
+        <pre><code><span class="keyword">USE ROLE</span> ACCOUNTADMIN;
+<span class="keyword">USE SCHEMA</span> F5_PROD.PUBLIC;
+
+<span class="comment">-- Create the API integration using dynamic client registration</span>
+<span class="keyword">CREATE API INTEGRATION</span> jira_mcp_api_integration
+  API_PROVIDER = external_mcp
+  API_ALLOWED_PREFIXES = (<span class="string">'https://mcp.atlassian.com/v1/mcp'</span>)
+  API_USER_AUTHENTICATION = (
+    TYPE=OAUTH_DYNAMIC_CLIENT,
+    OAUTH_RESOURCE_URL=<span class="string">'https://mcp.atlassian.com/v1/mcp'</span>
+  )
+  ENABLED = TRUE;
+
+<span class="comment">-- Create the external MCP server</span>
+<span class="keyword">CREATE EXTERNAL MCP SERVER</span> atlassian_mcp_server
+  WITH DISPLAY_NAME = <span class="string">'Atlassian (Jira &amp; Confluence)'</span>
+  URL=<span class="string">'https://mcp.atlassian.com/v1/mcp'</span>
+  API_INTEGRATION = jira_mcp_api_integration;
+
+<span class="comment">-- Grant access to all roles</span>
+<span class="keyword">GRANT USAGE ON EXTERNAL MCP SERVER</span> atlassian_mcp_server <span class="keyword">TO ROLE</span> PUBLIC;
+<span class="keyword">GRANT USAGE ON INTEGRATION</span> jira_mcp_api_integration <span class="keyword">TO ROLE</span> PUBLIC;</code></pre>
+    </li>
+    <li>Add the MCP tool to your agent:
+        <ul>
+            <li>Navigate to <strong>AI &amp; ML &rarr; CoWork</strong></li>
+            <li>Find <code>F5_SUPPORT_AGENT</code> &rarr; click <strong>Edit</strong></li>
+            <li>Click <strong>+ Add Tool</strong> &rarr; select <strong>MCP</strong></li>
+            <li>Select <code>atlassian_mcp_server</code></li>
+            <li>Click <strong>Save</strong></li>
+        </ul>
+    </li>
+    <li>Authenticate: The first time you use the MCP tool, you'll be prompted to sign in to Atlassian and authorize access to your Jira workspace (<code>f5snowhol.atlassian.net</code>)</li>
+</ol>
+
+<div class="note">
+<strong>Jira Project:</strong> Tickets are in the <code>KAN</code> project. Case numbers in <code>DIM_SUPPORT_CASE.SUPPORT_CASE_NUM</code> match Jira keys (e.g., KAN-123).
+</div>
+
+<hr>
+
+<h3 id="m1s5">Step 5: Combine into Sales Agent <span class="badge badge-manual">Manual</span></h3>
+
+<p>Add the support/telemetry analyst tool to the existing <code>F5_SALES_AGENT</code> to create a unified view.</p>
+
+<ol>
+    <li>Navigate to <strong>AI & ML &rarr; Snowflake Intelligence</strong></li>
+    <li>Find <code>F5_SALES_AGENT</code> &rarr; click <strong>Edit</strong></li>
+    <li>Add a new <strong>Cortex Analyst</strong> tool:
+        <ul>
+            <li>Name: <code>SupportTelemetryAnalyst</code></li>
+            <li>Semantic View: <code>F5_PROD.FINAL.F5_SUPPORT_TELEMETRY_SEMANTIC_VIEW</code></li>
+            <li>Description: <code>Analyzes support cases, telemetry signals, SLA metrics, and account health scores. Use for questions about support case trends, telemetry anomalies, and account risk.</code></li>
+        </ul>
+    </li>
+    <li>Click <strong>Save</strong></li>
+</ol>
+
+<hr>
+
+<h3 id="m1s6">Step 6: Test - Find Telemetry/Case Correlations <span class="badge badge-manual">Manual</span></h3>
+
+<p>Test the agent with these questions to discover the telemetry-to-support correlation:</p>
+
+<table>
+    <tr><th>#</th><th>Question</th><th>Expected Discovery</th></tr>
+    <tr><td>1</td><td>"Which accounts have the highest bot defense transaction volume AND open support cases?"</td><td>Amazon, AT&T, Comcast all have high bot telemetry AND open Bot Management cases</td></tr>
+    <tr><td>2</td><td>"Show me accounts where WAF usage is above average and they have open cases. What are the case categories?"</td><td>WAF-heavy accounts (Airbnb, Delta) have WAF Policy cases</td></tr>
+    <tr><td>3</td><td>"Are there accounts with capacity-related telemetry spikes that also have support cases?"</td><td>Endpoint-heavy accounts (CVS, American Airlines) have Capacity cases</td></tr>
+    <tr><td>4</td><td>"Search Jira for open tickets related to bot defense. Compare with telemetry for those accounts."</td><td>Jira tickets match the same pattern via MCP</td></tr>
+    <tr><td>5</td><td>"Based on telemetry trends and support case patterns, which accounts are most at risk right now?"</td><td>Accounts with BOTH high telemetry + multiple open cases = highest risk</td></tr>
+</table>
+
+<div class="success">
+<strong>Success Criteria:</strong> The agent should identify that accounts with elevated telemetry signals (bot > 300K, waf > 25, endpoints > 150) consistently have support cases in matching categories, even though there's no direct FK between telemetry and support data.
+</div>
+
+<p><strong>Bonus:</strong> When a match is found, use the Jira MCP to create or update a ticket linking the telemetry observation to the support case.</p>
+
+<hr>
+
+<h2 id="module2">4. Module 2: Churn Propensity Model</h2>
+
+<p>Build a predictive model that identifies accounts likely to churn based on telemetry trends, support case volume, and health scores.</p>
+
+<hr>
+
+<h3 id="m2s1">Step 1: Build Churn Propensity Model <span class="badge badge-coco">CoCo</span></h3>
+
+<div class="coco">
+<pre><code>Build a telemetry-driven churn propensity model using the F5 data. 
+
+Data sources:
+- COL_XC_TELEMETRY (12 months daily telemetry per account)
+- DIM_SUPPORT_CASE (support case volume and categories)
+- FACT_SUPPORT_CASE (resolution times, SLA breaches)
+- COL_XC_PRODUCT_HEALTHSCORE (CONSUMPTION_PATTERN = 'Declining' is the target)
+
+The model should:
+1. Predict which accounts have CONSUMPTION_PATTERN = 'Declining' 
+2. Use Snowpark ML or Cortex ML (classification)
+3. Register the model in the Snowflake Model Registry
+4. Output predictions as a table the agent can query
+
+Target variable: CONSUMPTION_PATTERN = 'Declining' (binary classification)
+Features: derived from telemetry trends, support patterns, health metrics</code></pre>
+</div>
+
+<hr>
+
+<h3 id="m2s2">Step 2: Feature Engineering <span class="badge badge-coco">CoCo</span></h3>
+
+<div class="coco">
+<pre><code>Create features for the churn model from our telemetry and support data:
+
+1. Telemetry trend slopes (over last 90 days):
+   - HTTP load balancer count trend (increasing/flat/declining)
+   - WAF usage trend
+   - Bot transaction volume trend
+   - Endpoint count trend
+
+2. Support case patterns:
+   - Total open cases in last 60 days
+   - Average case resolution time
+   - SLA breach count
+   - Escalation count
+
+3. Health score signals:
+   - SKU utilization percentage
+   - Current consumption pattern
+
+4. Combine into a feature table: F5_PROD.RAW.CHURN_FEATURES
+
+Then train the classification model predicting 'Declining' consumption pattern.
+Register it and create a predictions table: F5_PROD.FINAL.CHURN_PREDICTIONS</code></pre>
+</div>
+
+<div class="note">
+<strong>Tip:</strong> Use <code>REGR_SLOPE</code> in Snowflake SQL for calculating trend slopes over time windows. A negative slope on load balancer count + high support case volume is a strong churn signal.
+</div>
+
+<hr>
+
+<h3 id="m2s3">Step 3: Add Model to Agent <span class="badge badge-manual">Manual</span></h3>
+
+<ol>
+    <li>Add the <code>F5_PROD.FINAL.CHURN_PREDICTIONS</code> table to the support/telemetry semantic view</li>
+    <li>Add dimensions: <code>CHURN_RISK_SCORE</code>, <code>PREDICTED_PATTERN</code>, <code>TOP_RISK_FACTOR</code></li>
+    <li>Add metric: <code>high_risk_accounts</code> (count where risk score > 0.7)</li>
+    <li>Update the agent system prompt to include churn awareness:
+        <pre><code>When identifying at-risk accounts, also check their churn propensity score.
+Accounts with declining telemetry trends + open support cases + high churn score 
+need immediate attention. Recommend proactive outreach before they file more cases.</code></pre>
+    </li>
+</ol>
+
+<hr>
+
+<h3 id="m2s4">Step 4: Proactive Investigation <span class="badge badge-manual">Manual</span></h3>
+
+<p>Test the enhanced agent with predictive questions:</p>
+
+<table>
+    <tr><th>#</th><th>Question</th><th>Expected Insight</th></tr>
+    <tr><td>1</td><td>"Which accounts have a high churn risk score but no open support cases yet?"</td><td>These are accounts with declining telemetry that haven't filed cases — proactive outreach targets</td></tr>
+    <tr><td>2</td><td>"Show me accounts where telemetry is declining AND they had cases resolved in the last 3 months."</td><td>Previously-resolved issues may be recurring — check if telemetry confirms</td></tr>
+    <tr><td>3</td><td>"Can we predict which accounts will file support cases next month based on current telemetry trends?"</td><td>Model identifies accounts with early-stage degradation patterns</td></tr>
+    <tr><td>4</td><td>"Create a Jira ticket for any high-risk account that doesn't already have an open case."</td><td>Proactive case creation via MCP based on model predictions</td></tr>
+</table>
+
+<div class="success">
+<strong>Success Criteria:</strong> The model identifies accounts with declining patterns before they escalate. Combined with the telemetry-support correlation from Module 1, the agent can now provide proactive recommendations rather than reactive case management.
+</div>
+
+<hr>
+
+<h2 id="data-summary">5. Data Summary</h2>
+
+<h3>Signal-to-Support Correlation (Hidden Pattern)</h3>
+<p>This is what attendees will discover through the agent:</p>
+<table>
+    <tr><th>Telemetry Signal</th><th>Threshold</th><th>Support Case Category</th><th>Accounts</th></tr>
+    <tr><td>Bot Defense Transactions</td><td>&gt; 300,000 avg daily</td><td>XC Bot Defense / Bot Management</td><td>30</td></tr>
+    <tr><td>WAF Usage</td><td>&gt; 25 avg daily</td><td>XC WAF / BIG-IP ASM / WAF Policy</td><td>20</td></tr>
+    <tr><td>Active Endpoints</td><td>&gt; 150 avg</td><td>Configuration / Capacity</td><td>23</td></tr>
+    <tr><td>HTTP Load Balancers</td><td>&gt; 40 avg</td><td>BIG-IP LTM / NGINX Plus</td><td>19</td></tr>
+    <tr><td>DNS Zones</td><td>&gt; 7 avg</td><td>XC DNS / BIG-IP GTM</td><td>13</td></tr>
+    <tr><td>Performance (default)</td><td>Below all thresholds</td><td>BIG-IP LTM Performance</td><td>25</td></tr>
+</table>
+
+<h3>Jira Integration</h3>
+<table>
+    <tr><th>Field</th><th>Value</th></tr>
+    <tr><td>Jira URL</td><td><code>https://f5snowhol.atlassian.net</code></td></tr>
+    <tr><td>Project Key</td><td><code>KAN</code></td></tr>
+    <tr><td>MCP Server</td><td><code>atlassian_mcp_server</code></td></tr>
+    <tr><td>Total Tickets</td><td>~1,100 (matching DIM_SUPPORT_CASE)</td></tr>
+    <tr><td>Case Number Link</td><td><code>DIM_SUPPORT_CASE.SUPPORT_CASE_NUM</code> = Jira key (KAN-xxx)</td></tr>
+</table>
+
+<hr>
+
+<h2 id="troubleshooting">6. Troubleshooting</h2>
+
+<table>
+    <tr><th>Issue</th><th>Solution</th></tr>
+    <tr><td>Agent says "missing warehouse"</td><td>Ensure <code>execution_environment: {type: warehouse, warehouse: "COMPUTE_WH"}</code> in agent spec</td></tr>
+    <tr><td>Semantic view COMMENT error on FACTS</td><td>Remove COMMENT from FACTS section — only DIMENSIONS and METRICS support comments</td></tr>
+    <tr><td>Jira MCP "endpoint not allowed"</td><td>Ensure API_ALLOWED_PREFIXES = <code>('https://mcp.atlassian.com/v1/mcp')</code></td></tr>
+    <tr><td>Cortex Search returns empty</td><td>Verify transcripts are uploaded to stage and search service is refreshed</td></tr>
+    <tr><td>Agent can't find correlation</td><td>Ask specific questions: "Which accounts have bot transactions > 300K AND open bot defense cases?"</td></tr>
+    <tr><td>Model training fails</td><td>Ensure COL_XC_PRODUCT_HEALTHSCORE has data (116 rows expected)</td></tr>
+</table>
+
+</body>
+</html>

@@ -4,11 +4,12 @@
 -- Generates XC telemetry, account mappings, monthly usage,
 -- bot defense telemetry, and product health scores
 --
--- UPDATED: 180 days of telemetry (was 90), ~80% account coverage
---   (was 60%). Telemetry includes growth trends, weekly patterns,
---   and daily variance for realistic time-series analysis.
---   This provides enough historical data for closed support case
---   correlation and churn propensity modeling.
+-- UPDATED: 365 days of telemetry (12 months), ~80% account coverage.
+--   Telemetry includes growth trends, weekly patterns, and daily variance
+--   for realistic time-series analysis. 12-month window supports:
+--   - 2 months of active/open support cases
+--   - 10 months of historical/closed support cases
+--   - Correlation discovery between telemetry signals and support tickets
 --
 -- Run as SYSADMIN after 08_insert_support_and_install_base.sql
 -- ============================================================
@@ -45,7 +46,7 @@ WHERE MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 'xc')), 100) < 80;
 
 -- ============================================================
 -- COL_XC_TELEMETRY (Daily usage observations)
--- 180 days of data for accounts with XC tenants (changed from 90)
+-- 365 days of data for accounts with XC tenants (12 months)
 -- Includes growth trends, weekly patterns, and daily variance
 -- ============================================================
 INSERT INTO COL_XC_TELEMETRY (
@@ -83,12 +84,12 @@ SELECT
     MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'usr')), 50) + 5
 FROM COL_XC_TELEMETRY_ACCT_MAP_V2 m
 JOIN DIM_CUST_ACCT_SFDC a ON m.SFDCF5_ACCT_ID = a.SFDCF5_ACCT_ID
-JOIN DIM_DAY_DATE d ON d.CALENDAR_DATE BETWEEN CURRENT_DATE() - 180 AND CURRENT_DATE() - 1
+JOIN DIM_DAY_DATE d ON d.CALENDAR_DATE BETWEEN CURRENT_DATE() - 365 AND CURRENT_DATE() - 1
 WHERE m.TELEMETRY_RECEIVED_FLAG = 'Y';
 
 -- ============================================================
 -- COL_TERM_SUB_MONTHLY_USAGE_V2 (Monthly consumption)
--- 6 months of billing data per XC tenant
+-- 12 months of billing data per XC tenant
 -- ============================================================
 INSERT INTO COL_TERM_SUB_MONTHLY_USAGE_V2 (
     TENANT_ID, BILLING_MONTH_START_DATE, BILLING_MONTH_NAME,
@@ -102,7 +103,7 @@ INSERT INTO COL_TERM_SUB_MONTHLY_USAGE_V2 (
 WITH months AS (
     SELECT DISTINCT DATE_TRUNC('month', CALENDAR_DATE)::DATE AS month_start
     FROM DIM_DAY_DATE
-    WHERE CALENDAR_DATE BETWEEN DATEADD(month, -6, CURRENT_DATE()) AND CURRENT_DATE()
+    WHERE CALENDAR_DATE BETWEEN DATEADD(month, -12, CURRENT_DATE()) AND CURRENT_DATE()
 ),
 features AS (
     SELECT column1 AS feature, column2 AS uom, column3 AS sku, column4 AS product_name, column5 AS desc_val
@@ -237,7 +238,7 @@ SELECT
     m.ENTITLEMENT_ID,
     'transactions'
 FROM COL_XC_TELEMETRY_ACCT_MAP_V2 m
-JOIN DIM_DAY_DATE d ON d.CALENDAR_DATE BETWEEN CURRENT_DATE() - 180 AND CURRENT_DATE() - 1
+JOIN DIM_DAY_DATE d ON d.CALENDAR_DATE BETWEEN CURRENT_DATE() - 365 AND CURRENT_DATE() - 1
 WHERE m.TELEMETRY_RECEIVED_FLAG = 'Y'
   AND MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'bot_tel')), 100) < 40;
 
