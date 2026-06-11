@@ -3,6 +3,13 @@
 -- ============================================================
 -- Generates XC telemetry, account mappings, monthly usage,
 -- bot defense telemetry, and product health scores
+--
+-- UPDATED: 180 days of telemetry (was 90), ~80% account coverage
+--   (was 60%). Telemetry includes growth trends, weekly patterns,
+--   and daily variance for realistic time-series analysis.
+--   This provides enough historical data for closed support case
+--   correlation and churn propensity modeling.
+--
 -- Run as SYSADMIN after 08_insert_support_and_install_base.sql
 -- ============================================================
 
@@ -13,7 +20,7 @@ USE SCHEMA RAW;
 
 -- ============================================================
 -- COL_XC_TELEMETRY_ACCT_MAP_V2 (Tenant-to-Account mapping)
--- ~60% of accounts have XC tenants
+-- ~80% of accounts have XC tenants (changed from 60%)
 -- ============================================================
 INSERT INTO COL_XC_TELEMETRY_ACCT_MAP_V2 (
     SFDCF5_ACCT_ID, TENANT_ID, SUBSCRIPTION_NUM, ENTITLEMENT_ID,
@@ -34,11 +41,12 @@ SELECT
     CASE WHEN MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 'tel')), 100) < 85 THEN 'Active' ELSE 'Pending' END,
     a.VARICENT_TERRITORY_CODE
 FROM DIM_CUST_ACCT_SFDC a
-WHERE MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 'xc')), 100) < 60;
+WHERE MOD(ABS(HASH(a.SFDCF5_ACCT_ID || 'xc')), 100) < 80;
 
 -- ============================================================
 -- COL_XC_TELEMETRY (Daily usage observations)
--- 90 days of data for accounts with XC tenants
+-- 180 days of data for accounts with XC tenants (changed from 90)
+-- Includes growth trends, weekly patterns, and daily variance
 -- ============================================================
 INSERT INTO COL_XC_TELEMETRY (
     COL_XC_TELEMETRY_KEY, TENANT_ID, SFDCF5_ACCT_ID, ACCT_NAME,
@@ -75,7 +83,7 @@ SELECT
     MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'usr')), 50) + 5
 FROM COL_XC_TELEMETRY_ACCT_MAP_V2 m
 JOIN DIM_CUST_ACCT_SFDC a ON m.SFDCF5_ACCT_ID = a.SFDCF5_ACCT_ID
-JOIN DIM_DAY_DATE d ON d.CALENDAR_DATE BETWEEN CURRENT_DATE() - 90 AND CURRENT_DATE() - 1
+JOIN DIM_DAY_DATE d ON d.CALENDAR_DATE BETWEEN CURRENT_DATE() - 180 AND CURRENT_DATE() - 1
 WHERE m.TELEMETRY_RECEIVED_FLAG = 'Y';
 
 -- ============================================================
@@ -193,7 +201,7 @@ LEFT JOIN SALES_ACCOUNT_TEAM sat ON m.SFDCF5_ACCT_ID = sat.SFDCF5_ACCT_ID;
 
 -- ============================================================
 -- BASE_XC_TELEMETRY_NON_COMMERCIAL_BOT_STANDARD (Raw bot data)
--- 30 days of daily bot transaction telemetry
+-- 180 days of daily bot transaction telemetry (changed from 30)
 -- ============================================================
 INSERT INTO BASE_XC_TELEMETRY_NON_COMMERCIAL_BOT_STANDARD (
     TENANT, DATE, PRODUCT, TRANSACTION_TYPE, CLIENT_TYPE,
@@ -229,7 +237,7 @@ SELECT
     m.ENTITLEMENT_ID,
     'transactions'
 FROM COL_XC_TELEMETRY_ACCT_MAP_V2 m
-JOIN DIM_DAY_DATE d ON d.CALENDAR_DATE BETWEEN CURRENT_DATE() - 30 AND CURRENT_DATE() - 1
+JOIN DIM_DAY_DATE d ON d.CALENDAR_DATE BETWEEN CURRENT_DATE() - 180 AND CURRENT_DATE() - 1
 WHERE m.TELEMETRY_RECEIVED_FLAG = 'Y'
   AND MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'bot_tel')), 100) < 40;
 
