@@ -1,13 +1,47 @@
 -- ============================================================
 -- F5 Hands-On Lab: Query Repository for Pattern Analysis
 -- ============================================================
--- ~60 queries from different personas (Analyst, Data Engineer,
--- Sales Ops, CSM, Executive) with varying calculations.
+-- ~63 queries from different personas (Analyst, Data Engineer,
+-- Sales Ops, CSM, Executive, Telemetry) with varying calculations.
 -- Purpose: Discover patterns, dimensions, joins, and questions
 -- to synthesize into a semantic view. Some calcs are intentionally
 -- inconsistent to demonstrate the need for standardization.
 --
 -- Domain: Support & Customer Service
+-- ============================================================
+--
+-- DOMAIN KNOWLEDGE: Signal-to-Product Correlation Mapping
+-- ============================================================
+-- Telemetry signals correlate to F5 product support cases as follows:
+--   BOT_ADVANCED_TRANSACTION_CNT > 300000 = "bot-defense" signal
+--       → correlates with XC Bot Defense product cases
+--   WAF_USAGE_QTY > 25 = "waf" signal
+--       → correlates with XC WAF product cases
+--   ACTIVE_ENDPOINT_QTY > 150 = "capacity" signal
+--       → correlates with XC App Connect product cases
+--   ACTIVE_HTTP_LOAD_BALANCER_QTY > 40 = "load-balancer" signal
+--       → correlates with BIG-IP LTM and NGINX Plus cases
+--         (includes performance issues: latency, cache, memory)
+--   DNS_ZONES_QTY > 7 = "dns" signal
+--       → correlates with XC DNS and BIG-IP GTM product cases
+--
+-- Evaluate thresholds in the priority order listed above.
+-- Accounts below ALL thresholds default to "load-balancer" signal.
+-- The correlation: elevated infrastructure telemetry predicts which
+-- product categories will generate support cases for that account.
+--
+-- RECOMMENDED AI_SQL_GENERATION for semantic view:
+-- 'When correlating telemetry to support cases use this signal-to-product
+-- mapping: BOT_ADVANCED_TRANSACTION_CNT > 300000 means bot-defense signal
+-- correlating with XC Bot Defense cases. WAF_USAGE_QTY > 25 means waf
+-- signal correlating with XC WAF cases. ACTIVE_ENDPOINT_QTY > 150 means
+-- capacity signal correlating with XC App Connect cases.
+-- ACTIVE_HTTP_LOAD_BALANCER_QTY > 40 means load-balancer signal
+-- correlating with BIG-IP LTM and NGINX Plus cases including performance
+-- issues like latency cache and memory pressure. DNS_ZONES_QTY > 7 means
+-- dns signal correlating with XC DNS and BIG-IP GTM cases. Evaluate
+-- thresholds in this priority order. Always JOIN telemetry to cases
+-- through SFDCF5_ACCT_ID and aggregate telemetry over last 60 days.'
 -- ============================================================
 
 USE DATABASE F5_PROD;
@@ -396,12 +430,88 @@ LEFT JOIN DIM_SUPPORT_CASE sc ON a.SFDCF5_ACCT_ID = sc.SFDCF5_ACCT_ID
 WHERE t.CURRENT_OBSERVATION_FLAG = 'Y'
 GROUP BY 1 ORDER BY 3 DESC LIMIT 20;
 
+-- Q37: Telemetry signal classification - which signal dominates per account?
+-- Thresholds: bot>300K, waf>25, endpoints>150, http_lb>40, dns>7
+-- Accounts below all thresholds still correlate to load-balancer (BIG-IP/NGINX)
+SELECT t.SFDCF5_ACCT_ID, a.ACCT_NAME,
+    AVG(t.BOT_ADVANCED_TRANSACTION_CNT) AS avg_bot_txn,
+    AVG(t.WAF_USAGE_QTY) AS avg_waf,
+    AVG(t.ACTIVE_ENDPOINT_QTY) AS avg_endpoints,
+    AVG(t.ACTIVE_HTTP_LOAD_BALANCER_QTY) AS avg_http_lb,
+    AVG(t.DNS_ZONES_QTY) AS avg_dns,
+    CASE
+        WHEN AVG(t.BOT_ADVANCED_TRANSACTION_CNT) > 300000 THEN 'bot-defense'
+        WHEN AVG(t.WAF_USAGE_QTY) > 25 THEN 'waf'
+        WHEN AVG(t.ACTIVE_ENDPOINT_QTY) > 150 THEN 'capacity'
+        WHEN AVG(t.ACTIVE_HTTP_LOAD_BALANCER_QTY) > 40 THEN 'load-balancer'
+        WHEN AVG(t.DNS_ZONES_QTY) > 7 THEN 'dns'
+        ELSE 'load-balancer'
+    END AS dominant_signal
+FROM COL_XC_TELEMETRY t
+JOIN DIM_CUST_ACCT_SFDC a ON t.SFDCF5_ACCT_ID = a.SFDCF5_ACCT_ID
+WHERE t.OBSERVATION_DATE >= CURRENT_DATE() - 60
+GROUP BY 1, 2
+ORDER BY avg_bot_txn DESC;
+
+-- Q38: Telemetry-to-support correlation - match dominant signal to open cases
+WITH account_signals AS (
+    SELECT t.SFDCF5_ACCT_ID, a.ACCT_NAME,
+        AVG(t.BOT_ADVANCED_TRANSACTION_CNT) AS avg_bot_txn,
+        AVG(t.WAF_USAGE_QTY) AS avg_waf,
+        AVG(t.ACTIVE_ENDPOINT_QTY) AS avg_endpoints,
+        AVG(t.ACTIVE_HTTP_LOAD_BALANCER_QTY) AS avg_http_lb,
+        AVG(t.DNS_ZONES_QTY) AS avg_dns,
+        CASE
+            WHEN AVG(t.BOT_ADVANCED_TRANSACTION_CNT) > 300000 THEN 'bot-defense'
+            WHEN AVG(t.WAF_USAGE_QTY) > 25 THEN 'waf'
+            WHEN AVG(t.ACTIVE_ENDPOINT_QTY) > 150 THEN 'capacity'
+            WHEN AVG(t.ACTIVE_HTTP_LOAD_BALANCER_QTY) > 40 THEN 'load-balancer'
+            WHEN AVG(t.DNS_ZONES_QTY) > 7 THEN 'dns'
+            ELSE 'load-balancer'
+        END AS dominant_signal
+    FROM COL_XC_TELEMETRY t
+    JOIN DIM_CUST_ACCT_SFDC a ON t.SFDCF5_ACCT_ID = a.SFDCF5_ACCT_ID
+    WHERE t.OBSERVATION_DATE >= CURRENT_DATE() - 60
+    GROUP BY 1, 2
+),
+open_cases AS (
+    SELECT SFDCF5_ACCT_ID, PRODUCT_NAME, SUB_AREA_NAME,
+        CURRENT_PRIORITY_CODE, SUPPORT_CASE_TITLE_TEXT
+    FROM DIM_SUPPORT_CASE
+    WHERE SUPPORT_CASE_STATUS_CODE IN ('Open', 'In Progress')
+)
+SELECT s.ACCT_NAME, s.dominant_signal, s.avg_bot_txn, s.avg_waf,
+    s.avg_endpoints, s.avg_http_lb, s.avg_dns,
+    c.PRODUCT_NAME, c.SUB_AREA_NAME, c.CURRENT_PRIORITY_CODE,
+    c.SUPPORT_CASE_TITLE_TEXT
+FROM account_signals s
+JOIN open_cases c ON s.SFDCF5_ACCT_ID = c.SFDCF5_ACCT_ID
+ORDER BY s.avg_bot_txn DESC;
+
+-- Q39: Signal distribution - how many accounts per signal category?
+SELECT dominant_signal, COUNT(*) AS account_count
+FROM (
+    SELECT SFDCF5_ACCT_ID,
+        CASE
+            WHEN AVG(BOT_ADVANCED_TRANSACTION_CNT) > 300000 THEN 'bot-defense'
+            WHEN AVG(WAF_USAGE_QTY) > 25 THEN 'waf'
+            WHEN AVG(ACTIVE_ENDPOINT_QTY) > 150 THEN 'capacity'
+            WHEN AVG(ACTIVE_HTTP_LOAD_BALANCER_QTY) > 40 THEN 'load-balancer'
+            WHEN AVG(DNS_ZONES_QTY) > 7 THEN 'dns'
+            ELSE 'load-balancer'
+        END AS dominant_signal
+    FROM COL_XC_TELEMETRY
+    WHERE OBSERVATION_DATE >= CURRENT_DATE() - 60
+    GROUP BY 1
+)
+GROUP BY 1 ORDER BY 2 DESC;
+
 -- ============================================================
 -- PERSONA: Support Manager (Carlos)
 -- Focus: Team performance, workload distribution, backlog
 -- ============================================================
 
--- Q37: Backlog aging buckets
+-- Q40: Backlog aging buckets
 SELECT
     CASE
         WHEN DATEDIFF(day, OPENED_DATETIME, CURRENT_TIMESTAMP()) <= 7 THEN '0-7 days'
@@ -415,7 +525,7 @@ FROM DIM_SUPPORT_CASE
 WHERE SUPPORT_CASE_STATUS_CODE NOT IN ('Closed', 'Resolved')
 GROUP BY 1 ORDER BY MIN(DATEDIFF(day, OPENED_DATETIME, CURRENT_TIMESTAMP()));
 
--- Q38: Case volume by day of week (staffing optimization)
+-- Q41: Case volume by day of week (staffing optimization)
 SELECT DAYNAME(CREATED_DATETIME) AS day_of_week,
     COUNT(*) AS cases_created,
     AVG(CASE WHEN CURRENT_PRIORITY_CODE IN ('P1 - Critical','P2 - High') THEN 1 ELSE 0 END) * 100 AS pct_high_severity
@@ -426,7 +536,7 @@ GROUP BY 1 ORDER BY
         WHEN 'Thu' THEN 4 WHEN 'Fri' THEN 5 WHEN 'Sat' THEN 6 ELSE 7
     END;
 
--- Q39: First response SLA compliance by region
+-- Q42: First response SLA compliance by region
 -- NOTE: DIFFERENT definition of "breach" than Q3 (uses absolute threshold vs dynamic SLA)
 SELECT cs.REGION_NAME,
     COUNT(*) AS total_cases,
@@ -436,7 +546,7 @@ FROM COL_SUPPORT_CASE cs
 JOIN FACT_SUPPORT_CASE f ON cs.SUPPORT_CASE_NUM = (SELECT SUPPORT_CASE_NUM FROM DIM_SUPPORT_CASE WHERE SUPPORT_CASE_ID = f.SUPPORT_CASE_ID)
 GROUP BY 1;
 
--- Q40: Product area heatmap - where are we spending the most support effort?
+-- Q43: Product area heatmap - where are we spending the most support effort?
 SELECT AREA_NAME, SUB_AREA_NAME, PRODUCT_NAME,
     COUNT(*) AS case_count,
     AVG(DATEDIFF(day, OPENED_DATETIME, COALESCE(RESOLVED_DATETIME, CURRENT_TIMESTAMP()))) AS avg_days_to_resolve
@@ -448,14 +558,14 @@ GROUP BY 1, 2, 3 ORDER BY 4 DESC LIMIT 25;
 -- Focus: Cost of support, warranty claims, service revenue
 -- ============================================================
 
--- Q41: RMA cost exposure by symptom class
+-- Q44: RMA cost exposure by symptom class
 SELECT r.SYMPTOM_CLASS_CODE,
     COUNT(*) AS rma_count,
     COUNT(DISTINCT r.SFDCF5_ACCT_ID) AS affected_accounts
 FROM FACT_RMA_ORDER r
 GROUP BY 1 ORDER BY 2 DESC;
 
--- Q42: Support cost per account (proxy: cases * avg cost assumption)
+-- Q45: Support cost per account (proxy: cases * avg cost assumption)
 SELECT a.ACCT_NAME, a.ETM_REGION_NAME,
     COUNT(DISTINCT sc.SUPPORT_CASE_ID) AS total_cases,
     COUNT(DISTINCT sc.SUPPORT_CASE_ID) * 350 AS estimated_support_cost,
@@ -466,7 +576,7 @@ LEFT JOIN DIM_SUPPORT_CASE sc ON a.SFDCF5_ACCT_ID = sc.SFDCF5_ACCT_ID
 LEFT JOIN FACT_SALES_OPPORTUNITY f ON a.SFDCF5_ACCT_ID = f.SFDCF5_ACCT_ID
 GROUP BY 1, 2 ORDER BY 6 DESC NULLS LAST LIMIT 20;
 
--- Q43: Service level tier distribution and case load
+-- Q46: Service level tier distribution and case load
 SELECT d.SERVICE_LEVEL_CODE,
     COUNT(*) AS total_cases,
     AVG(f.TIME_TO_RESOLUTION_MINUTES_NUM) / 60 AS avg_resolution_hours,
@@ -476,7 +586,7 @@ JOIN FACT_SUPPORT_CASE f ON d.SUPPORT_CASE_ID = f.SUPPORT_CASE_ID
 WHERE f.TIME_TO_RESOLUTION_MINUTES_NUM IS NOT NULL
 GROUP BY 1;
 
--- Q44: Warranty RMA vs out-of-warranty (are we covering expired assets?)
+-- Q47: Warranty RMA vs out-of-warranty (are we covering expired assets?)
 SELECT
     CASE WHEN ib.SERVICE_END_DATETIME > CURRENT_TIMESTAMP() THEN 'Under Warranty' ELSE 'Expired' END AS warranty_status,
     COUNT(DISTINCT r.ORDER_NUM) AS rma_count
@@ -490,7 +600,7 @@ GROUP BY 1;
 -- Demonstrates inconsistency in how teams calculate metrics
 -- ============================================================
 
--- Q45: Avg resolution time - DIFFERENT from Q2 (includes nulls, uses CLOSE not RESOLUTION)
+-- Q48: Avg resolution time - DIFFERENT from Q2 (includes nulls, uses CLOSE not RESOLUTION)
 SELECT d.PRODUCT_NAME,
     AVG(DATEDIFF(minute, d.OPENED_DATETIME, d.CLOSED_DATETIME)) / 60 AS avg_close_hours,
     COUNT(*) AS total
@@ -498,7 +608,7 @@ FROM DIM_SUPPORT_CASE d
 WHERE d.CLOSED_DATETIME IS NOT NULL
 GROUP BY 1 ORDER BY 2 DESC;
 
--- Q46: Case volume per account - DIFFERENT join path than Q5 (uses COL_SUPPORT_CASE)
+-- Q49: Case volume per account - DIFFERENT join path than Q5 (uses COL_SUPPORT_CASE)
 SELECT cs.SALES_SFDCF5_ACCT_ID,
     a.ACCT_NAME, cs.REGION_NAME,
     COUNT(*) AS case_count,
@@ -508,7 +618,7 @@ JOIN DIM_CUST_ACCT_SFDC a ON cs.SALES_SFDCF5_ACCT_ID = a.SFDCF5_ACCT_ID
 WHERE cs.STATUS NOT IN ('Closed', 'Resolved')
 GROUP BY 1, 2, 3 ORDER BY 4 DESC LIMIT 10;
 
--- Q47: SLA calculation - THIRD different approach
+-- Q50: SLA calculation - THIRD different approach
 -- Uses absolute time thresholds per priority instead of TIME_OVER_UNDER_SLA
 SELECT d.CURRENT_PRIORITY_CODE,
     COUNT(*) AS total,
@@ -530,7 +640,7 @@ FROM DIM_SUPPORT_CASE d
 JOIN FACT_SUPPORT_CASE f ON d.SUPPORT_CASE_ID = f.SUPPORT_CASE_ID
 GROUP BY 1 ORDER BY 1;
 
--- Q48: Install base coverage - assets with vs without support contracts
+-- Q51: Install base coverage - assets with vs without support contracts
 SELECT
     CASE WHEN ib.SERVICE_END_DATETIME > CURRENT_TIMESTAMP() THEN 'Active Support' ELSE 'Lapsed' END AS support_status,
     COUNT(*) AS asset_count,
@@ -543,7 +653,7 @@ GROUP BY 1;
 -- Focus: Feature-level insights, product roadmap input
 -- ============================================================
 
--- Q49: Top case drivers by product and area (feature request signal)
+-- Q52: Top case drivers by product and area (feature request signal)
 SELECT PRODUCT_NAME, AREA_NAME, SUB_AREA_NAME,
     COUNT(*) AS cases,
     COUNT(DISTINCT SFDCF5_ACCT_ID) AS affected_accounts
@@ -552,7 +662,7 @@ GROUP BY 1, 2, 3
 HAVING COUNT(*) >= 5
 ORDER BY 4 DESC;
 
--- Q50: XC vs BIG-IP case comparison
+-- Q53: XC vs BIG-IP case comparison
 SELECT
     CASE WHEN PRODUCT_SKU_ID LIKE '%XC%' OR PRODUCT_SKU_ID LIKE '%NGINX%' THEN 'Cloud/SaaS'
          WHEN PRODUCT_SKU_ID LIKE '%BIG%' THEN 'BIG-IP'
@@ -563,7 +673,7 @@ SELECT
 FROM DIM_SUPPORT_CASE
 GROUP BY 1;
 
--- Q51: Version-specific issues (which SW versions generate most cases?)
+-- Q54: Version-specific issues (which SW versions generate most cases?)
 SELECT ib.SOFTWARE_VERSION_NUM, ib.CORE_PRODUCT_NAME,
     COUNT(DISTINCT ib.SERIAL_NUM) AS deployed_count,
     COUNT(DISTINCT sc.SUPPORT_CASE_ID) AS case_count,
@@ -574,7 +684,7 @@ GROUP BY 1, 2
 HAVING COUNT(DISTINCT ib.SERIAL_NUM) >= 3
 ORDER BY 5 DESC LIMIT 15;
 
--- Q52: Bot defense false positive signal from support cases
+-- Q55: Bot defense false positive signal from support cases
 SELECT a.ACCT_NAME,
     SUM(CASE WHEN b.ACTION_TYPE = 'block' THEN b.VALUE ELSE 0 END) AS total_blocks,
     COUNT(DISTINCT CASE WHEN sc.SUB_AREA_NAME = 'Bot Management' THEN sc.SUPPORT_CASE_ID END) AS bot_cases
@@ -591,7 +701,7 @@ ORDER BY 3 DESC;
 -- Focus: Region-level performance, team comparison
 -- ============================================================
 
--- Q53: Regional support scorecard
+-- Q56: Regional support scorecard
 SELECT a.ETM_REGION_NAME AS region,
     COUNT(DISTINCT sc.SUPPORT_CASE_ID) AS total_cases,
     COUNT(DISTINCT a.SFDCF5_ACCT_ID) AS accounts_with_cases,
@@ -603,7 +713,7 @@ JOIN DIM_SUPPORT_CASE sc ON a.SFDCF5_ACCT_ID = sc.SFDCF5_ACCT_ID
 JOIN FACT_SUPPORT_CASE f ON sc.SUPPORT_CASE_ID = f.SUPPORT_CASE_ID
 GROUP BY 1 ORDER BY 2 DESC;
 
--- Q54: Case severity by industry (which verticals need most help?)
+-- Q57: Case severity by industry (which verticals need most help?)
 SELECT a.INDUSTRY_NAME,
     COUNT(*) AS total_cases,
     SUM(CASE WHEN sc.CURRENT_PRIORITY_CODE = 'P1 - Critical' THEN 1 ELSE 0 END) AS p1_cases,
@@ -612,7 +722,7 @@ FROM DIM_SUPPORT_CASE sc
 JOIN DIM_CUST_ACCT_SFDC a ON sc.SFDCF5_ACCT_ID = a.SFDCF5_ACCT_ID
 GROUP BY 1 ORDER BY 2 DESC;
 
--- Q55: Support team coverage gaps
+-- Q58: Support team coverage gaps
 SELECT sat.AE_NAME, sat.SE_NAME, sat.REGION_NAME,
     COUNT(DISTINCT sat.SFDCF5_ACCT_ID) AS total_accounts,
     COUNT(DISTINCT sc.SUPPORT_CASE_ID) AS total_cases,
@@ -627,13 +737,13 @@ GROUP BY 1, 2, 3 ORDER BY 6 DESC;
 -- Focus: Security cases, data patterns, audit readiness
 -- ============================================================
 
--- Q56: Security-related cases by product
+-- Q59: Security-related cases by product
 SELECT PRODUCT_NAME, COUNT(*) AS security_cases
 FROM DIM_SUPPORT_CASE
 WHERE AREA_NAME = 'Security'
 GROUP BY 1 ORDER BY 2 DESC;
 
--- Q57: High-priority cases with long first response (potential audit flag)
+-- Q60: High-priority cases with long first response (potential audit flag)
 SELECT d.SUPPORT_CASE_NUM, d.SFDCF5_ACCT_ID, d.SUPPORT_CASE_TITLE_TEXT,
     d.CURRENT_PRIORITY_CODE, f.TIME_TO_RESPONSE_MINUTES_NUM,
     d.SERVICE_LEVEL_CODE
@@ -643,7 +753,7 @@ WHERE d.CURRENT_PRIORITY_CODE = 'P1 - Critical'
   AND f.TIME_TO_RESPONSE_MINUTES_NUM > 60
 ORDER BY f.TIME_TO_RESPONSE_MINUTES_NUM DESC;
 
--- Q58: Case escalation pattern (priority changed from low to high)
+-- Q61: Case escalation pattern (priority changed from low to high)
 SELECT d.SUPPORT_CASE_NUM, a.ACCT_NAME,
     d.INITIAL_PRIORITY_CODE, d.CURRENT_PRIORITY_CODE,
     d.SUPPORT_CASE_TITLE_TEXT
@@ -652,7 +762,7 @@ JOIN DIM_CUST_ACCT_SFDC a ON d.SFDCF5_ACCT_ID = a.SFDCF5_ACCT_ID
 WHERE d.INITIAL_PRIORITY_CODE IN ('P3 - Medium', 'P4 - Low')
   AND d.CURRENT_PRIORITY_CODE IN ('P1 - Critical', 'P2 - High');
 
--- Q59: DDoS and WAF cases correlated with telemetry spikes
+-- Q62: DDoS and WAF cases correlated with telemetry spikes
 SELECT a.ACCT_NAME, sc.SUPPORT_CASE_NUM, sc.CREATED_DATETIME,
     t.OBSERVATION_DATE, t.WAF_USAGE_QTY, t.BOT_ADVANCED_TRANSACTION_CNT
 FROM DIM_SUPPORT_CASE sc
@@ -662,7 +772,7 @@ JOIN COL_XC_TELEMETRY t ON a.SFDCF5_ACCT_ID = t.SFDCF5_ACCT_ID
 WHERE sc.SUB_AREA_NAME IN ('DDoS', 'WAF Policy', 'Bot Management')
 ORDER BY t.BOT_ADVANCED_TRANSACTION_CNT DESC LIMIT 20;
 
--- Q60: Complete case lifecycle summary per account (exec-level)
+-- Q63: Complete case lifecycle summary per account (exec-level)
 SELECT a.ACCT_NAME, a.INDUSTRY_NAME, a.ETM_REGION_NAME,
     sat.AE_NAME, sat.SE_NAME,
     COUNT(DISTINCT sc.SUPPORT_CASE_ID) AS lifetime_cases,

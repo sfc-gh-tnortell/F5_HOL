@@ -66,7 +66,15 @@ SELECT
     d.CALENDAR_DATE,
     CASE WHEN d.CALENDAR_DATE = CURRENT_DATE() - 1 THEN 'Y' ELSE 'N' END,
     -- Usage quantities based on hash for consistency + slight daily variance
-    MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'http')), 50) + 5 + MOD(ABS(HASH(d.CALENDAR_DATE::VARCHAR || m.TENANT_ID)), 5),
+    -- HTTP LB: boosted to >40 for accounts that would otherwise have no clear signal (ensures correlation)
+    CASE WHEN MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'bot')), 2) != 0  -- no bot defense
+         AND MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'waf')), 30) + 3 <= 25  -- low WAF
+         AND MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'ep')), 200) + 10 <= 150  -- low endpoints
+         AND MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'dns')), 10) + 1 <= 7  -- low DNS
+         AND MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'http')), 50) + 5 <= 40  -- would be low LB
+        THEN MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'http')), 15) + 42 + MOD(ABS(HASH(d.CALENDAR_DATE::VARCHAR || m.TENANT_ID)), 5)
+        ELSE MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'http')), 50) + 5 + MOD(ABS(HASH(d.CALENDAR_DATE::VARCHAR || m.TENANT_ID)), 5)
+    END,
     MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'tcp')), 20) + 2,
     MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'ep')), 200) + 10 + MOD(ABS(HASH(d.CALENDAR_DATE::VARCHAR)), 10),
     MOD(ABS(HASH(m.SFDCF5_ACCT_ID || 'waf')), 30) + 3,

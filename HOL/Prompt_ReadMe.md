@@ -29,9 +29,7 @@ Module 1:
    - Add MCP tool to the agent after setup
    - First use requires OAuth sign-in to Atlassian
    - Jira project: KAN at f5snowhol.atlassian.net
-5. Combine the new support/telemetry analyst back into the sales agent -- manual
-   - Add SupportTelemetryAnalyst tool to F5_SALES_AGENT
-6. Test the agent, try to find telemetry that matches open cases. If it matches write it back to the support case using Jira MCP -- manual
+5. Test the agent, try to find telemetry that matches open cases. If it matches write it back to the support case using Jira MCP -- manual
 
 Module 2:
 1. Create a Telemetry-Driven Churn Propensity Model. Build a lightweight ML model using the closed support cases and telemetry + health score data -- coco
@@ -41,6 +39,8 @@ Module 2:
 	- Register the model and serve predictions as a table the agent can query 
 3. Add this back into the support agent -- manual
 4. Interact and test, could we find/create a case before a problem starts? Internal investigation on telemetry trends -- manual
+
+BASE_XC_TELEMETRY_NON_COMMERCIAL_BOT_STANDARD use this for deeper analysis and trends
 
 
 DESIGN NOTES

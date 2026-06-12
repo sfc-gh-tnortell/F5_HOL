@@ -36,7 +36,7 @@ WITH acct_signals AS (
             WHEN AVG(t.ACTIVE_ENDPOINT_QTY) > 150 THEN 'capacity'
             WHEN AVG(t.ACTIVE_HTTP_LOAD_BALANCER_QTY) > 40 THEN 'load-balancer'
             WHEN AVG(t.DNS_ZONES_QTY) > 7 THEN 'dns'
-            ELSE 'performance'
+            ELSE 'load-balancer'
         END as primary_signal
     FROM COL_XC_TELEMETRY t
     JOIN DIM_CUST_ACCT_SFDC a ON t.SFDCF5_ACCT_ID = a.SFDCF5_ACCT_ID
@@ -73,7 +73,7 @@ case_templates AS (
     ('capacity', 6, 'Security event log storage exceeding retention policy threshold', 'XC WAF', 'F5-XC-WAF', 'Configuration', 'Capacity', 'Technical'),
     ('capacity', 7, 'Site count approaching hard limit for current subscription tier', 'XC App Connect', 'F5-XC-APP-CONNECT', 'Configuration', 'Capacity', 'Service Request'),
     ('capacity', 8, 'Load balancer pool member count maxed causing health check overhead', 'BIG-IP LTM', 'F5-BIG-LTM', 'Configuration', 'Capacity', 'Technical'),
-    -- load-balancer (8)
+    -- load-balancer (16 templates - includes performance issues on LB products)
     ('load-balancer', 1, 'Health check failures during blue-green deployment cutover', 'BIG-IP LTM', 'F5-BIG-LTM', 'Networking', 'High Availability', 'Technical'),
     ('load-balancer', 2, 'Connection draining not completing before new deployment activates', 'NGINX Plus', 'F5-NGINX-PLUS', 'Networking', 'Load Balancing', 'Technical'),
     ('load-balancer', 3, 'Origin TLS certificate chain validation failing intermittently', 'BIG-IP LTM', 'F5-BIG-LTM', 'Security', 'Certificates', 'Technical'),
@@ -82,6 +82,14 @@ case_templates AS (
     ('load-balancer', 6, 'IPv6 to IPv4 translation causing source IP preservation issues', 'NGINX Plus', 'F5-NGINX-PLUS', 'Networking', 'Load Balancing', 'Technical'),
     ('load-balancer', 7, 'TCP connection pool exhaustion under sustained high throughput', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Escalation'),
     ('load-balancer', 8, 'HTTP/2 server push not functioning through load balancer proxy', 'NGINX Plus', 'F5-NGINX-PLUS', 'Networking', 'Load Balancing', 'Technical'),
+    ('load-balancer', 9, 'P99 latency regression after configuration deployment last Tuesday', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Technical'),
+    ('load-balancer', 10, 'Cache hit ratio collapsed from 82% to 34% after origin failover', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Technical'),
+    ('load-balancer', 11, 'TLS handshake overhead adding 65ms for clients with older ciphers', 'BIG-IP LTM', 'F5-BIG-LTM', 'Security', 'Certificates', 'Technical'),
+    ('load-balancer', 12, 'Edge function cold start latency exceeding 800ms SLA threshold', 'XC App Connect', 'F5-XC-APP-CONNECT', 'Software', 'Performance', 'Technical'),
+    ('load-balancer', 13, 'Connection keep-alive timeout mismatch causing premature resets', 'NGINX Plus', 'F5-NGINX-PLUS', 'Networking', 'Load Balancing', 'Technical'),
+    ('load-balancer', 14, 'Response compression not activating for application/json content', 'NGINX Plus', 'F5-NGINX-PLUS', 'Software', 'Performance', 'Technical'),
+    ('load-balancer', 15, 'iRule execution time degradation after upgrade to v17.1', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Escalation'),
+    ('load-balancer', 16, 'Memory utilization at 95% causing intermittent connection drops', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Technical'),
     -- dns (8)
     ('dns', 1, 'Zone transfer propagation taking 18 minutes between edge PoPs', 'XC DNS', 'F5-XC-DNS', 'Networking', 'DNS', 'Technical'),
     ('dns', 2, 'GSLB not detecting primary site health degradation', 'BIG-IP GTM', 'F5-BIG-GTM', 'Networking', 'DNS', 'Escalation'),
@@ -90,23 +98,14 @@ case_templates AS (
     ('dns', 5, 'DNSSEC validation failures for records signed with expiring ZSK', 'XC DNS', 'F5-XC-DNS', 'Networking', 'DNS', 'Technical'),
     ('dns', 6, 'Split-horizon DNS not separating internal from external resolution', 'BIG-IP GTM', 'F5-BIG-GTM', 'Networking', 'DNS', 'Technical'),
     ('dns', 7, 'DNS failover SLA breach during datacenter maintenance window', 'XC DNS', 'F5-XC-DNS', 'Networking', 'DNS', 'Escalation'),
-    ('dns', 8, 'Recursive resolver timeout causing intermittent name resolution', 'BIG-IP GTM', 'F5-BIG-GTM', 'Networking', 'DNS', 'Technical'),
-    -- performance (8)
-    ('performance', 1, 'P99 latency regression after configuration deployment last Tuesday', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Technical'),
-    ('performance', 2, 'Cache hit ratio collapsed from 82% to 34% after origin failover', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Technical'),
-    ('performance', 3, 'TLS handshake overhead adding 65ms for clients with older ciphers', 'BIG-IP LTM', 'F5-BIG-LTM', 'Security', 'Certificates', 'Technical'),
-    ('performance', 4, 'Edge function cold start latency exceeding 800ms SLA threshold', 'XC App Connect', 'F5-XC-APP-CONNECT', 'Software', 'Performance', 'Technical'),
-    ('performance', 5, 'Connection keep-alive timeout mismatch causing premature resets', 'NGINX Plus', 'F5-NGINX-PLUS', 'Networking', 'Load Balancing', 'Technical'),
-    ('performance', 6, 'Response compression not activating for application/json content', 'NGINX Plus', 'F5-NGINX-PLUS', 'Software', 'Performance', 'Technical'),
-    ('performance', 7, 'iRule execution time degradation after upgrade to v17.1', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Escalation'),
-    ('performance', 8, 'Memory utilization at 95% causing intermittent connection drops', 'BIG-IP LTM', 'F5-BIG-LTM', 'Software', 'Performance', 'Technical')
+    ('dns', 8, 'Recursive resolver timeout causing intermittent name resolution', 'BIG-IP GTM', 'F5-BIG-GTM', 'Networking', 'DNS', 'Technical')
 ),
 month_template_combos AS (
     SELECT
         s.value::INT as month_offset,
         t.value::INT as template_pick
     FROM TABLE(FLATTEN(ARRAY_GENERATE_RANGE(0, 12))) s,
-         TABLE(FLATTEN(ARRAY_GENERATE_RANGE(1, 9))) t
+         TABLE(FLATTEN(ARRAY_GENERATE_RANGE(1, 17))) t
 ),
 generated AS (
     SELECT

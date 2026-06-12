@@ -27,7 +27,7 @@ WITH account_signals AS (
             WHEN AVG(ACTIVE_ENDPOINT_QTY) > 150 THEN 'capacity'
             WHEN AVG(ACTIVE_HTTP_LOAD_BALANCER_QTY) > 40 THEN 'load-balancer'
             WHEN AVG(DNS_ZONES_QTY) > 7 THEN 'dns'
-            ELSE 'performance'
+            ELSE 'load-balancer'
         END AS dominant_signal
     FROM F5_PROD.RAW.COL_XC_TELEMETRY
     WHERE OBSERVATION_DATE >= CURRENT_DATE() - 60
