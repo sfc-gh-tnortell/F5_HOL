@@ -588,6 +588,30 @@ Make each section a separate cell so I can run and review step by step.</code></
 <strong>What you'll do:</strong> Run each cell in the notebook, review the features CoCo engineered, inspect model metrics, and confirm the predictions table is created. This is interactive — explore the intermediate results at each step.
 </div>
 
+<h4>Upload the Notebook to Snowflake</h4>
+<ol>
+    <li>In Snowsight, go to <strong>Projects → Notebooks</strong></li>
+    <li>Click <strong>+ Notebook</strong> → <strong>Import .ipynb file</strong></li>
+    <li>Select the notebook file CoCo generated</li>
+    <li>Configure the notebook settings:
+        <table>
+            <tr><th>Setting</th><th>Value</th></tr>
+            <tr><td>Runtime</td><td><strong>2.0</strong> (Python 3.10)</td></tr>
+            <tr><td>Notebook Warehouse</td><td><code>COMPUTE_WH</code></td></tr>
+            <tr><td>Database</td><td><code>F5_PROD</code></td></tr>
+            <tr><td>Schema</td><td><code>FINAL</code></td></tr>
+        </table>
+    </li>
+    <li>Click <strong>Create</strong></li>
+    <li>Before running, install required packages: click <strong>Packages</strong> (top of notebook) and add:
+        <ul>
+            <li><code>snowflake-ml-python</code> (includes Feature Store, Model Registry, XGBoost, GridSearch, Pipeline)</li>
+            <li><code>numpy</code> — pin to version <strong>1.26.4</strong> (resolves compatibility with Runtime 2.0)</li>
+        </ul>
+    </li>
+    <li>Run cells one at a time (Shift+Enter) and review output at each step</li>
+</ol>
+
 <hr>
 
 <h3 id="m2s2">Step 2: Review & Deploy Model <span class="badge badge-manual">Manual</span></h3>
@@ -610,17 +634,29 @@ Make each section a separate cell so I can run and review step by step.</code></
 
 <h3 id="m2s3">Step 3: Add Model to Agent <span class="badge badge-manual">Manual</span></h3>
 
+<p>Add the predictions table to your semantic view via Snowsight:</p>
+
 <ol>
-    <li>Add the <code>F5_PROD.FINAL.CHURN_PREDICTIONS</code> table to the support/telemetry semantic view</li>
-    <li>Add dimensions: <code>CHURN_RISK_SCORE</code>, <code>PREDICTED_PATTERN</code>, <code>DOMINANT_SIGNAL</code>, <code>TOP_RISK_FACTOR</code></li>
-    <li>Add metric: <code>high_risk_accounts</code> (count where CHURN_RISK_SCORE > 0.7)</li>
-    <li>Update the agent system prompt to include churn awareness:
-        <pre><code>When identifying at-risk accounts, also check their churn propensity score 
-from F5_PROD.FINAL.CHURN_PREDICTIONS. Accounts with declining telemetry 
-trends + open support cases + high churn score need immediate attention. 
-Recommend proactive outreach before they file more cases.</code></pre>
+    <li>Go to <strong>AI & ML → Semantic Views</strong> → open <code>F5_SUPPORT_TELEMETRY_SEMANTIC_VIEW</code></li>
+    <li>Click <strong>Add Table</strong> → select <code>F5_PROD.FINAL.CHURN_PREDICTIONS</code></li>
+    <li>Set primary key: <code>SFDCF5_ACCT_ID</code></li>
+    <li>Add relationship: <code>CHURN_PREDICTIONS.SFDCF5_ACCT_ID</code> → <code>ACCOUNTS.SFDCF5_ACCT_ID</code></li>
+    <li>Add dimensions:
+        <ul>
+            <li><code>PREDICTED_PATTERN</code> — synonyms: "churn status", "risk status"</li>
+            <li><code>DOMINANT_SIGNAL</code> — synonyms: "signal category"</li>
+            <li><code>TOP_RISK_FACTORS</code></li>
+        </ul>
     </li>
+    <li>Add fact: <code>CHURN_RISK_SCORE</code></li>
+    <li>Add metric: <code>HIGH_RISK_ACCOUNT_COUNT</code> = <code>COUNT(CASE WHEN CHURN_RISK_SCORE = 1 THEN 1 ELSE 0 END)</code></li>
+    <li>Save the semantic view</li>
 </ol>
+
+<p>Then update the agent instructions (AI & ML → Cortex Agents → edit your agent → <strong>Instructions</strong> field, append):</p>
+<pre><code>When identifying at-risk accounts, also check their churn propensity score 
+from CHURN_PREDICTIONS. Accounts with PREDICTED_PATTERN = 'At Risk' 
+plus open support cases need immediate proactive outreach.</code></pre>
 
 <hr>
 

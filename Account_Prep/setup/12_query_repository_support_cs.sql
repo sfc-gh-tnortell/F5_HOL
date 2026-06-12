@@ -44,6 +44,8 @@
 -- through SFDCF5_ACCT_ID and aggregate telemetry over last 60 days.'
 -- ============================================================
 
+USE ROLE SYSADMIN;
+USE WAREHOUSE COMPUTE_WH;
 USE DATABASE F5_PROD;
 USE SCHEMA RAW;
 
