@@ -165,7 +165,7 @@
 
 <h1>F5 Telemetry & Support Intelligence - Hands-On Lab</h1>
 
-<p>Build a Cortex Agent that discovers hidden correlations between F5 Distributed Cloud telemetry signals and customer support cases. You'll analyze historical SQL queries, create semantic views, build agents, and train a churn propensity model — all using Snowflake Cortex Code and Intelligence.</p>
+<p>Build a Cortex Agent that discovers hidden correlations between F5 Distributed Cloud telemetry signals and customer support cases. You'll analyze historical SQL queries, create semantic views, build agents, and train a churn propensity model, all using Snowflake Cortex Code and Intelligence.</p>
 
 <hr>
 
@@ -190,7 +190,7 @@
             <li><a href="#m2s2">Step 2: Review & Deploy Model (Manual)</a></li>
             <li><a href="#m2s3">Step 3: Add Model to Agent (Manual)</a></li>
             <li><a href="#m2s4">Step 4: Proactive Investigation (Manual)</a></li>
-            <li><a href="#m2s5">Step 5: Customer Success Streamlit App (CoCo)</a></li>
+            <li><a href="#m2s5">Step 5: Customer Success Streamlit App (Challenge)</a></li>
         </ul>
     </li>
     <li><a href="#data-summary">6. Data Summary</a></li>
@@ -207,7 +207,7 @@
     <li><strong>Support/Telemetry Semantic View</strong> derived from analyzing 60+ real SQL queries</li>
     <li><strong>Cortex Agent</strong> that queries telemetry + support cases + Salesforce via MCP</li>
     <li><strong>Churn Propensity Model</strong> using Snowflake ML Feature Store + XGBoost + Model Registry</li>
-    <li><strong>Customer Success Dashboard</strong> — Streamlit-in-Snowflake app with account health, pipeline, and predictions</li>
+    <li><strong>Customer Success Dashboard</strong> - interactive app with account health, pipeline, and predictions</li>
     <li><strong>Proactive Case Detection</strong> using telemetry spikes to predict support issues before they're reported</li>
 </ul>
 
@@ -357,8 +357,8 @@ another domain. Install it to ~/.snowflake/cortex/skills/query-analysis/</code><
 
 <p><strong>Expected Output:</strong></p>
 <ul>
-    <li><code>HOL/verified_queries.sql</code> — 5 SELECT statements, each with business question + persona header</li>
-    <li><code>~/.snowflake/cortex/skills/query-analysis/SKILL.md</code> — Reusable Cortex Code skill for any domain</li>
+    <li><code>HOL/verified_queries.sql</code> - 5 SELECT statements, each with business question + persona header</li>
+    <li><code>~/.snowflake/cortex/skills/query-analysis/SKILL.md</code> - Reusable Cortex Code skill for any domain</li>
     <li>Analysis summary: table frequency, join patterns, identified inconsistencies with recommendations</li>
 </ul>
 
@@ -402,7 +402,7 @@ Include the verified queries as VQRs in the semantic view definition.</code></pr
 </ol>
 
 <div class="note">
-<strong>Key Insight:</strong> The telemetry signals (bot-defense, waf, capacity, load-balancer, dns) map directly to support case categories. This is the correlation the agent will discover — but it's not explicit in the schema.
+<strong>Key Insight:</strong> The telemetry signals (bot-defense, waf, capacity, load-balancer, dns) map directly to support case categories. This is the correlation the agent will discover, but it's not explicit in the schema.
 </div>
 
 <hr>
@@ -511,7 +511,7 @@ where telemetry signals correlate with open support cases. When you find matches
 <h4>Part C: Write Observations Back to Salesforce</h4>
 <table>
     <tr><th>#</th><th>Question to Ask the Agent</th></tr>
-    <tr><td>5</td><td>"Find the Salesforce case for <strong>[YOUR ACCOUNT]</strong>'s open issue. Add a comment noting the telemetry correlation you found — include the specific metric values and the trend direction."</td></tr>
+    <tr><td>5</td><td>"Find the Salesforce case for <strong>[YOUR ACCOUNT]</strong>'s open issue. Add a comment noting the telemetry correlation you found. Include the specific metric values and the trend direction."</td></tr>
     <tr><td>6</td><td>"Based on the telemetry trends for <strong>[YOUR ACCOUNT]</strong>, do you think this issue will get worse? If so, create a new Salesforce case recommending a proactive review with the customer."</td></tr>
 </table>
 
@@ -551,7 +551,7 @@ pre-case average slope, and whether it's flagged.</code></pre>
 </div>
 
 <div class="note">
-<strong>What this demonstrates:</strong> Telemetry trends are leading indicators of support cases. If bot transactions were climbing 5% daily for 2 weeks before a "credential stuffing" case was filed, that same pattern today means a case is likely coming — and we can act before it does.
+<strong>What this demonstrates:</strong> Telemetry trends are leading indicators of support cases. If bot transactions were climbing 5% daily for 2 weeks before a "credential stuffing" case was filed, that same pattern today means a case is likely coming, and we can act before it does.
 </div>
 
 <hr>
@@ -585,7 +585,7 @@ Make each section a separate cell so I can run and review step by step.</code></
 </div>
 
 <div class="note">
-<strong>What you'll do:</strong> Run each cell in the notebook, review the features CoCo engineered, inspect model metrics, and confirm the predictions table is created. This is interactive — explore the intermediate results at each step.
+<strong>What you'll do:</strong> Run each cell in the notebook, review the features CoCo engineered, inspect model metrics, and confirm the predictions table is created. This is interactive. Explore the intermediate results at each step.
 </div>
 
 <h4>Upload the Notebook to Snowflake</h4>
@@ -606,7 +606,7 @@ Make each section a separate cell so I can run and review step by step.</code></
     <li>Before running, install required packages: click <strong>Packages</strong> (top of notebook) and add:
         <ul>
             <li><code>snowflake-ml-python</code> (includes Feature Store, Model Registry, XGBoost, GridSearch, Pipeline)</li>
-            <li><code>numpy</code> — pin to version <strong>1.26.4</strong> (resolves compatibility with Runtime 2.0)</li>
+            <li><code>numpy</code> - pin to version <strong>1.26.4</strong> (resolves compatibility with Runtime 2.0)</li>
         </ul>
     </li>
     <li>Run cells one at a time (Shift+Enter) and review output at each step</li>
@@ -618,7 +618,7 @@ Make each section a separate cell so I can run and review step by step.</code></
 
 <p>After running the notebook:</p>
 <ol>
-    <li>Review the feature importance — which features drive churn predictions?</li>
+    <li>Review the feature importance: which features drive churn predictions?</li>
     <li>Check model metrics (aim for F1 > 0.6 given the small dataset)</li>
     <li>Verify <code>F5_PROD.FINAL.CHURN_PREDICTIONS</code> was created:
         <pre><code>SELECT * FROM F5_PROD.FINAL.CHURN_PREDICTIONS ORDER BY CHURN_RISK_SCORE DESC LIMIT 10;</code></pre>
@@ -643,8 +643,8 @@ Make each section a separate cell so I can run and review step by step.</code></
     <li>Add relationship: <code>CHURN_PREDICTIONS.SFDCF5_ACCT_ID</code> → <code>ACCOUNTS.SFDCF5_ACCT_ID</code></li>
     <li>Add dimensions:
         <ul>
-            <li><code>PREDICTED_PATTERN</code> — synonyms: "churn status", "risk status"</li>
-            <li><code>DOMINANT_SIGNAL</code> — synonyms: "signal category"</li>
+            <li><code>PREDICTED_PATTERN</code> - synonyms: "churn status", "risk status"</li>
+            <li><code>DOMINANT_SIGNAL</code> - synonyms: "signal category"</li>
             <li><code>TOP_RISK_FACTORS</code></li>
         </ul>
     </li>
@@ -666,8 +666,8 @@ plus open support cases need immediate proactive outreach.</code></pre>
 
 <table>
     <tr><th>#</th><th>Question</th><th>Expected Insight</th></tr>
-    <tr><td>1</td><td>"Which accounts have a high churn risk score but no open support cases yet?"</td><td>These are accounts with declining telemetry that haven't filed cases — proactive outreach targets</td></tr>
-    <tr><td>2</td><td>"Show me accounts where telemetry is declining AND they had cases resolved in the last 3 months."</td><td>Previously-resolved issues may be recurring — check if telemetry confirms</td></tr>
+    <tr><td>1</td><td>"Which accounts have a high churn risk score but no open support cases yet?"</td><td>These are accounts with declining telemetry that haven't filed cases. Proactive outreach targets</td></tr>
+    <tr><td>2</td><td>"Show me accounts where telemetry is declining AND they had cases resolved in the last 3 months."</td><td>Previously-resolved issues may be recurring. Check if telemetry confirms</td></tr>
     <tr><td>3</td><td>"Can we predict which accounts will file support cases next month based on current telemetry trends?"</td><td>Model identifies accounts with early-stage degradation patterns</td></tr>
     <tr><td>4</td><td>"Create a Salesforce case for any high-risk account that doesn't already have an open case."</td><td>Proactive case creation via MCP based on model predictions</td></tr>
 </table>
@@ -678,34 +678,39 @@ plus open support cases need immediate proactive outreach.</code></pre>
 
 <hr>
 
-<h3 id="m2s5">Step 5: Customer Success Streamlit App <span class="badge badge-coco">CoCo</span></h3>
+<h3 id="m2s5">Step 5: Customer Success Streamlit App <span class="badge badge-manual">Challenge</span></h3>
 
-<p>Build a Streamlit-in-Snowflake dashboard that gives Customer Success Managers an always-on view of account health, support metrics, sales pipeline, and churn predictions — without needing to query the agent conversationally.</p>
+<p>You just received this Slack message from your VP of Customer Success:</p>
 
-<div class="coco">
-<pre><code>Build a multi-page Streamlit-in-Snowflake app for Customer Success Managers 
-using data in F5_PROD.RAW and F5_PROD.FINAL.
-
-The app should have:
-1. Account Health Overview - KPIs, telemetry signal classification, trend chart
-2. Support & SLA - open cases, SLA compliance, resolution metrics
-3. Sales & Renewals - pipeline, ARR, upcoming renewals, install base
-4. Churn Predictions - ranked risk table from CHURN_PREDICTIONS, 
-   highlight accounts at risk with no open cases
-
-Include an account selector so CSMs can drill into any customer.
-Use all available tables: DIM_CUST_ACCT_SFDC, COL_XC_TELEMETRY, 
-DIM_SUPPORT_CASE, FACT_SUPPORT_CASE, DIM_SALES_OPPORTUNITY, 
-FACT_SALES_OPPORTUNITY, COL_INSTALL_BASE, SALES_ACCOUNT_TEAM, 
-COL_XC_PRODUCT_HEALTHSCORE, and CHURN_PREDICTIONS.</code></pre>
+<div style="background: #f8f8f8; border-left: 4px solid #e01e5a; padding: 12px 16px; margin: 12px 0; font-family: monospace; font-size: 0.9em;">
+<strong>#customer-success</strong> - 9:14 AM<br><br>
+@here need help urgently. We lost two accounts last month that nobody 
+saw coming. I need a way to monitor our customer base and catch these 
+before they happen.<br><br>
+I need to see account health, open support issues, where they are in their 
+renewal cycle, and whether our product telemetry is showing any warning signs.
+I also want to see what that churn model you built is predicting.<br><br>
+I've been using Tableau but it's a week behind and I can't interact with it. 
+I need something I can click into for any account and see the full picture, 
+ideally in Snowflake where the data lives so it's always current.<br><br>
+I need a prototype by end of day. Doesn't need to be perfect, just needs 
+to work. - Sarah K, VP Customer Success
 </div>
 
+<p><strong>Your task:</strong> Use CoCo to build a solution that addresses Sarah's request. Consider:</p>
+<ul>
+    <li>What data do you have available? (Think about which tables from Module 1 and 2 are relevant)</li>
+    <li>What does "full picture" mean for a CSM looking at one account?</li>
+    <li>How do you make it interactive vs. a static report?</li>
+    <li>Sarah mentioned churn predictions, renewals, support issues, AND product telemetry. How do you organize that?</li>
+</ul>
+
 <div class="note">
-<strong>Deployment:</strong> Once CoCo generates the app, deploy it using the Snowflake UI: Go to <strong>Projects → Streamlit</strong> → Create Streamlit App. Paste the code, select <code>F5_PROD</code> database and <code>COMPUTE_WH</code> warehouse.
+<strong>Hint:</strong> You have account data, telemetry, support cases, sales opportunities, install base, health scores, and churn predictions all in <code>F5_PROD</code>. Think about what Snowflake offers for building interactive data apps.
 </div>
 
 <div class="success">
-<strong>Outcome:</strong> The Streamlit app provides the "at a glance" metrics view that complements the conversational Cortex Agent. CSMs use the dashboard for daily monitoring and the agent for deeper investigation and action (like creating Salesforce cases via MCP).
+<strong>Success Criteria:</strong> Sarah can open the solution, pick an account, and quickly understand: are they at risk, do they have open cases, what's their renewal status, and is their telemetry trending up or down.
 </div>
 
 <hr>
@@ -740,7 +745,7 @@ COL_XC_PRODUCT_HEALTHSCORE, and CHURN_PREDICTIONS.</code></pre>
 <table>
     <tr><th>Issue</th><th>Solution</th></tr>
     <tr><td>Agent says "missing warehouse"</td><td>Ensure <code>execution_environment: {type: warehouse, warehouse: "COMPUTE_WH"}</code> in agent spec</td></tr>
-    <tr><td>Semantic view COMMENT error on FACTS</td><td>Remove COMMENT from FACTS section — only DIMENSIONS and METRICS support comments</td></tr>
+    <tr><td>Semantic view COMMENT error on FACTS</td><td>Remove COMMENT from FACTS section. Only DIMENSIONS and METRICS support comments</td></tr>
     <tr><td>Salesforce MCP "endpoint not allowed"</td><td>Ensure MCP Servers are activated in Salesforce Setup → API Catalog → MCP Servers. Server URL: <code>https://api.salesforce.com/platform/mcp/v1/platform/sobject-all</code></td></tr>
     <tr><td>Cortex Search returns empty</td><td>Verify transcripts are uploaded to stage and search service is refreshed</td></tr>
     <tr><td>Agent can't find correlation</td><td>Ask specific questions: "Which accounts have bot transactions > 300K AND open bot defense cases?"</td></tr>
