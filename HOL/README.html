@@ -165,7 +165,7 @@
 
 <h1>F5 Telemetry & Support Intelligence - Hands-On Lab</h1>
 
-<p>Build a Cortex Agent that discovers hidden correlations between F5 Distributed Cloud telemetry signals and customer support cases. You'll analyze historical SQL queries, create semantic views, build agents, and train a churn propensity model, all using Snowflake Cortex Code and Intelligence.</p>
+<p>Build a Cortex Agent that discovers hidden correlations between F5 Distributed Cloud telemetry signals and customer support cases. You'll analyze historical SQL queries, create semantic views, build agents, and train a cross-sell/upsell model, all using Snowflake Cortex Code and Intelligence.</p>
 
 <hr>
 
@@ -184,13 +184,13 @@
             <li><a href="#m1s5">Step 5: Test - Find Telemetry/Case Correlations (Manual)</a></li>
         </ul>
     </li>
-    <li><a href="#module2">5. Module 2: Churn Propensity Model</a>
+    <li><a href="#module2">5. Module 2: Cross-Sell & Upsell Recommendations</a>
         <ul>
-            <li><a href="#m2s1">Step 1: Build Churn Model Notebook (CoCo)</a></li>
-            <li><a href="#m2s2">Step 2: Review & Deploy Model (Manual)</a></li>
-            <li><a href="#m2s3">Step 3: Add Model to Agent (Manual)</a></li>
-            <li><a href="#m2s4">Step 4: Proactive Investigation (Manual)</a></li>
-            <li><a href="#m2s5">Step 5: Customer Success Streamlit App (Challenge)</a></li>
+            <li><a href="#m2s1">Step 1: Build Recommendation Model Notebook (CoCo)</a></li>
+            <li><a href="#m2s2">Step 2: Review Recommendations (Manual)</a></li>
+            <li><a href="#m2s3">Step 3: Add Recommendations to Sales Agent (Manual)</a></li>
+            <li><a href="#m2s4">Step 4: Test Expansion Queries (Manual)</a></li>
+            <li><a href="#m2s5">Step 5: Customer Growth Dashboard (Challenge)</a></li>
         </ul>
     </li>
     <li><a href="#data-summary">6. Data Summary</a></li>
@@ -206,8 +206,8 @@
 <ul>
     <li><strong>Support/Telemetry Semantic View</strong> derived from analyzing 60+ real SQL queries</li>
     <li><strong>Cortex Agent</strong> that queries telemetry + support cases + Salesforce via MCP</li>
-    <li><strong>Churn Propensity Model</strong> using Snowflake ML Feature Store + XGBoost + Model Registry</li>
-    <li><strong>Customer Success Dashboard</strong> - interactive app with account health, pipeline, and predictions</li>
+    <li><strong>Cross-Sell/Upsell Model</strong> using Snowflake ML Feature Store + XGBoost + Model Registry</li>
+    <li><strong>Customer Growth Dashboard</strong> - interactive app with expansion opportunities and recommendations</li>
     <li><strong>Proactive Case Detection</strong> using telemetry spikes to predict support issues before they're reported</li>
 </ul>
 
@@ -556,161 +556,175 @@ pre-case average slope, and whether it's flagged.</code></pre>
 
 <hr>
 
-<h2 id="module2">5. Module 2: Churn Propensity Model</h2>
+<h2 id="module2">5. Module 2: Cross-Sell & Upsell Recommendations</h2>
 
-<p>Build a predictive model using Snowflake ML that identifies accounts likely to churn based on telemetry signal classification, trend slopes, support case patterns, and health scores. Uses the Feature Store for centralized feature management and the Model Registry for deployment.</p>
+<p>Build a recommendation model that identifies which accounts are ready to expand and what products to pitch them, based on their current product mix, telemetry signals, utilization patterns, support history, and contract timing.</p>
 
 <hr>
 
-<h3 id="m2s1">Step 1: Build Churn Model Notebook <span class="badge badge-coco">CoCo</span></h3>
+<h3 id="m2s1">Step 1: Build Recommendation Model Notebook <span class="badge badge-coco">CoCo</span></h3>
 
 <div class="coco">
-<pre><code>Create a Snowflake Notebook that builds a churn propensity model 
-for our F5 accounts.
+<pre><code>You are a senior ML engineer. Create a Snowflake Notebook that builds a 
+cross-sell/upsell recommendation model for our F5 accounts following 
+classical ML best practices.
 
-Target: predict which accounts have CONSUMPTION_PATTERN = 'Declining' 
-in COL_XC_PRODUCT_HEALTHSCORE (binary classification).
+This will run in Snowflake Workspaces (container-based). Train the model 
+locally in the container using sklearn and xgboost.
+
+The model should recommend additional products or capacity upgrades for 
+each account based on what they currently own, their telemetry usage, 
+support case patterns, utilization levels, and contract timing.
+
+Use historical expansion deals (won vs lost) as training labels.
 
 The notebook should walk through:
-1. Feature engineering from telemetry trends, support case patterns, 
-   and health scores
+1. Feature engineering from product ownership, telemetry, utilization, 
+   support gaps, and renewal dates
 2. Feature Store registration
-3. Model training with XGBoost and GridSearch tuning
-4. Model evaluation (accuracy, precision, recall, F1)
+3. Model training with proper train/test split, class weighting, 
+   and hyperparameter tuning
+4. Model evaluation with classification metrics
 5. Register in Model Registry
-6. Batch inference → write predictions to F5_PROD.FINAL.CHURN_PREDICTIONS
+6. Batch inference - write to F5_PROD.FINAL.CROSS_SELL_RECOMMENDATIONS
 
-Include the dominant telemetry signal as a categorical feature.
+Output should be MULTIPLE rows per account (one per recommendation) with 
+the recommended SKU, recommendation type (cross-sell/upsell/capacity), 
+confidence score, and rationale explaining why.
+
 Make each section a separate cell so I can run and review step by step.</code></pre>
 </div>
 
 <div class="note">
-<strong>What you'll do:</strong> Run each cell in the notebook, review the features CoCo engineered, inspect model metrics, and confirm the predictions table is created. This is interactive. Explore the intermediate results at each step.
+<strong>What you'll do:</strong> Run each cell in the notebook, review the features, inspect which products get recommended to which accounts, and confirm the output table makes sense for your assigned account.
 </div>
 
-<h4>Upload the Notebook to Snowflake</h4>
+<h4>Upload the Notebook to Snowflake Workspaces</h4>
 <ol>
-    <li>In Snowsight, go to <strong>Projects → Notebooks</strong></li>
-    <li>Click <strong>+ Notebook</strong> → <strong>Import .ipynb file</strong></li>
+    <li>In Snowsight, go to <strong>Projects → Workspaces</strong></li>
+    <li>Click <strong>+ Add New</strong> → <strong>Upload Files</strong></li>
     <li>Select the notebook file CoCo generated</li>
-    <li>Configure the notebook settings:
+    <li>Configure the service settings:
         <table>
             <tr><th>Setting</th><th>Value</th></tr>
-            <tr><td>Runtime</td><td><strong>2.0</strong> (Python 3.10)</td></tr>
+            <tr><td>Compute Pool</td><td><code>NOTEBOOK_POOL</code></td></tr>
+            <tr><td>Runtime</td><td>Latest available (v2.6+)</td></tr>
             <tr><td>Notebook Warehouse</td><td><code>COMPUTE_WH</code></td></tr>
             <tr><td>Database</td><td><code>F5_PROD</code></td></tr>
             <tr><td>Schema</td><td><code>FINAL</code></td></tr>
         </table>
     </li>
-    <li>Click <strong>Create</strong></li>
-    <li>Before running, install required packages: click <strong>Packages</strong> (top of notebook) and add:
-        <ul>
-            <li><code>snowflake-ml-python</code> (includes Feature Store, Model Registry, XGBoost, GridSearch, Pipeline)</li>
-            <li><code>numpy</code> - pin to version <strong>1.26.4</strong> (resolves compatibility with Runtime 2.0)</li>
-        </ul>
-    </li>
+    <li>Click <strong>Create</strong> and wait for the compute pool to start (1-2 minutes on first use)</li>
     <li>Run cells one at a time (Shift+Enter) and review output at each step</li>
 </ol>
 
+<div class="note">
+<strong>Why Workspaces?</strong> The model trains locally in the container (not on the warehouse). SQL queries still run on COMPUTE_WH for data prep.
+</div>
+
 <hr>
 
-<h3 id="m2s2">Step 2: Review & Deploy Model <span class="badge badge-manual">Manual</span></h3>
+<h3 id="m2s2">Step 2: Review Recommendations <span class="badge badge-manual">Manual</span></h3>
 
 <p>After running the notebook:</p>
 <ol>
-    <li>Review the feature importance: which features drive churn predictions?</li>
-    <li>Check model metrics (aim for F1 > 0.6 given the small dataset)</li>
-    <li>Verify <code>F5_PROD.FINAL.CHURN_PREDICTIONS</code> was created:
-        <pre><code>SELECT * FROM F5_PROD.FINAL.CHURN_PREDICTIONS ORDER BY CHURN_RISK_SCORE DESC LIMIT 10;</code></pre>
+    <li>Check how many recommendations were generated per account:
+        <pre><code>SELECT ACCT_NAME, COUNT(*) as recommendations 
+FROM F5_PROD.FINAL.CROSS_SELL_RECOMMENDATIONS 
+GROUP BY 1 ORDER BY 2 DESC LIMIT 10;</code></pre>
     </li>
-    <li>Confirm all accounts have predictions (not just those with health scores)</li>
+    <li>Look at what your assigned account was recommended:
+        <pre><code>SELECT * FROM F5_PROD.FINAL.CROSS_SELL_RECOMMENDATIONS 
+WHERE ACCT_NAME = '[YOUR ACCOUNT]' 
+ORDER BY CONFIDENCE_SCORE DESC;</code></pre>
+    </li>
+    <li>Verify the rationale makes sense. Does an account with heavy WAF telemetry but no Bot Defense get recommended Bot Defense?</li>
+    <li>Check that recommendation types are varied (cross-sell, upsell, capacity)</li>
 </ol>
 
 <div class="note">
-<strong>Tip:</strong> If the dataset is too small for GridSearch, CoCo may simplify to a single XGBClassifier. The model is still valuable for ranking accounts by relative risk.
+<strong>Tip:</strong> If recommendations seem off, check the feature engineering cell. The model should be seeing what products each account owns today (from line items and subscriptions) vs. what's available in the catalog.
 </div>
 
 <hr>
 
-<h3 id="m2s3">Step 3: Add Model to Agent <span class="badge badge-manual">Manual</span></h3>
+<h3 id="m2s3">Step 3: Add Recommendations to Sales Agent <span class="badge badge-manual">Manual</span></h3>
 
-<p>Add the predictions table to your semantic view via Snowsight:</p>
+<p>Add the recommendations table to your <strong>sales semantic view</strong> via Snowsight:</p>
 
 <ol>
-    <li>Go to <strong>AI & ML → Semantic Views</strong> → open <code>F5_SUPPORT_TELEMETRY_SEMANTIC_VIEW</code></li>
-    <li>Click <strong>Add Table</strong> → select <code>F5_PROD.FINAL.CHURN_PREDICTIONS</code></li>
-    <li>Set primary key: <code>SFDCF5_ACCT_ID</code></li>
-    <li>Add relationship: <code>CHURN_PREDICTIONS.SFDCF5_ACCT_ID</code> → <code>ACCOUNTS.SFDCF5_ACCT_ID</code></li>
-    <li>Add dimensions:
+    <li>Go to <strong>AI & ML → Semantic Views</strong> → open your sales semantic view</li>
+    <li>Click <strong>Add Table</strong> → select <code>F5_PROD.FINAL.CROSS_SELL_RECOMMENDATIONS</code></li>
+    <li>Select the columns to include (search columns): SFDCF5_ACCT_ID, ACCT_NAME, RECOMMENDED_SKU, RECOMMENDATION_TYPE, CONFIDENCE_SCORE, RATIONALE, PRIORITY_RANK</li>
+    <li>Once added, edit the table to configure:
         <ul>
-            <li><code>PREDICTED_PATTERN</code> - synonyms: "churn status", "risk status"</li>
-            <li><code>DOMINANT_SIGNAL</code> - synonyms: "signal category"</li>
-            <li><code>TOP_RISK_FACTORS</code></li>
+            <li>Set primary key: <code>SFDCF5_ACCT_ID, RECOMMENDED_SKU</code> (composite)</li>
+            <li>Review synonyms:
+                <ul>
+                    <li><code>RECOMMENDED_SKU</code> - <code>recommended product</code>, <code>suggestion</code></li>
+                    <li><code>RECOMMENDATION_TYPE</code> - <code>type</code>, <code>cross-sell or upsell</code></li>
+                    <li><code>RATIONALE</code> - <code>reason</code>, <code>why</code></li>
+                </ul>
+            </li>
+            <li>Add metric: <code>EXPANSION_OPPORTUNITY_COUNT</code> = <code>COUNT(RECOMMENDED_SKU)</code></li>
         </ul>
     </li>
-    <li>Add fact: <code>CHURN_RISK_SCORE</code></li>
-    <li>Add metric: <code>HIGH_RISK_ACCOUNT_COUNT</code> = <code>COUNT(CASE WHEN CHURN_RISK_SCORE = 1 THEN 1 ELSE 0 END)</code></li>
+    <li>Add relationship: <code>CROSS_SELL_RECOMMENDATIONS.SFDCF5_ACCT_ID</code> → <code>ACCOUNTS.SFDCF5_ACCT_ID</code> (many-to-one)</li>
     <li>Save the semantic view</li>
 </ol>
 
-<p>Then update the agent instructions (AI & ML → Cortex Agents → edit your agent → <strong>Instructions</strong> field, append):</p>
-<pre><code>When identifying at-risk accounts, also check their churn propensity score 
-from CHURN_PREDICTIONS. Accounts with PREDICTED_PATTERN = 'At Risk' 
-plus open support cases need immediate proactive outreach.</code></pre>
+<p>Then update the agent (AI & ML → Cortex Agents → edit your agent → <strong>Orchestration Instructions</strong>, append):</p>
+<pre><code>When asked about expansion opportunities or what to recommend to an account,
+check CROSS_SELL_RECOMMENDATIONS for product suggestions. Explain the 
+rationale behind each recommendation and prioritize by confidence score.</code></pre>
 
 <hr>
 
-<h3 id="m2s4">Step 4: Proactive Investigation <span class="badge badge-manual">Manual</span></h3>
+<h3 id="m2s4">Step 4: Test Expansion Queries <span class="badge badge-manual">Manual</span></h3>
 
-<p>Test the enhanced agent with predictive questions:</p>
+<p>Test the enhanced agent with expansion-focused questions:</p>
 
 <table>
     <tr><th>#</th><th>Question</th><th>Expected Insight</th></tr>
-    <tr><td>1</td><td>"Which accounts have a high churn risk score but no open support cases yet?"</td><td>These are accounts with declining telemetry that haven't filed cases. Proactive outreach targets</td></tr>
-    <tr><td>2</td><td>"Show me accounts where telemetry is declining AND they had cases resolved in the last 3 months."</td><td>Previously-resolved issues may be recurring. Check if telemetry confirms</td></tr>
-    <tr><td>3</td><td>"Can we predict which accounts will file support cases next month based on current telemetry trends?"</td><td>Model identifies accounts with early-stage degradation patterns</td></tr>
-    <tr><td>4</td><td>"Create a Salesforce case for any high-risk account that doesn't already have an open case."</td><td>Proactive case creation via MCP based on model predictions</td></tr>
+    <tr><td>1</td><td>"Which accounts are over 80% utilization and approaching renewal?"</td><td>Accounts that need capacity upgrades before their next renewal conversation</td></tr>
+    <tr><td>2</td><td>"What should we recommend to [YOUR ACCOUNT] based on their current products and telemetry?"</td><td>Specific product recommendations with rationale tied to their usage patterns</td></tr>
+    <tr><td>3</td><td>"Which accounts have high WAF telemetry but no Bot Defense product?"</td><td>Clear cross-sell gap where telemetry proves the need</td></tr>
+    <tr><td>4</td><td>"Show me the top 10 expansion opportunities by confidence score."</td><td>Prioritized list of accounts and products with the strongest signals</td></tr>
 </table>
 
 <div class="success">
-<strong>Success Criteria:</strong> The model identifies accounts with declining patterns before they escalate. Combined with the telemetry-support correlation from Module 1, the agent can now provide proactive recommendations rather than reactive case management.
+<strong>Success Criteria:</strong> The model identifies concrete product recommendations per account with clear rationale. Combined with the telemetry-support correlation from Module 1, the agent can now explain not just what's happening with an account but what to sell them next.
 </div>
 
 <hr>
 
-<h3 id="m2s5">Step 5: Customer Success Streamlit App <span class="badge badge-manual">Challenge</span></h3>
+<h3 id="m2s5">Step 5: Customer Growth Dashboard <span class="badge badge-manual">Challenge</span></h3>
 
-<p>You just received this Slack message from your VP of Customer Success:</p>
+<p>You just received this Slack message from your VP of Customer Growth:</p>
 
 <div style="background: #f8f8f8; border-left: 4px solid #e01e5a; padding: 12px 16px; margin: 12px 0; font-family: monospace; font-size: 0.9em;">
-<strong>#customer-success</strong> - 9:14 AM<br><br>
-@here need help urgently. We lost two accounts last month that nobody 
-saw coming. I need a way to monitor our customer base and catch these 
-before they happen.<br><br>
-I need to see account health, open support issues, where they are in their 
-renewal cycle, and whether our product telemetry is showing any warning signs.
-I also want to see what that churn model you built is predicting.<br><br>
-I've been using Tableau but it's a week behind and I can't interact with it. 
-I need something I can click into for any account and see the full picture, 
-ideally in Snowflake where the data lives so it's always current.<br><br>
-I need a prototype by end of day. Doesn't need to be perfect, just needs 
-to work. - Sarah K, VP Customer Success
+<strong>#customer-growth</strong> - 9:14 AM<br><br>
+@here becoming a real problem. We're sitting on a huge customer base but I have no visibility into which accounts are ready to expand. Every quarter we scramble to find upsell opportunities based on gut instinct instead of data.<br><br>
+I need to see which accounts should be buying more products, which ones need capacity upgrades, and what we should be recommending. If an account is likely to buy something, I want to know what and why.<br><br>
+I've been using Tableau but it's static and always a week behind. Need something interactive in Snowflake where I can drill into any account.<br><br>
+Need a working prototype by end of day.<br><br>
+- Sarah K, VP Customer Growth
 </div>
 
 <p><strong>Your task:</strong> Use CoCo to build a solution that addresses Sarah's request. Consider:</p>
 <ul>
     <li>What data do you have available? (Think about which tables from Module 1 and 2 are relevant)</li>
-    <li>What does "full picture" mean for a CSM looking at one account?</li>
+    <li>What does "drill into any account" mean for someone looking at expansion opportunities?</li>
     <li>How do you make it interactive vs. a static report?</li>
-    <li>Sarah mentioned churn predictions, renewals, support issues, AND product telemetry. How do you organize that?</li>
+    <li>Sarah mentioned product recommendations, capacity, and the expansion model. How do you organize that?</li>
 </ul>
 
 <div class="note">
-<strong>Hint:</strong> You have account data, telemetry, support cases, sales opportunities, install base, health scores, and churn predictions all in <code>F5_PROD</code>. Think about what Snowflake offers for building interactive data apps.
+<strong>Hint:</strong> You have account data, telemetry, support cases, sales opportunities, install base, health scores, and expansion recommendations all in <code>F5_PROD</code>. Think about what Snowflake offers for building interactive data apps.
 </div>
 
 <div class="success">
-<strong>Success Criteria:</strong> Sarah can open the solution, pick an account, and quickly understand: are they at risk, do they have open cases, what's their renewal status, and is their telemetry trending up or down.
+<strong>Success Criteria:</strong> Sarah can open the solution, pick an account, and quickly understand: what products should we pitch them, why, how confident are we, and when is their renewal window.
 </div>
 
 <hr>
@@ -749,7 +763,7 @@ to work. - Sarah K, VP Customer Success
     <tr><td>Salesforce MCP "endpoint not allowed"</td><td>Ensure MCP Servers are activated in Salesforce Setup → API Catalog → MCP Servers. Server URL: <code>https://api.salesforce.com/platform/mcp/v1/platform/sobject-all</code></td></tr>
     <tr><td>Cortex Search returns empty</td><td>Verify transcripts are uploaded to stage and search service is refreshed</td></tr>
     <tr><td>Agent can't find correlation</td><td>Ask specific questions: "Which accounts have bot transactions > 300K AND open bot defense cases?"</td></tr>
-    <tr><td>Model training fails</td><td>Ensure COL_XC_PRODUCT_HEALTHSCORE has data (116 rows expected)</td></tr>
+    <tr><td>Model training fails</td><td>Ensure product/opportunity data exists. Check COL_SALES_OPPORTUNITY_LINE_ITEM has rows.</td></tr>
 </table>
 
 </body>
