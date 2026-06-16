@@ -172,19 +172,20 @@
 <div class="toc">
 <h2>Table of Contents</h2>
 <ul>
-    <li><a href="#overview">1. Overview</a></li>
-    <li><a href="#prerequisites">2. Prerequisites</a></li>
-    <li><a href="#assignments">3. Your Assigned Customer</a></li>
-    <li><a href="#module1">4. Module 1: Support & Telemetry Agent</a>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#assignments">Your Assigned Customer</a></li>
+    <li><a href="#module1">Module 1: Support & Telemetry Agent</a>
         <ul>
             <li><a href="#m1s1">Step 1: Analyze SQL Query Patterns (CoCo)</a></li>
             <li><a href="#m1s2">Step 2: Create Support/Telemetry Semantic View (CoCo)</a></li>
             <li><a href="#m1s3">Step 3: Create Customer Support Agent (Manual)</a></li>
             <li><a href="#m1s4">Step 4: Connect Salesforce via MCP (Manual)</a></li>
             <li><a href="#m1s5">Step 5: Test - Find Telemetry/Case Correlations (Manual)</a></li>
+            <li><a href="#m1s6">Step 6 (Optional): Build a Proactive Trend Model (CoCo)</a></li>
         </ul>
     </li>
-    <li><a href="#module2">5. Module 2: Cross-Sell & Upsell Recommendations</a>
+    <li><a href="#module2">Module 2: Cross-Sell & Upsell Recommendations</a>
         <ul>
             <li><a href="#m2s1">Step 1: Build Recommendation Model Notebook (CoCo)</a></li>
             <li><a href="#m2s2">Step 2: Review Recommendations (Manual)</a></li>
@@ -193,14 +194,13 @@
             <li><a href="#m2s5">Step 5: Customer Growth Dashboard (Challenge)</a></li>
         </ul>
     </li>
-    <li><a href="#data-summary">6. Data Summary</a></li>
-    <li><a href="#troubleshooting">7. Troubleshooting</a></li>
+    <li><a href="#data-summary">Data Summary</a></li>
 </ul>
 </div>
 
 <hr>
 
-<h2 id="overview">1. Overview</h2>
+<h2 id="overview">Overview</h2>
 
 <h3>What You'll Build</h3>
 <ul>
@@ -258,7 +258,7 @@
 
 <hr>
 
-<h2 id="prerequisites">2. Prerequisites</h2>
+<h2 id="prerequisites">Prerequisites</h2>
 <ul>
     <li>Snowflake account: <code>sfsenorthamerica-demo351_aws</code></li>
     <li>Role: <code>SYSADMIN</code></li>
@@ -270,7 +270,7 @@
 
 <hr>
 
-<h2 id="assignments">3. Your Assigned Customer</h2>
+<h2 id="assignments">Your Assigned Customer</h2>
 
 <p>Each attendee is assigned a specific F5 customer account to work with during the lab. Focus your agent queries and Salesforce updates on your assigned account to avoid conflicts with other attendees.</p>
 
@@ -324,7 +324,7 @@
 
 <hr>
 
-<h2 id="module1">4. Module 1: Support & Telemetry Agent</h2>
+<h2 id="module1">Module 1: Support & Telemetry Agent</h2>
 
 <p>In this module you'll build a Cortex Agent specialized for customer support and telemetry analysis. The goal: discover which customers have telemetry signals that correlate with open support cases.</p>
 
@@ -556,7 +556,7 @@ pre-case average slope, and whether it's flagged.</code></pre>
 
 <hr>
 
-<h2 id="module2">5. Module 2: Cross-Sell & Upsell Recommendations</h2>
+<h2 id="module2">Module 2: Cross-Sell & Upsell Recommendations</h2>
 
 <p>Build a recommendation model that identifies which accounts are ready to expand and what products to pitch them, based on their current product mix, telemetry signals, utilization patterns, support history, and contract timing.</p>
 
@@ -590,7 +590,8 @@ The notebook should walk through:
 
 Output should be MULTIPLE rows per account (one per recommendation) with 
 the recommended SKU, recommendation type (cross-sell/upsell/capacity), 
-confidence score, and rationale explaining why.
+confidence score, and a human-readable rationale explaining why in plain 
+business language (not raw feature names).
 
 Make each section a separate cell so I can run and review step by step.</code></pre>
 </div>
@@ -729,7 +730,7 @@ Need a working prototype by end of day.<br><br>
 
 <hr>
 
-<h2 id="data-summary">6. Data Summary</h2>
+<h2 id="data-summary">Data Summary</h2>
 
 <h3>Signal-to-Support Correlation (Hidden Pattern)</h3>
 <p>This is what attendees will discover through the agent:</p>
@@ -753,18 +754,6 @@ Need a working prototype by end of day.<br><br>
 </table>
 
 <hr>
-
-<h2 id="troubleshooting">7. Troubleshooting</h2>
-
-<table>
-    <tr><th>Issue</th><th>Solution</th></tr>
-    <tr><td>Agent says "missing warehouse"</td><td>Ensure <code>execution_environment: {type: warehouse, warehouse: "COMPUTE_WH"}</code> in agent spec</td></tr>
-    <tr><td>Semantic view COMMENT error on FACTS</td><td>Remove COMMENT from FACTS section. Only DIMENSIONS and METRICS support comments</td></tr>
-    <tr><td>Salesforce MCP "endpoint not allowed"</td><td>Ensure MCP Servers are activated in Salesforce Setup → API Catalog → MCP Servers. Server URL: <code>https://api.salesforce.com/platform/mcp/v1/platform/sobject-all</code></td></tr>
-    <tr><td>Cortex Search returns empty</td><td>Verify transcripts are uploaded to stage and search service is refreshed</td></tr>
-    <tr><td>Agent can't find correlation</td><td>Ask specific questions: "Which accounts have bot transactions > 300K AND open bot defense cases?"</td></tr>
-    <tr><td>Model training fails</td><td>Ensure product/opportunity data exists. Check COL_SALES_OPPORTUNITY_LINE_ITEM has rows.</td></tr>
-</table>
 
 </body>
 </html>
