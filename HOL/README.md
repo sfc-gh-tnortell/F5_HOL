@@ -15,9 +15,11 @@ Build a Cortex Agent that discovers hidden correlations between F5 Distributed C
     - [Step 1: Analyze SQL Query Patterns (CoCo)](#step-1-analyze-sql-query-patterns)
     - [Step 2: Create Support/Telemetry Semantic View (CoCo)](#step-2-create-supporttelemetry-semantic-view)
     - [Step 3: Create Customer Support Agent (Manual)](#step-3-create-customer-support-agent)
-    - [Step 4: Connect Salesforce via MCP (Manual)](#step-4-connect-salesforce-via-mcp)
-    - [Step 5: Test - Find Telemetry/Case Correlations (Manual)](#step-5-test---find-telemetrycase-correlations)
-    - [Step 6 (Optional): Build a Proactive Trend Model (CoCo)](#step-6-optional-build-a-proactive-trend-model)
+    - [Step 4: Discover the Correlation (Manual)](#step-4-discover-the-correlation)
+    - [Step 5: Prove the Signal is Predictive (CoCo)](#step-5-prove-the-signal-is-predictive)
+    - [Step 6: Connect Salesforce via MCP (Manual)](#step-6-connect-salesforce-via-mcp)
+    - [Step 7: Write Findings Back to Salesforce (Manual)](#step-7-write-findings-back-to-salesforce)
+    - [Step 8: What Comes Next - Automated Detection (Discussion)](#step-8-what-comes-next---automated-detection)
 - [Module 2: Cross-Sell & Upsell Recommendations](#module-2-cross-sell--upsell-recommendations)
     - [Step 1: Build Recommendation Model Notebook (CoCo)](#step-1-build-recommendation-model-notebook)
     - [Step 2: Review Recommendations (Manual)](#step-2-review-recommendations)
@@ -259,7 +261,7 @@ Open the verified queries file generated in Step 1 and use the following prompt:
 
 `Manual`{: .badge-manual }
 
-Create the agent in the Snowflake UI that combines the semantic view with search and MCP tools.
+Create the agent in the Snowflake UI that combines the semantic view with search.
 
 1. Navigate to **AI & ML → CoWork**
 2. Click **+ Create Agent**
@@ -295,13 +297,64 @@ Create the agent in the Snowflake UI that combines the semantic view with search
 
 ---
 
-### Step 4: Connect Salesforce via MCP
+### Step 4: Discover the Correlation
 
 `Manual`{: .badge-manual }
 
-Set up the Salesforce MCP connector so the agent can read and create Cases in Salesforce.
+Use your agent to investigate your assigned customer. Ask questions to discover that telemetry signals correlate with open support cases.
 
-#### 4a: Snowflake MCP Connector Setup
+Replace `[YOUR ACCOUNT]` with your assigned customer name.
+
+| # | Question to Ask the Agent |
+|---|--------------------------|
+| 1 | "What open support cases does **[YOUR ACCOUNT]** have? Show me the case title, priority, and product category." |
+| 2 | "What is the telemetry profile for **[YOUR ACCOUNT]**? Show me their average bot transactions, WAF usage, endpoint count, and load balancers over the last 60 days." |
+| 3 | "Compare the telemetry signals for **[YOUR ACCOUNT]** with their open case categories. Is there a correlation between what the telemetry shows and what they filed a case about?" |
+| 4 | "Look at the telemetry trend for **[YOUR ACCOUNT]** over the past 6 months. Did the signal that matches their case category increase before the case was opened?" |
+
+!!! success "Success Criteria"
+    You should see that your customer's dominant telemetry signal matches the product category of their open support cases. For example, a bot-defense account will have elevated bot transactions AND open cases about Bot Defense/Bot Management.
+
+---
+
+### Step 5: Prove the Signal is Predictive
+
+`CoCo`{: .badge-coco }
+
+You found a correlation. But is it a coincidence or a pattern? Use CoCo to prove that telemetry slopes increase *before* cases are filed, not just at the same time.
+
+!!! coco "Cortex Code Prompt"
+    ```
+    Using the telemetry data in F5_PROD.RAW.COL_XC_TELEMETRY for my assigned 
+    account [YOUR ACCOUNT], prove that telemetry trends predict support cases:
+
+    1. Calculate the 30-day rolling slope for each telemetry signal 
+       (bot transactions, WAF usage, endpoints, load balancers, DNS zones)
+    2. Compare these slopes to the dates when support cases were opened 
+       (from DIM_SUPPORT_CASE.CREATED_DATETIME)
+    3. Identify which signal slopes were increasing in the 30 days BEFORE 
+       each case was created
+    4. Build a simple threshold rule: if a signal's 30-day slope exceeds 
+       the pre-case average slope, flag it as "trending toward a case"
+    5. Apply this rule to current telemetry and tell me if any signals 
+       are currently trending in a way that preceded past cases
+
+    Output a summary table showing: signal name, current slope, 
+    pre-case average slope, and whether it's flagged.
+    ```
+
+!!! success "Success Criteria"
+    The output should show that the signal matching your account's case category had an elevated slope in the 30 days before the case was filed. This proves the telemetry is a leading indicator, not just a coincidence.
+
+---
+
+### Step 6: Connect Salesforce via MCP
+
+`Manual`{: .badge-manual }
+
+Now you have predictive data. What do you do with it? Let's make this actionable by connecting CoWork to Salesforce so the agent can write findings directly into your CRM.
+
+#### 6a: Snowflake MCP Connector Setup
 
 1. Navigate to **AI & ML → Agents → Settings → Tools and Connectors**
 2. Click **Browse Connectors** → select **Salesforce**
@@ -319,7 +372,7 @@ Set up the Salesforce MCP connector so the agent can read and create Cases in Sa
 4. Select a database and schema (e.g., `F5_PROD.PUBLIC`)
 5. Click **Add**
 
-#### 4b: Add to Agent and Authenticate
+#### 6b: Add to Agent and Authenticate
 
 1. Navigate to **AI & ML → CoWork**
 2. Find `F5_SUPPORT_AGENT` → click **Edit**
@@ -338,73 +391,40 @@ Set up the Salesforce MCP connector so the agent can read and create Cases in Sa
 
 ---
 
-### Step 5: Test - Find Telemetry/Case Correlations
+### Step 7: Write Findings Back to Salesforce
 
 `Manual`{: .badge-manual }
 
-Use your agent to investigate your assigned customer. Follow this sequence to discover the telemetry-support correlation and write findings back to Salesforce.
-
-#### Part A: Find Your Customer's Open Cases
-
-Replace `[YOUR ACCOUNT]` with your assigned customer name from Section 3.
+Now that you have data proving the signal is predictive and a live Salesforce connection, write your findings back with the slope evidence.
 
 | # | Question to Ask the Agent |
 |---|--------------------------|
-| 1 | "What open support cases does **[YOUR ACCOUNT]** have? Show me the case title, priority, and product category." |
-| 2 | "What is the telemetry profile for **[YOUR ACCOUNT]**? Show me their average bot transactions, WAF usage, endpoint count, and load balancers over the last 60 days." |
-
-#### Part B: Discover the Correlation
-
-| # | Question to Ask the Agent |
-|---|--------------------------|
-| 3 | "Compare the telemetry signals for **[YOUR ACCOUNT]** with their open case categories. Is there a correlation between what the telemetry shows and what they filed a case about?" |
-| 4 | "Look at the telemetry trend for **[YOUR ACCOUNT]** over the past 6 months. Did the signal that matches their case category increase before the case was opened?" |
-
-#### Part C: Write Observations Back to Salesforce
-
-| # | Question to Ask the Agent |
-|---|--------------------------|
-| 5 | "Find the Salesforce case for **[YOUR ACCOUNT]**'s open issue. Add a comment noting the telemetry correlation you found. Include the specific metric values and the trend direction." |
-| 6 | "Based on the telemetry trends for **[YOUR ACCOUNT]**, do you think this issue will get worse? If so, create a new Salesforce case recommending a proactive review with the customer." |
+| 1 | "Find the Salesforce case for **[YOUR ACCOUNT]**'s open issue. Add a comment noting the telemetry correlation you found. Include the specific metric values and the slope trend from my analysis." |
+| 2 | "Based on the telemetry slopes for **[YOUR ACCOUNT]**, the signal is currently trending above the pre-case threshold. Create a new Salesforce case recommending a proactive review with the customer. Include the slope data as evidence." |
 
 !!! success "Success Criteria"
     By the end of this step you should have:
 
-    1. Identified that your customer's open case category matches their dominant telemetry signal
-    2. Found telemetry evidence that supports (or preceded) the reported issue
-    3. Written a comment on the existing Salesforce case with your telemetry findings
-    4. Optionally created a proactive Salesforce case if the trend suggests escalation
+    1. Written a comment on the existing Salesforce case with telemetry correlation + slope evidence
+    2. Created a proactive Salesforce case backed by predictive data, not just a hunch
 
 ---
 
-### Step 6 (Optional): Build a Proactive Trend Model
+### Step 8: What Comes Next - Automated Detection
 
-`CoCo`{: .badge-coco }
+`Discussion`{: .badge-manual }
 
-If you finish Step 5 early, use Cortex Code to build a lightweight model that detects telemetry trends *before* they become support cases.
+You've gone from manual discovery to data-backed prediction to action. The natural next question: how do we automate this so it runs without a human in the loop?
 
-!!! coco "Cortex Code Prompt"
-    ```
-    Using the telemetry data in F5_PROD.RAW.COL_XC_TELEMETRY for my assigned 
-    account [YOUR ACCOUNT], build a proactive trend detection model:
+Discuss together what possible automation paths would look like:
 
-    1. Calculate the 30-day rolling slope for each telemetry signal 
-       (bot transactions, WAF usage, endpoints, load balancers, DNS zones)
-    2. Compare these slopes to the dates when support cases were opened 
-       (from DIM_SUPPORT_CASE.CREATED_DATETIME)
-    3. Identify which signal slopes were increasing in the 30 days BEFORE 
-       each case was created
-    4. Build a simple threshold rule: if a signal's 30-day slope exceeds 
-       the pre-case average slope, flag it as "trending toward a case"
-    5. Apply this rule to current telemetry and tell me if any signals 
-       are currently trending in a way that preceded past cases
+- **Snowflake Tasks** - Run the slope calculation on a daily schedule, write flagged accounts to a detection table
+- **Snowflake Alerts** - Trigger when any account crosses the pre-case threshold
+- **Notification Integrations** - Send Slack messages or emails when alerts fire
+- **MCP Automation** - Have the agent automatically create Salesforce cases for flagged accounts
+- **Feedback Loop** - Track whether flagged accounts actually file cases, and use that to tune thresholds over time
 
-    Output a summary table showing: signal name, current slope, 
-    pre-case average slope, and whether it's flagged.
-    ```
-
-!!! note "What this demonstrates"
-    Telemetry trends are leading indicators of support cases. If bot transactions were climbing 5% daily for 2 weeks before a "credential stuffing" case was filed, that same pattern today means a case is likely coming, and we can act before it does.
+The goal: instead of waiting for a customer to file a case, the system tells you a case is coming and what product it will be about.
 
 ---
 
