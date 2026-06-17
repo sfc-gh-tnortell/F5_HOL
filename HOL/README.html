@@ -165,7 +165,7 @@
 
 <h1>F5 Telemetry & Support Intelligence - Hands-On Lab</h1>
 
-<p>Build a Cortex Agent that discovers hidden correlations between F5 Distributed Cloud telemetry signals and customer support cases. You'll analyze historical SQL queries, create semantic views, build agents, and train a cross-sell/upsell model, all using Snowflake Cortex Code and Intelligence.</p>
+<p>Build a Cortex Agent that discovers hidden correlations between F5 Distributed Cloud telemetry signals and customer support cases. You'll analyze historical SQL queries, create semantic views, build agents, and train a cross-sell/upsell model, all using Snowflake Cortex Code and CoWork.</p>
 
 <hr>
 
@@ -173,6 +173,7 @@
 <h2>Table of Contents</h2>
 <ul>
     <li><a href="#overview">Overview</a></li>
+    <li><a href="#prerequisites">Prerequisites</a></li>
     <li><a href="#assignments">Your Assigned Customer</a></li>
     <li><a href="#module1">Module 1: Support & Telemetry Agent</a>
         <ul>
@@ -257,6 +258,41 @@
 
 <hr>
 
+<h2 id="prerequisites">Prerequisites</h2>
+
+<h3>Download Cortex Code Desktop</h3>
+<p>Download and install CoCo Desktop from: <a href="https://www.snowflake.com/en/product/snowflake-coco/downloads/">https://www.snowflake.com/en/product/snowflake-coco/downloads/</a></p>
+
+<h3>Connect to Your Snowflake Account</h3>
+<ol>
+    <li>Open CoCo Desktop</li>
+    <li>Click your <strong>connection name</strong> (top-left corner)</li>
+    <li>Click <strong>Manage Connections</strong></li>
+    <li>Click <strong>+ New Connection</strong></li>
+    <li>Fill in:
+        <table>
+            <tr><th>Field</th><th>Value</th></tr>
+            <tr><td>Account</td><td>Your assigned Snowflake account from the table below (e.g. <code>sfsehol-f5_hol_biabnl</code>)</td></tr>
+            <tr><td>Authentication</td><td>Username and Password</td></tr>
+            <tr><td>Username</td><td><em>Provided by instructor</em></td></tr>
+            <tr><td>Password</td><td><em>Provided by instructor</em></td></tr>
+            <tr><td>Role</td><td><code>SYSADMIN</code></td></tr>
+            <tr><td>Warehouse</td><td><code>COMPUTE_WH</code></td></tr>
+        </table>
+    </li>
+    <li>Click <strong>Connect</strong></li>
+</ol>
+
+<h3>Create Your Project Folder</h3>
+<ol>
+    <li>In CoCo Desktop, open <strong>Explorer</strong> in the sidebar</li>
+    <li>Click <strong>Open Folder</strong></li>
+    <li>Click <strong>New Folder</strong> and name it <code>F5_HOL</code></li>
+    <li>This is where CoCo will save files it generates during the lab</li>
+</ol>
+
+<hr>
+
 <h2 id="assignments">Your Assigned Customer</h2>
 
 <p>Each attendee is assigned a specific F5 customer account to work with during the lab. Focus your agent queries and Salesforce updates on your assigned account to avoid conflicts with other attendees.</p>
@@ -326,8 +362,10 @@
 <p>We have 60 historical SQL queries written by different personas (Support Analyst, Data Engineer, Sales Ops, CSM, Executive). Analyze them to identify the most important patterns and distill them into 5 verified queries for a Cortex Skill.</p>
 
 <div class="coco">
-<p>Open <code>Account_Prep/setup/12_query_repository_support_cs.sql</code> and use the following prompt:</p>
-<pre><code>Analyze the 60 SQL queries in this file. These were written by different personas 
+<p>Use the following prompt in CoCo:</p>
+<pre><code>Read the file at @F5_PROD.RAW.QUERY_REPOSITORY_STAGE/query_repository.sql
+
+Analyze the 60 SQL queries in this file. These were written by different personas 
 to answer support and telemetry questions. I need you to:
 
 1. Identify the key dimensions, metrics, and join patterns used across all queries

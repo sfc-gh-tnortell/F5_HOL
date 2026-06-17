@@ -44,6 +44,9 @@ PUT file://./data/SALES_ACCOUNT_TEAM/* @HOL_DATA_STAGE/SALES_ACCOUNT_TEAM/ AUTO_
 PUT file://./data/SALES_SECURITY_ETM_TERRITORY/* @HOL_DATA_STAGE/SALES_SECURITY_ETM_TERRITORY/ AUTO_COMPRESS=FALSE OVERWRITE=TRUE;
 PUT file://./data/USER_ENTRY_HEADER/* @HOL_DATA_STAGE/USER_ENTRY_HEADER/ AUTO_COMPRESS=FALSE OVERWRITE=TRUE;
 
+-- Upload query repository to stage
+PUT file://./query_repository.sql @QUERY_REPOSITORY_STAGE/ AUTO_COMPRESS=FALSE OVERWRITE=TRUE;
+
 -- ============================================================
 -- COPY INTO: Load staged Parquet into tables
 -- ============================================================

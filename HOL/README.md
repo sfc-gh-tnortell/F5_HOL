@@ -2,13 +2,14 @@
 
 ### <h1sub>Overview</h1sub>
 
-Build a Cortex Agent that discovers hidden correlations between F5 Distributed Cloud telemetry signals and customer support cases. You'll analyze historical SQL queries, create semantic views, build agents, and train a cross-sell/upsell model, all using Snowflake Cortex Code and Intelligence.
+Build a Cortex Agent that discovers hidden correlations between F5 Distributed Cloud telemetry signals and customer support cases. You'll analyze historical SQL queries, create semantic views, build agents, and train a cross-sell/upsell model, all using Snowflake Cortex Code and CoWork.
 
 ---
 
 ## Table of Contents
 
 - [Overview](#overview)
+- [Prerequisites](#prerequisites)
 - [Your Assigned Customer](#your-assigned-customer)
 - [Module 1: Support & Telemetry Agent](#module-1-support--telemetry-agent)
     - [Step 1: Analyze SQL Query Patterns (CoCo)](#step-1-analyze-sql-query-patterns)
@@ -81,6 +82,36 @@ Build a Cortex Agent that discovers hidden correlations between F5 Distributed C
 
 ---
 
+## Prerequisites
+
+### Download Cortex Code Desktop
+
+Download and install CoCo Desktop from: [https://www.snowflake.com/en/product/snowflake-coco/downloads/](https://www.snowflake.com/en/product/snowflake-coco/downloads/)
+
+### Connect to Your Snowflake Account
+
+1. Open CoCo Desktop
+2. Click your **connection name** (top-left corner)
+3. Click **Manage Connections**
+4. Click **+ New Connection**
+5. Fill in:
+    - **Account**: Your assigned Snowflake account from the table below (e.g. `sfsehol-f5_hol_biabnl`)
+    - **Authentication**: Username and Password
+    - **Username**: *Provided by instructor*
+    - **Password**: *Provided by instructor*
+    - **Role**: `SYSADMIN`
+    - **Warehouse**: `COMPUTE_WH`
+6. Click **Connect**
+
+### Create Your Project Folder
+
+1. In CoCo Desktop, open **Explorer** in the sidebar
+2. Click **Open Folder**
+3. Click **New Folder** and name it `F5_HOL`
+4. This is where CoCo will save files it generates during the lab
+
+---
+
 ## Your Assigned Customer
 
 Each attendee is assigned a specific F5 customer account to work with during the lab. Focus your agent queries and Salesforce updates on your assigned account to avoid conflicts with other attendees.
@@ -150,9 +181,11 @@ In this module you'll build a Cortex Agent specialized for customer support and 
 We have 60 historical SQL queries written by different personas (Support Analyst, Data Engineer, Sales Ops, CSM, Executive). Analyze them to identify the most important patterns and distill them into 5 verified queries for a Cortex Skill.
 
 !!! coco "Cortex Code Prompt"
-    Open `Account_Prep/setup/12_query_repository_support_cs.sql` and use the following prompt:
+    Open the query repository from stage and use the following prompt:
 
     ```
+    Read the file at @F5_PROD.RAW.QUERY_REPOSITORY_STAGE/query_repository.sql
+
     Analyze the 60 SQL queries in this file. These were written by different personas 
     to answer support and telemetry questions. I need you to:
 

@@ -692,3 +692,8 @@ CREATE OR REPLACE TABLE COL_SALES_OPPORTUNITY_LINE_ITEM (
 CREATE OR REPLACE STAGE ZOOM_TRANSCRIPTS_STAGE
     DIRECTORY = (ENABLE = TRUE)
     COMMENT = 'Zoom call transcript files in WEBVTT format for Cortex Search';
+
+-- Query repository stage (for Module 1 SQL analysis)
+CREATE OR REPLACE STAGE QUERY_REPOSITORY_STAGE
+    DIRECTORY = (ENABLE = TRUE)
+    COMMENT = 'SQL query repository for pattern analysis in Module 1';
