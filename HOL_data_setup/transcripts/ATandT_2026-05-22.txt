@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+David Morrison: Thanks for joining, David Murphy. Good to connect with you and the AT&T team.
+
+00:00:38.945 --> 00:00:44.500
+David Murphy: Good to see you both. David Morrison, Nicole Martinez - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+David Morrison: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:14.432
+David Murphy: We're migrating 70% of workloads to AWS and Azure over the next 18 months. The on-prem BIG-IP strategy needs to evolve. What does F5 offer for multi-cloud?
+
+00:01:14.432 --> 00:01:24.862
+Nicole Martinez: Great question. Let me share what we're seeing with customers in similar situations.
+
+00:01:24.862 --> 00:01:51.290
+Nicole Martinez: For zero trust, our Access Policy Manager integrates with your IdP and enforces per-request authentication. Combined with XC, you get identity-aware routing.
+
+00:01:51.290 --> 00:02:06.251
+David Murphy: Our fiscal year starts in April, and we've been asked to consolidate security vendors. F5 is on the short list to keep, but we need to see the full value stack.
+
+00:02:06.251 --> 00:02:34.041
+David Morrison: We can definitely work with you on that. Let me put together a total value summary showing your current investment and ROI across all F5 products.
+
+00:02:34.041 --> 00:02:42.943
+David Morrison: This has been really productive. Let me summarize the action items.
+
+00:02:42.943 --> 00:02:57.750
+David Morrison: Let's reconvene in two weeks after you've had a chance to review the proposal. We'll bring our architect to address the integration questions.
+
+00:02:57.750 --> 00:03:02.525
+David Murphy: Appreciate it. Let's keep the momentum going.
+
+00:03:02.525 --> 00:03:07.857
+David Morrison: Thank you, David Murphy. Talk soon.
+

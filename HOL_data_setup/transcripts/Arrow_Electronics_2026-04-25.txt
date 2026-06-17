@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Michael Park: Thanks for joining, Jennifer Zhang. Good to connect with you and the Arrow Electronics team.
+
+00:00:38.945 --> 00:00:44.500
+Jennifer Zhang: Good to see you both. Michael Park, Rachel Gonzalez - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Michael Park: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Jennifer Zhang: AWS Shield Advanced plus ALB gives us most of what XC DDoS and WAF do, and it's already in our cloud bill. Why should we add another vendor?
+
+00:01:16.691 --> 00:01:24.862
+Michael Park: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Rachel Gonzalez: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Jennifer Zhang: Sure. The main pain point is feature parity. Competitors are shipping faster and their UX is more modern.
+
+00:02:02.604 --> 00:02:17.971
+Jennifer Zhang: Our fiscal year starts in April, and we've been asked to consolidate security vendors. F5 is on the short list to keep, but we need to see the full value stack.
+
+00:02:17.971 --> 00:02:45.370
+Michael Park: Let me connect you with our finance team. We have some creative options around payment terms and ramp structures that might help with the timing.
+
+00:02:45.370 --> 00:02:53.822
+Michael Park: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+Michael Park: Let's schedule a call with our engineering leadership next week. I want them to hear directly from you what needs to change.
+
+00:03:08.051 --> 00:03:13.346
+Jennifer Zhang: Appreciate it. Let's keep the momentum going.
+
+00:03:13.346 --> 00:03:18.309
+Michael Park: Thank you, Jennifer Zhang. Talk soon.
+

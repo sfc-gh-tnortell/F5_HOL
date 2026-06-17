@@ -1,0 +1,32 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Lauren Kim: Thanks for joining, Lisa Lee. Good to connect with you and the Texas Instruments team.
+
+00:00:38.945 --> 00:00:44.500
+Lisa Lee: Good to see you both. Lauren Kim, Chris Anderson - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Lauren Kim: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:14.432
+Lisa Lee: Our API gateway strategy is evolving. We're using Kong for some things, Apigee for others. The F5 API security story is interesting but needs to integrate.
+
+00:01:14.432 --> 00:01:24.862
+Chris Anderson: Great question. Let me share what we're seeing with customers in similar situations.
+
+00:01:24.862 --> 00:01:56.982
+Chris Anderson: The BIG-IP Next platform is our answer to the modernization question. Full API-driven management, Terraform native, and runs anywhere - cloud, edge, or on-prem.
+
+00:01:56.982 --> 00:02:04.035
+Lauren Kim: This has been really productive. Let me summarize the action items.
+
+00:02:04.035 --> 00:02:19.318
+Lauren Kim: Good discussion. I'll get the multi-year pricing from deal desk and Chris Anderson will put together a technical architecture for the migration path.
+
+00:02:19.318 --> 00:02:24.869
+Lisa Lee: Thanks. We'll review on our end and circle back.
+
+00:02:24.869 --> 00:02:29.993
+Lauren Kim: Thank you, Lisa Lee. Talk soon.
+

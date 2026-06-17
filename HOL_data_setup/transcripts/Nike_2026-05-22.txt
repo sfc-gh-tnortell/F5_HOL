@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Robert Chen: Thanks for joining, John Garcia. Good to connect with you and the Nike team.
+
+00:00:38.945 --> 00:00:44.500
+John Garcia: Good to see you both. Robert Chen, Priya Sharma - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Robert Chen: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+John Garcia: We're evaluating Fastly for CDN and edge security. Their developer experience is significantly better than what we've seen from F5.
+
+00:01:16.691 --> 00:01:24.862
+Robert Chen: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Priya Sharma: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+John Garcia: Sure. The main pain point is lack of integration with our CI/CD pipeline. Everything else is GitOps but F5 config is still manual.
+
+00:02:02.604 --> 00:02:17.971
+John Garcia: Finance froze all new capital expenditure until next quarter. We can't commit to any hardware refresh right now, but SaaS models might still fit our opex budget.
+
+00:02:17.971 --> 00:02:45.370
+Robert Chen: Multi-year commitments are something we actively encourage. I can get our deal desk to model out 2-year and 3-year options with the associated discounts.
+
+00:02:45.370 --> 00:02:53.822
+Robert Chen: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+Robert Chen: First priority is getting your support experience fixed. I'm escalating to our VP of Customer Success today. Priya Sharma will set up weekly technical check-ins.
+
+00:03:08.051 --> 00:03:13.346
+John Garcia: Thanks. We'll review on our end and circle back.
+
+00:03:13.346 --> 00:03:18.309
+Robert Chen: Thank you, John Garcia. Talk soon.
+

@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Rachel Patel: Thanks for joining, Maria Patel. Good to connect with you and the Microsoft team.
+
+00:00:38.945 --> 00:00:44.500
+Maria Patel: Good to see you both. Rachel Patel, Marcus Thompson - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Rachel Patel: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:14.432
+Maria Patel: Kubernetes adoption hit 80% of production workloads. We need ingress controllers that scale. NGINX vs Envoy vs Traefik - help me understand the tradeoffs.
+
+00:01:14.432 --> 00:01:24.862
+Marcus Thompson: Great question. Let me share what we're seeing with customers in similar situations.
+
+00:01:24.862 --> 00:01:51.290
+Marcus Thompson: Distributed Cloud is specifically designed for multi-cloud environments. It gives you consistent policy enforcement across AWS, Azure, and GCP without managing separate WAF instances.
+
+00:01:51.290 --> 00:02:06.251
+Maria Patel: We're in Q4 budget planning right now, and the board wants a 15% reduction across all vendor spend. We need to understand our total F5 commitment before renewals hit.
+
+00:02:06.251 --> 00:02:34.041
+Rachel Patel: Multi-year commitments are something we actively encourage. I can get our deal desk to model out 2-year and 3-year options with the associated discounts.
+
+00:02:34.041 --> 00:02:42.943
+Rachel Patel: This has been really productive. Let me summarize the action items.
+
+00:02:42.943 --> 00:02:57.750
+Rachel Patel: Good discussion. I'll get the multi-year pricing from deal desk and Marcus Thompson will put together a technical architecture for the migration path.
+
+00:02:57.750 --> 00:03:02.525
+Maria Patel: Sounds good. Thanks both for the time today.
+
+00:03:02.525 --> 00:03:07.857
+Rachel Patel: Thank you, Maria Patel. Talk soon.
+

@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+James O'Brien: Thanks for joining, Mike Zhang. Good to connect with you and the Home Depot team.
+
+00:00:38.945 --> 00:00:44.500
+Mike Zhang: Good to see you both. James O'Brien, Aisha Washington - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+James O'Brien: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Mike Zhang: Imperva acquired a bot defense company and their integrated story is looking strong. How does F5 Bot Defense compare?
+
+00:01:16.691 --> 00:01:24.862
+James O'Brien: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Aisha Washington: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Mike Zhang: Sure. The main pain point is lack of integration with our CI/CD pipeline. Everything else is GitOps but F5 config is still manual.
+
+00:02:02.604 --> 00:02:17.971
+Mike Zhang: The CFO is pushing for multi-year agreements across all vendors to lock in pricing. What kind of terms can you offer on a 3-year for Distributed Cloud?
+
+00:02:17.971 --> 00:02:45.370
+James O'Brien: Let me connect you with our finance team. We have some creative options around payment terms and ramp structures that might help with the timing.
+
+00:02:45.370 --> 00:02:53.822
+James O'Brien: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+James O'Brien: I hear the frustration. Let me come back with a concrete remediation plan within 48 hours. We're not going to lose Home Depot over something we can fix.
+
+00:03:08.051 --> 00:03:13.346
+Mike Zhang: Good. Send me the follow-up and we'll get it on the calendar.
+
+00:03:13.346 --> 00:03:18.309
+James O'Brien: Thank you, Mike Zhang. Talk soon.
+

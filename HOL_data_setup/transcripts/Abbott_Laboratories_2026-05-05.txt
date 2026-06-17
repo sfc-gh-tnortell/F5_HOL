@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Amanda Nguyen: Thanks for joining, Alex Garcia. Good to connect with you and the Abbott Laboratories team.
+
+00:00:38.945 --> 00:00:44.500
+Alex Garcia: Good to see you both. Amanda Nguyen, Eric Johnson - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Amanda Nguyen: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:14.432
+Alex Garcia: Kubernetes adoption hit 80% of production workloads. We need ingress controllers that scale. NGINX vs Envoy vs Traefik - help me understand the tradeoffs.
+
+00:01:14.432 --> 00:01:24.862
+Eric Johnson: Great question. Let me share what we're seeing with customers in similar situations.
+
+00:01:24.862 --> 00:01:51.290
+Eric Johnson: For zero trust, our Access Policy Manager integrates with your IdP and enforces per-request authentication. Combined with XC, you get identity-aware routing.
+
+00:01:51.290 --> 00:02:06.251
+Alex Garcia: We just got approval for a major security initiative in FY26. There's budget earmarked for WAF and bot protection modernization. Your timing is actually perfect.
+
+00:02:06.251 --> 00:02:34.041
+Amanda Nguyen: Let me connect you with our finance team. We have some creative options around payment terms and ramp structures that might help with the timing.
+
+00:02:34.041 --> 00:02:42.943
+Amanda Nguyen: This has been really productive. Let me summarize the action items.
+
+00:02:42.943 --> 00:02:57.750
+Amanda Nguyen: I'll send over the comparison document and pricing options. Eric Johnson can set up a lab environment if you want hands-on time with the platform.
+
+00:02:57.750 --> 00:03:02.525
+Alex Garcia: Appreciate it. Let's keep the momentum going.
+
+00:03:02.525 --> 00:03:07.857
+Amanda Nguyen: Thank you, Alex Garcia. Talk soon.
+

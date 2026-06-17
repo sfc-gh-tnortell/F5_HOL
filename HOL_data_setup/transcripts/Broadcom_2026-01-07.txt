@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Robert Chen: Thanks for joining, Sarah Brown. Good to connect with you and the Broadcom team.
+
+00:00:38.945 --> 00:00:44.500
+Sarah Brown: Good to see you both. Robert Chen, Priya Sharma - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Robert Chen: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:11.957
+Sarah Brown: The BIG-IP LTM has been rock solid for us. Zero unplanned downtime in 3 years. When it works, it really works.
+
+00:01:11.957 --> 00:01:19.352
+Robert Chen: That's great to hear! We love when the technology delivers real value.
+
+00:01:19.352 --> 00:01:44.735
+Sarah Brown: Absolutely. In fact, that success is why we're looking at expanding. NGINX Ingress is working great in staging. We want to roll it out to production clusters.
+
+00:01:44.735 --> 00:01:59.106
+Sarah Brown: The CFO is pushing for multi-year agreements across all vendors to lock in pricing. What kind of terms can you offer on a 3-year for Distributed Cloud?
+
+00:01:59.106 --> 00:02:27.807
+Robert Chen: We can definitely work with you on that. Let me put together a total value summary showing your current investment and ROI across all F5 products.
+
+00:02:27.807 --> 00:02:35.330
+Robert Chen: This has been really productive. Let me summarize the action items.
+
+00:02:35.330 --> 00:02:50.198
+Robert Chen: Let's get a POC scheduled for the AI Gateway. Priya Sharma, can you coordinate with Sarah Brown's team on environment requirements?
+
+00:02:50.198 --> 00:02:55.831
+Sarah Brown: Good. Send me the follow-up and we'll get it on the calendar.
+
+00:02:55.831 --> 00:03:00.679
+Robert Chen: Thank you, Sarah Brown. Talk soon.
+

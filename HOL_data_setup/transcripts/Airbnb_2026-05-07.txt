@@ -1,0 +1,32 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Jessica Torres: Thanks for joining, David Murphy. Good to connect with you and the Airbnb team.
+
+00:00:38.945 --> 00:00:44.500
+David Murphy: Good to see you both. Jessica Torres, Daniel Kim - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Jessica Torres: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:14.432
+David Murphy: Kubernetes adoption hit 80% of production workloads. We need ingress controllers that scale. NGINX vs Envoy vs Traefik - help me understand the tradeoffs.
+
+00:01:14.432 --> 00:01:24.862
+Daniel Kim: Great question. Let me share what we're seeing with customers in similar situations.
+
+00:01:24.862 --> 00:01:56.982
+Daniel Kim: Distributed Cloud is specifically designed for multi-cloud environments. It gives you consistent policy enforcement across AWS, Azure, and GCP without managing separate WAF instances.
+
+00:01:56.982 --> 00:02:04.035
+Jessica Torres: This has been really productive. Let me summarize the action items.
+
+00:02:04.035 --> 00:02:19.318
+Jessica Torres: I'll send over the comparison document and pricing options. Daniel Kim can set up a lab environment if you want hands-on time with the platform.
+
+00:02:19.318 --> 00:02:24.869
+David Murphy: Thanks. We'll review on our end and circle back.
+
+00:02:24.869 --> 00:02:29.993
+Jessica Torres: Thank you, David Murphy. Talk soon.
+

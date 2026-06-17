@@ -1,0 +1,47 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Amanda Nguyen: Thanks for joining, Jennifer Jackson. Good to connect with you and the Marathon Petroleum team.
+
+00:00:38.945 --> 00:00:44.500
+Jennifer Jackson: Good to see you both. Amanda Nguyen, Eric Johnson - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Amanda Nguyen: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Jennifer Jackson: Honestly, the BIG-IP management interface feels like it's from 2010. Terraform support is incomplete and the API is inconsistent. My team hates it.
+
+00:01:16.691 --> 00:01:24.862
+Amanda Nguyen: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Eric Johnson: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Jennifer Jackson: Sure. The main pain point is operational complexity. Our team is stretched thin and managing the platform takes too much effort.
+
+00:02:02.604 --> 00:02:17.971
+Jennifer Jackson: We're in Q4 budget planning right now, and the board wants a 15% reduction across all vendor spend. We need to understand our total F5 commitment before renewals hit.
+
+00:02:17.971 --> 00:02:40.432
+Amanda Nguyen: We can definitely work with you on that. Let me put together a total value summary showing your current investment and ROI across all F5 products.
+
+00:02:40.432 --> 00:02:55.831
+Jennifer Jackson: We lost our lead network engineer who managed all the F5 config. Can you connect us with professional services to bridge the gap?
+
+00:02:55.831 --> 00:03:23.724
+Eric Johnson: A lot of customers in your situation are moving to Distributed Cloud precisely because it reduces operational overhead. No boxes to patch, no hardware to lifecycle.
+
+00:03:23.724 --> 00:03:31.111
+Amanda Nguyen: This has been really productive. Let me summarize the action items.
+
+00:03:31.111 --> 00:03:46.905
+Amanda Nguyen: First priority is getting your support experience fixed. I'm escalating to our VP of Customer Success today. Eric Johnson will set up weekly technical check-ins.
+
+00:03:46.905 --> 00:03:51.284
+Jennifer Jackson: Good. Send me the follow-up and we'll get it on the calendar.
+
+00:03:51.284 --> 00:03:56.081
+Amanda Nguyen: Thank you, Jennifer Jackson. Talk soon.
+

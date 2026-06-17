@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Robert Chen: Thanks for joining, Jennifer Garcia. Good to connect with you and the Costco team.
+
+00:00:38.945 --> 00:00:44.500
+Jennifer Garcia: Good to see you both. Robert Chen, Priya Sharma - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Robert Chen: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:14.432
+Jennifer Garcia: Our API gateway strategy is evolving. We're using Kong for some things, Apigee for others. The F5 API security story is interesting but needs to integrate.
+
+00:01:14.432 --> 00:01:24.862
+Priya Sharma: Great question. Let me share what we're seeing with customers in similar situations.
+
+00:01:24.862 --> 00:01:51.290
+Priya Sharma: Distributed Cloud is specifically designed for multi-cloud environments. It gives you consistent policy enforcement across AWS, Azure, and GCP without managing separate WAF instances.
+
+00:01:51.290 --> 00:02:06.251
+Jennifer Garcia: Finance froze all new capital expenditure until next quarter. We can't commit to any hardware refresh right now, but SaaS models might still fit our opex budget.
+
+00:02:06.251 --> 00:02:34.041
+Robert Chen: I understand the budget pressure. One option is to transition from capex hardware to opex SaaS models. That often fits better in today's financial planning.
+
+00:02:34.041 --> 00:02:42.943
+Robert Chen: This has been really productive. Let me summarize the action items.
+
+00:02:42.943 --> 00:02:57.750
+Robert Chen: Let's reconvene in two weeks after you've had a chance to review the proposal. We'll bring our architect to address the integration questions.
+
+00:02:57.750 --> 00:03:02.525
+Jennifer Garcia: Appreciate it. Let's keep the momentum going.
+
+00:03:02.525 --> 00:03:07.857
+Robert Chen: Thank you, Jennifer Garcia. Talk soon.
+

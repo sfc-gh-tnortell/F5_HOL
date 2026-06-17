@@ -1,0 +1,32 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Lauren Kim: Thanks for joining, Mike Garcia. Good to connect with you and the Fiserv team.
+
+00:00:38.945 --> 00:00:44.500
+Mike Garcia: Good to see you both. Lauren Kim, Chris Anderson - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Lauren Kim: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:11.957
+Mike Garcia: The BIG-IP LTM has been rock solid for us. Zero unplanned downtime in 3 years. When it works, it really works.
+
+00:01:11.957 --> 00:01:19.352
+Lauren Kim: That's great to hear! We love when the technology delivers real value.
+
+00:01:19.352 --> 00:01:49.597
+Mike Garcia: Absolutely. In fact, that success is why we're looking at expanding. The multi-cloud networking piece is interesting. We're adding GCP and need consistent policy.
+
+00:01:49.597 --> 00:01:57.914
+Lauren Kim: This has been really productive. Let me summarize the action items.
+
+00:01:57.914 --> 00:02:12.110
+Lauren Kim: I'll loop in our executive sponsor for a joint roadmap session. We want to make sure Fiserv has early access to what's coming.
+
+00:02:12.110 --> 00:02:17.971
+Mike Garcia: Appreciate it. Let's keep the momentum going.
+
+00:02:17.971 --> 00:02:22.330
+Lauren Kim: Thank you, Mike Garcia. Talk soon.
+

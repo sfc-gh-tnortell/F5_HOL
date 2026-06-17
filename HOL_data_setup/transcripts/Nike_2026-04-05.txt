@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Robert Chen: Thanks for joining, Mike Anderson. Good to connect with you and the Nike team.
+
+00:00:38.945 --> 00:00:44.500
+Mike Anderson: Good to see you both. Robert Chen, Priya Sharma - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Robert Chen: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Mike Anderson: The NGINX licensing model is confusing. We can't figure out what we're paying for versus what's open source versus what needs Plus.
+
+00:01:16.691 --> 00:01:24.862
+Robert Chen: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Priya Sharma: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Mike Anderson: Sure. The main pain point is cost per transaction. When we benchmark against cloud-native alternatives, the economics don't always work.
+
+00:02:02.604 --> 00:02:17.971
+Mike Anderson: There's a reorganization happening. The security team is being merged with infrastructure under a new CTO. All vendor relationships are being reviewed.
+
+00:02:17.971 --> 00:02:45.370
+Priya Sharma: Automation is where we're investing heavily. BIG-IP Next and NGINX One both support full GitOps workflows. Less manual, fewer people needed.
+
+00:02:45.370 --> 00:02:53.822
+Robert Chen: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+Robert Chen: Let's schedule a call with our engineering leadership next week. I want them to hear directly from you what needs to change.
+
+00:03:08.051 --> 00:03:13.346
+Mike Anderson: Sounds good. Thanks both for the time today.
+
+00:03:13.346 --> 00:03:18.309
+Robert Chen: Thank you, Mike Anderson. Talk soon.
+

@@ -1,0 +1,47 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Christopher Davis: Thanks for joining, Maria Murphy. Good to connect with you and the Truist Financial team.
+
+00:00:38.945 --> 00:00:44.500
+Maria Murphy: Good to see you both. Christopher Davis, Emily Rodriguez - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Christopher Davis: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Maria Murphy: The upgrade path from BIG-IP v15 to v17 broke our iRules. Three weeks of regression testing we didn't plan for. Not happy.
+
+00:01:16.691 --> 00:01:24.862
+Christopher Davis: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Emily Rodriguez: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Maria Murphy: Sure. The main pain point is lack of integration with our CI/CD pipeline. Everything else is GitOps but F5 config is still manual.
+
+00:02:02.604 --> 00:02:17.971
+Maria Murphy: We just got approval for a major security initiative in FY26. There's budget earmarked for WAF and bot protection modernization. Your timing is actually perfect.
+
+00:02:17.971 --> 00:02:40.432
+Christopher Davis: Multi-year commitments are something we actively encourage. I can get our deal desk to model out 2-year and 3-year options with the associated discounts.
+
+00:02:40.432 --> 00:02:55.831
+Maria Murphy: We lost our lead network engineer who managed all the F5 config. Can you connect us with professional services to bridge the gap?
+
+00:02:55.831 --> 00:03:23.724
+Emily Rodriguez: We can help with that transition. Our managed services offering handles the day-to-day operations so your remaining team can focus on strategic work.
+
+00:03:23.724 --> 00:03:31.111
+Christopher Davis: This has been really productive. Let me summarize the action items.
+
+00:03:31.111 --> 00:03:46.905
+Christopher Davis: First priority is getting your support experience fixed. I'm escalating to our VP of Customer Success today. Emily Rodriguez will set up weekly technical check-ins.
+
+00:03:46.905 --> 00:03:51.284
+Maria Murphy: Good. Send me the follow-up and we'll get it on the calendar.
+
+00:03:51.284 --> 00:03:56.081
+Christopher Davis: Thank you, Maria Murphy. Talk soon.
+

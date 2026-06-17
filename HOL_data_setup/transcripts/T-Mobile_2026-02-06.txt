@@ -1,0 +1,32 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Robert Chen: Thanks for joining, Lisa Murphy. Good to connect with you and the T-Mobile team.
+
+00:00:38.945 --> 00:00:44.500
+Lisa Murphy: Good to see you both. Robert Chen, Priya Sharma - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Robert Chen: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:11.957
+Lisa Murphy: We deployed XC App Connect across three clouds in two weeks. The multi-cloud networking story is genuinely differentiated.
+
+00:01:11.957 --> 00:01:19.352
+Robert Chen: That's great to hear! We love when the technology delivers real value.
+
+00:01:19.352 --> 00:01:49.597
+Lisa Murphy: Absolutely. In fact, that success is why we're looking at expanding. We're interested in the AI Gateway product for protecting our internal LLM deployments.
+
+00:01:49.597 --> 00:01:57.914
+Robert Chen: This has been really productive. Let me summarize the action items.
+
+00:01:57.914 --> 00:02:12.110
+Robert Chen: Let's get a POC scheduled for the AI Gateway. Priya Sharma, can you coordinate with Lisa Murphy's team on environment requirements?
+
+00:02:12.110 --> 00:02:17.971
+Lisa Murphy: Appreciate it. Let's keep the momentum going.
+
+00:02:17.971 --> 00:02:22.330
+Robert Chen: Thank you, Lisa Murphy. Talk soon.
+

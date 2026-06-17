@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Sarah Mitchell: Thanks for joining, Alex Williams. Good to connect with you and the Palo Alto Networks team.
+
+00:00:38.945 --> 00:00:44.500
+Alex Williams: Good to see you both. Sarah Mitchell, Kevin Nakamura - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Sarah Mitchell: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Alex Williams: We're evaluating Fastly for CDN and edge security. Their developer experience is significantly better than what we've seen from F5.
+
+00:01:16.691 --> 00:01:24.862
+Sarah Mitchell: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Kevin Nakamura: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Alex Williams: Sure. The main pain point is feature parity. Competitors are shipping faster and their UX is more modern.
+
+00:02:02.604 --> 00:02:17.971
+Alex Williams: Our fiscal year starts in April, and we've been asked to consolidate security vendors. F5 is on the short list to keep, but we need to see the full value stack.
+
+00:02:17.971 --> 00:02:45.370
+Sarah Mitchell: We can definitely work with you on that. Let me put together a total value summary showing your current investment and ROI across all F5 products.
+
+00:02:45.370 --> 00:02:53.822
+Sarah Mitchell: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+Sarah Mitchell: First priority is getting your support experience fixed. I'm escalating to our VP of Customer Success today. Kevin Nakamura will set up weekly technical check-ins.
+
+00:03:08.051 --> 00:03:13.346
+Alex Williams: Good. Send me the follow-up and we'll get it on the calendar.
+
+00:03:13.346 --> 00:03:18.309
+Sarah Mitchell: Thank you, Alex Williams. Talk soon.
+

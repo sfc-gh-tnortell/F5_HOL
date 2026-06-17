@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+David Morrison: Thanks for joining, Alex Miller. Good to connect with you and the United Airlines team.
+
+00:00:38.945 --> 00:00:44.500
+Alex Miller: Good to see you both. David Morrison, Nicole Martinez - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+David Morrison: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Alex Miller: AWS Shield Advanced plus ALB gives us most of what XC DDoS and WAF do, and it's already in our cloud bill. Why should we add another vendor?
+
+00:01:16.691 --> 00:01:24.862
+David Morrison: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Nicole Martinez: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Alex Miller: Sure. The main pain point is feature parity. Competitors are shipping faster and their UX is more modern.
+
+00:02:02.604 --> 00:02:17.971
+Alex Miller: We're in Q4 budget planning right now, and the board wants a 15% reduction across all vendor spend. We need to understand our total F5 commitment before renewals hit.
+
+00:02:17.971 --> 00:02:45.370
+David Morrison: We can definitely work with you on that. Let me put together a total value summary showing your current investment and ROI across all F5 products.
+
+00:02:45.370 --> 00:02:53.822
+David Morrison: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+David Morrison: Let's schedule a call with our engineering leadership next week. I want them to hear directly from you what needs to change.
+
+00:03:08.051 --> 00:03:13.346
+Alex Miller: Sounds good. Thanks both for the time today.
+
+00:03:13.346 --> 00:03:18.309
+David Morrison: Thank you, Alex Miller. Talk soon.
+

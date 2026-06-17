@@ -173,7 +173,6 @@
 <h2>Table of Contents</h2>
 <ul>
     <li><a href="#overview">Overview</a></li>
-    <li><a href="#prerequisites">Prerequisites</a></li>
     <li><a href="#assignments">Your Assigned Customer</a></li>
     <li><a href="#module1">Module 1: Support & Telemetry Agent</a>
         <ul>
@@ -215,7 +214,7 @@
 <div class="architecture">
 <pre>
 +-----------------------------------------------------------------------+
-|                      Snowflake Intelligence                            |
+|                           CoWork                                       |
 |  +---------------------------------------------------------------+    |
 |  |                F5 Customer Support Agent                       |    |
 |  |  +--------------+  +--------------+  +---------------------+  |    |
@@ -258,64 +257,56 @@
 
 <hr>
 
-<h2 id="prerequisites">Prerequisites</h2>
-<ul>
-    <li>Snowflake account: <code>sfsenorthamerica-demo351_aws</code></li>
-    <li>Role: <code>SYSADMIN</code></li>
-    <li>Warehouse: <code>COMPUTE_WH</code></li>
-    <li>Database <code>F5_PROD</code> with all setup scripts already executed (steps 01-11)</li>
-    <li>Cortex Code desktop installed and connected</li>
-    <li>Salesforce MCP connector configured (see <code>scripts/SFDC_MCP_Setup.sql</code>)</li>
-</ul>
-
-<hr>
-
 <h2 id="assignments">Your Assigned Customer</h2>
 
 <p>Each attendee is assigned a specific F5 customer account to work with during the lab. Focus your agent queries and Salesforce updates on your assigned account to avoid conflicts with other attendees.</p>
 
 <table>
-    <tr><th>#</th><th>Attendee</th><th>Assigned Account</th><th>Signal Type</th></tr>
-    <tr><td>1</td><td></td><td>Amazon</td><td>bot-defense</td></tr>
-    <tr><td>2</td><td></td><td>Republic Services</td><td>bot-defense</td></tr>
-    <tr><td>3</td><td></td><td>Cloudflare</td><td>bot-defense</td></tr>
-    <tr><td>4</td><td></td><td>Fidelity</td><td>bot-defense</td></tr>
-    <tr><td>5</td><td></td><td>Accenture</td><td>bot-defense</td></tr>
-    <tr><td>6</td><td></td><td>Morgan Stanley</td><td>bot-defense</td></tr>
-    <tr><td>7</td><td></td><td>Costco</td><td>bot-defense</td></tr>
-    <tr><td>8</td><td></td><td>Comcast</td><td>bot-defense</td></tr>
-    <tr><td>9</td><td></td><td>Raytheon Technologies</td><td>bot-defense</td></tr>
-    <tr><td>10</td><td></td><td>CDW</td><td>bot-defense</td></tr>
-    <tr><td>11</td><td></td><td>Airbnb</td><td>waf</td></tr>
-    <tr><td>12</td><td></td><td>Delta Air Lines</td><td>waf</td></tr>
-    <tr><td>13</td><td></td><td>Abbott Laboratories</td><td>waf</td></tr>
-    <tr><td>14</td><td></td><td>Duke Energy</td><td>waf</td></tr>
-    <tr><td>15</td><td></td><td>eBay</td><td>waf</td></tr>
-    <tr><td>16</td><td></td><td>Cardinal Health</td><td>waf</td></tr>
-    <tr><td>17</td><td></td><td>Cognizant</td><td>waf</td></tr>
-    <tr><td>18</td><td></td><td>Honeywell</td><td>waf</td></tr>
-    <tr><td>19</td><td></td><td>American Airlines</td><td>capacity</td></tr>
-    <tr><td>20</td><td></td><td>CVS Health</td><td>capacity</td></tr>
-    <tr><td>21</td><td></td><td>Albertsons</td><td>capacity</td></tr>
-    <tr><td>22</td><td></td><td>CrowdStrike</td><td>capacity</td></tr>
-    <tr><td>23</td><td></td><td>Caterpillar</td><td>capacity</td></tr>
-    <tr><td>24</td><td></td><td>CSX</td><td>capacity</td></tr>
-    <tr><td>25</td><td></td><td>Johnson & Johnson</td><td>capacity</td></tr>
-    <tr><td>26</td><td></td><td>Palo Alto Networks</td><td>capacity</td></tr>
-    <tr><td>27</td><td></td><td>BlackRock</td><td>load-balancer</td></tr>
-    <tr><td>28</td><td></td><td>Dell Technologies</td><td>load-balancer</td></tr>
-    <tr><td>29</td><td></td><td>EOG Resources</td><td>load-balancer</td></tr>
-    <tr><td>30</td><td></td><td>Rockwell Automation</td><td>load-balancer</td></tr>
-    <tr><td>31</td><td></td><td>Qualcomm</td><td>load-balancer</td></tr>
-    <tr><td>32</td><td></td><td>AmerisourceBergen</td><td>dns</td></tr>
-    <tr><td>33</td><td></td><td>Aon</td><td>dns</td></tr>
-    <tr><td>34</td><td></td><td>Dish Network</td><td>dns</td></tr>
-    <tr><td>35</td><td></td><td>Elevance Health</td><td>dns</td></tr>
-    <tr><td>36</td><td></td><td>Visa</td><td>bot-defense</td></tr>
-    <tr><td>37</td><td></td><td>Netflix</td><td>bot-defense</td></tr>
-    <tr><td>38</td><td></td><td>Adobe</td><td>bot-defense</td></tr>
-    <tr><td>39</td><td></td><td>Goldman Sachs</td><td>capacity</td></tr>
-    <tr><td>40</td><td></td><td>Intel</td><td>waf</td></tr>
+    <tr><th>#</th><th>Snowflake Account</th><th>Assigned Account</th><th>Signal Type</th></tr>
+    <tr><td>1</td><td>F5_HOL_BIABNL</td><td>Amazon</td><td>bot-defense</td></tr>
+    <tr><td>2</td><td>F5_HOL_ZEKKPR</td><td>Republic Services</td><td>bot-defense</td></tr>
+    <tr><td>3</td><td>F5_HOL_TVJWZL</td><td>Cloudflare</td><td>bot-defense</td></tr>
+    <tr><td>4</td><td>F5_HOL_ZCGUWB</td><td>Fidelity</td><td>bot-defense</td></tr>
+    <tr><td>5</td><td>F5_HOL_PUNPFP</td><td>Accenture</td><td>bot-defense</td></tr>
+    <tr><td>6</td><td>F5_HOL_WJNEMH</td><td>Morgan Stanley</td><td>bot-defense</td></tr>
+    <tr><td>7</td><td>F5_HOL_MCLDHV</td><td>Costco</td><td>bot-defense</td></tr>
+    <tr><td>8</td><td>F5_HOL_YABWEP</td><td>Comcast</td><td>bot-defense</td></tr>
+    <tr><td>9</td><td>F5_HOL_RKSGYH</td><td>Raytheon Technologies</td><td>bot-defense</td></tr>
+    <tr><td>10</td><td>F5_HOL_YSNNBK</td><td>CDW</td><td>bot-defense</td></tr>
+    <tr><td>11</td><td>F5_HOL_FSIDVS</td><td>Airbnb</td><td>waf</td></tr>
+    <tr><td>12</td><td>F5_HOL_RYDRLM</td><td>Delta Air Lines</td><td>waf</td></tr>
+    <tr><td>13</td><td>F5_HOL_ZGBVWK</td><td>Abbott Laboratories</td><td>waf</td></tr>
+    <tr><td>14</td><td>F5_HOL_AASUAF</td><td>Duke Energy</td><td>waf</td></tr>
+    <tr><td>15</td><td>F5_HOL_WMJUIZ</td><td>eBay</td><td>waf</td></tr>
+    <tr><td>16</td><td>F5_HOL_SEMCJS</td><td>Cardinal Health</td><td>waf</td></tr>
+    <tr><td>17</td><td>F5_HOL_NKGMLH</td><td>Cognizant</td><td>waf</td></tr>
+    <tr><td>18</td><td>F5_HOL_KJJPAF</td><td>Honeywell</td><td>waf</td></tr>
+    <tr><td>19</td><td>F5_HOL_IMDUJG</td><td>American Airlines</td><td>capacity</td></tr>
+    <tr><td>20</td><td>F5_HOL_TTZBRR</td><td>CVS Health</td><td>capacity</td></tr>
+    <tr><td>21</td><td>F5_HOL_ZEJLNK</td><td>Albertsons</td><td>capacity</td></tr>
+    <tr><td>22</td><td>F5_HOL_RTFILS</td><td>CrowdStrike</td><td>capacity</td></tr>
+    <tr><td>23</td><td>F5_HOL_FMEZJG</td><td>Caterpillar</td><td>capacity</td></tr>
+    <tr><td>24</td><td>F5_HOL_PERDEK</td><td>CSX</td><td>capacity</td></tr>
+    <tr><td>25</td><td>F5_HOL_DNEBWG</td><td>Johnson &amp; Johnson</td><td>capacity</td></tr>
+    <tr><td>26</td><td>F5_HOL_CKVBZA</td><td>Palo Alto Networks</td><td>capacity</td></tr>
+    <tr><td>27</td><td>F5_HOL_HRVRBR</td><td>BlackRock</td><td>bot-defense</td></tr>
+    <tr><td>28</td><td>F5_HOL_KVWMPA</td><td>Dell Technologies</td><td>load-balancer</td></tr>
+    <tr><td>29</td><td>F5_HOL_SHSUJV</td><td>EOG Resources</td><td>load-balancer</td></tr>
+    <tr><td>30</td><td>F5_HOL_TZWAUX</td><td>Rockwell Automation</td><td>load-balancer</td></tr>
+    <tr><td>31</td><td>F5_HOL_JJGJWV</td><td>Qualcomm</td><td>load-balancer</td></tr>
+    <tr><td>32</td><td>F5_HOL_ZKSHWJ</td><td>AmerisourceBergen</td><td>dns</td></tr>
+    <tr><td>33</td><td>F5_HOL_ZHMTDX</td><td>Aon</td><td>load-balancer</td></tr>
+    <tr><td>34</td><td>F5_HOL_UKGRNB</td><td>Dish Network</td><td>dns</td></tr>
+    <tr><td>35</td><td>F5_HOL_EUVJDT</td><td>Elevance Health</td><td>dns</td></tr>
+    <tr><td>36</td><td>F5_HOL_GDKZEI</td><td>Visa</td><td>bot-defense</td></tr>
+    <tr><td>37</td><td>F5_HOL_DMLTUF</td><td>Netflix</td><td>bot-defense</td></tr>
+    <tr><td>38</td><td>F5_HOL_RIHNCY</td><td>Adobe</td><td>bot-defense</td></tr>
+    <tr><td>39</td><td>F5_HOL_ITMHRV</td><td>Goldman Sachs</td><td>capacity</td></tr>
+    <tr><td>40</td><td>F5_HOL_WPKXYL</td><td>Intel</td><td>waf</td></tr>
+    <tr><td>41</td><td>F5_HOL_PZKPYL</td><td>AT&amp;T</td><td>bot-defense</td></tr>
+    <tr><td>42</td><td>F5_HOL_UTJGAD</td><td>Tesla</td><td>load-balancer</td></tr>
+    <tr><td>43</td><td>F5_HOL_UJPTEW</td><td>Splunk</td><td>dns</td></tr>
+    <tr><td>44</td><td>F5_HOL_RTSWPH</td><td>PayPal</td><td>waf</td></tr>
 </table>
 
 <div class="note">
@@ -412,7 +403,7 @@ Include the verified queries as VQRs in the semantic view definition.</code></pr
 <p>Create the agent in the Snowflake UI that combines the semantic view with search and MCP tools.</p>
 
 <ol>
-    <li>Navigate to <strong>AI & ML &rarr; Snowflake Intelligence</strong></li>
+    <li>Navigate to <strong>AI & ML &rarr; CoWork</strong></li>
     <li>Click <strong>+ Create Agent</strong></li>
     <li>Configure:
         <table>

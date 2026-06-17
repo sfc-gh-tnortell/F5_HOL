@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+James O'Brien: Thanks for joining, John Patel. Good to connect with you and the Mastercard team.
+
+00:00:38.945 --> 00:00:44.500
+John Patel: Good to see you both. James O'Brien, Aisha Washington - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+James O'Brien: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:11.957
+John Patel: The bot defense product has saved us millions in fraud prevention. Our e-commerce team considers it indispensable.
+
+00:01:11.957 --> 00:01:19.352
+James O'Brien: That's great to hear! We love when the technology delivers real value.
+
+00:01:19.352 --> 00:01:44.735
+John Patel: Absolutely. In fact, that success is why we're looking at expanding. Bot Defense has proven itself on our main site. Now we want it across all customer-facing properties.
+
+00:01:44.735 --> 00:01:59.106
+John Patel: The CFO is pushing for multi-year agreements across all vendors to lock in pricing. What kind of terms can you offer on a 3-year for Distributed Cloud?
+
+00:01:59.106 --> 00:02:27.807
+James O'Brien: Let me connect you with our finance team. We have some creative options around payment terms and ramp structures that might help with the timing.
+
+00:02:27.807 --> 00:02:35.330
+James O'Brien: This has been really productive. Let me summarize the action items.
+
+00:02:35.330 --> 00:02:50.198
+James O'Brien: Let's get a POC scheduled for the AI Gateway. Aisha Washington, can you coordinate with John Patel's team on environment requirements?
+
+00:02:50.198 --> 00:02:55.831
+John Patel: Good. Send me the follow-up and we'll get it on the calendar.
+
+00:02:55.831 --> 00:03:00.679
+James O'Brien: Thank you, John Patel. Talk soon.
+

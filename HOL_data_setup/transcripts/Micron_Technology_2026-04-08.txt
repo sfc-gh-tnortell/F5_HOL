@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Michael Park: Thanks for joining, Karen Lee. Good to connect with you and the Micron Technology team.
+
+00:00:38.945 --> 00:00:44.500
+Karen Lee: Good to see you both. Michael Park, Rachel Gonzalez - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Michael Park: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Karen Lee: The upgrade path from BIG-IP v15 to v17 broke our iRules. Three weeks of regression testing we didn't plan for. Not happy.
+
+00:01:16.691 --> 00:01:24.862
+Michael Park: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Rachel Gonzalez: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Karen Lee: Sure. The main pain point is reliability. We've had too many incidents that impacted production workloads.
+
+00:02:02.604 --> 00:02:17.971
+Karen Lee: We just got approval for a major security initiative in FY26. There's budget earmarked for WAF and bot protection modernization. Your timing is actually perfect.
+
+00:02:17.971 --> 00:02:45.370
+Michael Park: Multi-year commitments are something we actively encourage. I can get our deal desk to model out 2-year and 3-year options with the associated discounts.
+
+00:02:45.370 --> 00:02:53.822
+Michael Park: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+Michael Park: I hear the frustration. Let me come back with a concrete remediation plan within 48 hours. We're not going to lose Micron Technology over something we can fix.
+
+00:03:08.051 --> 00:03:13.346
+Karen Lee: Appreciate it. Let's keep the momentum going.
+
+00:03:13.346 --> 00:03:18.309
+Michael Park: Thank you, Karen Lee. Talk soon.
+

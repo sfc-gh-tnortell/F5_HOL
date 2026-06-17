@@ -1,0 +1,38 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Jessica Torres: Thanks for joining, Alex Garcia. Good to connect with you and the Cloudflare team.
+
+00:00:38.945 --> 00:00:44.500
+Alex Garcia: Good to see you both. Jessica Torres, Daniel Kim - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Jessica Torres: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:14.432
+Alex Garcia: We're building a zero-trust architecture. Every service needs mTLS and identity-aware access. How does F5 support that model?
+
+00:01:14.432 --> 00:01:24.862
+Daniel Kim: Great question. Let me share what we're seeing with customers in similar situations.
+
+00:01:24.862 --> 00:01:51.290
+Daniel Kim: For Kubernetes workloads, NGINX Ingress Controller is the most deployed solution in production. It handles north-south traffic while your service mesh handles east-west.
+
+00:01:51.290 --> 00:02:06.251
+Alex Garcia: The CFO is pushing for multi-year agreements across all vendors to lock in pricing. What kind of terms can you offer on a 3-year for Distributed Cloud?
+
+00:02:06.251 --> 00:02:34.041
+Jessica Torres: We can definitely work with you on that. Let me put together a total value summary showing your current investment and ROI across all F5 products.
+
+00:02:34.041 --> 00:02:42.943
+Jessica Torres: This has been really productive. Let me summarize the action items.
+
+00:02:42.943 --> 00:02:57.750
+Jessica Torres: Good discussion. I'll get the multi-year pricing from deal desk and Daniel Kim will put together a technical architecture for the migration path.
+
+00:02:57.750 --> 00:03:02.525
+Alex Garcia: Thanks. We'll review on our end and circle back.
+
+00:03:02.525 --> 00:03:07.857
+Jessica Torres: Thank you, Alex Garcia. Talk soon.
+

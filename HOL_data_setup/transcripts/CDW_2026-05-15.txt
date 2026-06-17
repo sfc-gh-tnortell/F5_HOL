@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Amanda Nguyen: Thanks for joining, Sarah Miller. Good to connect with you and the CDW team.
+
+00:00:38.945 --> 00:00:44.500
+Sarah Miller: Good to see you both. Amanda Nguyen, Eric Johnson - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Amanda Nguyen: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Sarah Miller: Distributed Cloud onboarding took 4 months. Your professional services team was overwhelmed. We expected better from a $200K deal.
+
+00:01:16.691 --> 00:01:24.862
+Amanda Nguyen: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Eric Johnson: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Sarah Miller: Sure. The main pain point is cost per transaction. When we benchmark against cloud-native alternatives, the economics don't always work.
+
+00:02:02.604 --> 00:02:17.971
+Sarah Miller: Finance froze all new capital expenditure until next quarter. We can't commit to any hardware refresh right now, but SaaS models might still fit our opex budget.
+
+00:02:17.971 --> 00:02:45.370
+Amanda Nguyen: Multi-year commitments are something we actively encourage. I can get our deal desk to model out 2-year and 3-year options with the associated discounts.
+
+00:02:45.370 --> 00:02:53.822
+Amanda Nguyen: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+Amanda Nguyen: First priority is getting your support experience fixed. I'm escalating to our VP of Customer Success today. Eric Johnson will set up weekly technical check-ins.
+
+00:03:08.051 --> 00:03:13.346
+Sarah Miller: Sounds good. Thanks both for the time today.
+
+00:03:13.346 --> 00:03:18.309
+Amanda Nguyen: Thank you, Sarah Miller. Talk soon.
+

@@ -1,0 +1,41 @@
+WEBVTT
+
+00:00:30.617 --> 00:00:38.945
+Michael Park: Thanks for joining, Mike Lee. Good to connect with you and the Micron Technology team.
+
+00:00:38.945 --> 00:00:44.500
+Mike Lee: Good to see you both. Michael Park, Rachel Gonzalez - thanks for making the time.
+
+00:00:44.500 --> 00:00:56.830
+Michael Park: Of course. We wanted to check in on how things are going and see where we can help. How's everything on your end?
+
+00:00:56.830 --> 00:01:16.691
+Mike Lee: Honestly, the BIG-IP management interface feels like it's from 2010. Terraform support is incomplete and the API is inconsistent. My team hates it.
+
+00:01:16.691 --> 00:01:24.862
+Michael Park: I appreciate you being direct about that. Let me address this head-on.
+
+00:01:24.862 --> 00:01:39.963
+Rachel Gonzalez: From a technical perspective, I want to make sure we're looking at the full picture here. Can you walk me through the specific issues your team is seeing?
+
+00:01:39.963 --> 00:02:02.604
+Mike Lee: Sure. The main pain point is operational complexity. Our team is stretched thin and managing the platform takes too much effort.
+
+00:02:02.604 --> 00:02:17.971
+Mike Lee: The CFO is pushing for multi-year agreements across all vendors to lock in pricing. What kind of terms can you offer on a 3-year for Distributed Cloud?
+
+00:02:17.971 --> 00:02:45.370
+Michael Park: I understand the budget pressure. One option is to transition from capex hardware to opex SaaS models. That often fits better in today's financial planning.
+
+00:02:45.370 --> 00:02:53.822
+Michael Park: This has been really productive. Let me summarize the action items.
+
+00:02:53.822 --> 00:03:08.051
+Michael Park: I hear the frustration. Let me come back with a concrete remediation plan within 48 hours. We're not going to lose Micron Technology over something we can fix.
+
+00:03:08.051 --> 00:03:13.346
+Mike Lee: Sounds good. Thanks both for the time today.
+
+00:03:13.346 --> 00:03:18.309
+Michael Park: Thank you, Mike Lee. Talk soon.
+
