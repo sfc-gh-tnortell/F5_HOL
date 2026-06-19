@@ -25,7 +25,9 @@ Build a Cortex Agent that discovers hidden correlations between F5 Distributed C
     - [Step 2: Review Recommendations (Manual)](#step-2-review-recommendations)
     - [Step 3: Add Recommendations to Sales Agent (Manual)](#step-3-add-recommendations-to-sales-agent)
     - [Step 4: Test Expansion Queries (Manual)](#step-4-test-expansion-queries)
-    - [Step 5: Customer Growth Dashboard (Challenge)](#step-5-customer-growth-dashboard)
+- [Module 3: Challenges](#module-3-challenges)
+    - [Challenge 1: Customer Growth Dashboard](#challenge-1-customer-growth-dashboard)
+    - [Challenge 2: Break and Fix Your Semantic View](#challenge-2-break-and-fix-your-semantic-view)
 - [Data Summary](#data-summary)
 
 ---
@@ -182,12 +184,19 @@ In this module you'll build a Cortex Agent specialized for customer support and 
 
 We have 60 historical SQL queries written by different personas (Support Analyst, Data Engineer, Sales Ops, CSM, Executive). Analyze them to identify the most important patterns and distill them into 5 verified queries for a Cortex Skill.
 
+#### Download the Query Repository
+
+1. Log in to Snowsight at your assigned account URL
+2. Navigate to **Data → Databases → F5_PROD → RAW → Stages → QUERY_REPOSITORY_STAGE**
+3. Click on `query_repository.sql` and download the file
+4. In CoCo Desktop, drag the downloaded file into your `F5_HOL` folder (or use Explorer → right-click → paste)
+
+#### Run the Analysis
+
 !!! coco "Cortex Code Prompt"
-    Open the query repository from stage and use the following prompt:
+    Open `query_repository.sql` in your F5_HOL folder and use the following prompt:
 
     ```
-    Read the file at @F5_PROD.RAW.QUERY_REPOSITORY_STAGE/query_repository.sql
-
     Analyze the 60 SQL queries in this file. These were written by different personas 
     to answer support and telemetry questions. I need you to:
 
@@ -197,7 +206,8 @@ We have 60 historical SQL queries written by different personas (Support Analyst
        and recommend which calculation to standardize on
     4. Distill the top 5 most impactful queries that cover the broadest analytical needs
     5. For each of the 5 queries, write it as a clean SELECT statement with a comment 
-       explaining the business question it answers and which persona asks it
+       explaining the business question it answers and which persona asks it.
+       Save these to a file called verified_queries.sql in my project folder.
 
     These will be used as verified query representations (VQRs) when building 
     a semantic view. Write them as plain SELECT statements, not functions.
@@ -209,7 +219,7 @@ We have 60 historical SQL queries written by different personas (Support Analyst
 
 **Expected Output:**
 
-- `HOL/verified_queries.sql` - 5 SELECT statements, each with business question + persona header
+- `F5_HOL/verified_queries.sql` - 5 SELECT statements, each with business question + persona header
 - `~/.snowflake/cortex/skills/query-analysis/SKILL.md` - Reusable Cortex Code skill for any domain
 - Analysis summary: table frequency, join patterns, identified inconsistencies with recommendations
 
@@ -227,7 +237,7 @@ Open the verified queries file generated in Step 1 and use the following prompt:
 
 !!! coco "Cortex Code Prompt"
     ```
-    Using the verified queries in HOL/verified_queries.sql, create a semantic view 
+    Using the verified queries in F5_HOL/verified_queries.sql, create a semantic view 
     for support and telemetry analysis. The queries show the tables, joins, 
     dimensions, and metrics that matter most.
 
@@ -243,7 +253,7 @@ Open the verified queries file generated in Step 1 and use the following prompt:
 1. Navigate to **AI & ML → Cortex Analyst → Semantic Views**
 2. Click **+ Create Semantic View**
 3. Select **Generate from verified queries**
-4. Upload or paste the contents of `HOL/verified_queries.sql`
+4. Upload or paste the contents of `F5_HOL/verified_queries.sql`
 5. The auto-generator will infer tables, relationships, dimensions, metrics, and facts from the SQL
 6. Review the generated semantic view structure:
     - Confirm tables: DIM_SUPPORT_CASE, FACT_SUPPORT_CASE, COL_XC_TELEMETRY, COL_XC_PRODUCT_HEALTHSCORE, DIM_CUST_ACCT_SFDC
@@ -263,7 +273,7 @@ Open the verified queries file generated in Step 1 and use the following prompt:
 
 Create the agent in the Snowflake UI that combines the semantic view with search.
 
-1. Navigate to **AI & ML → CoWork**
+1. Navigate to **AI & ML → Agents**
 2. Click **+ Create Agent**
 3. Configure:
 
@@ -312,9 +322,6 @@ Replace `[YOUR ACCOUNT]` with your assigned customer name.
 | 3 | "Compare the telemetry signals for **[YOUR ACCOUNT]** with their open case categories. Is there a correlation between what the telemetry shows and what they filed a case about?" |
 | 4 | "Look at the telemetry trend for **[YOUR ACCOUNT]** over the past 6 months. Did the signal that matches their case category increase before the case was opened?" |
 
-!!! success "Success Criteria"
-    You should see that your customer's dominant telemetry signal matches the product category of their open support cases. For example, a bot-defense account will have elevated bot transactions AND open cases about Bot Defense/Bot Management.
-
 ---
 
 ### Step 5: Prove the Signal is Predictive
@@ -343,9 +350,6 @@ You found a correlation. But is it a coincidence or a pattern? Use CoCo to prove
     pre-case average slope, and whether it's flagged.
     ```
 
-!!! success "Success Criteria"
-    The output should show that the signal matching your account's case category had an elevated slope in the 30 days before the case was filed. This proves the telemetry is a leading indicator, not just a coincidence.
-
 ---
 
 ### Step 6: Connect Salesforce via MCP
@@ -357,11 +361,13 @@ Now you have predictive data. What do you do with it? Let's make this actionable
 #### 6a: Snowflake MCP Connector Setup
 
 1. Navigate to **AI & ML → Agents → Settings → Tools and Connectors**
-2. Click **Browse Connectors** → select **Salesforce**
-3. Fill in the following fields:
+2. Switch to **ACCOUNTADMIN** role
+3. Click **Browse Connectors** → select **Salesforce**
+4. Fill in the following fields:
 
     | Field | Value |
     |-------|-------|
+    | Location | `F5_PROD.FINAL` |
     | Server URL | `https://api.salesforce.com/platform/mcp/v1/platform/sobject-all` |
     | Token Endpoint | `https://login.salesforce.com/services/oauth2/token` |
     | Authorization Endpoint | `https://login.salesforce.com/services/oauth2/authorize` |
@@ -369,16 +375,15 @@ Now you have predictive data. What do you do with it? Let's make this actionable
     | OAuth Client Secret | *Provided by instructor* |
     | Scopes | `mcp_api` |
 
-4. Select a database and schema (e.g., `F5_PROD.PUBLIC`)
 5. Click **Add**
 
 #### 6b: Add to Agent and Authenticate
 
-1. Navigate to **AI & ML → CoWork**
+1. Navigate to **AI & ML → Agents**
 2. Find `F5_SUPPORT_AGENT` → click **Edit**
 3. Click **+ Add Tool** → select **MCP** → select `salesforce_mcp`
 4. Click **Save**
-5. Open the agent in CoWork. In the **Sources** panel, click **Connect** next to Salesforce
+5. Next to the prompt window, click **+** → **Connectors** → **Salesforce** to connect
 6. Sign in with the shared Salesforce credentials:
 
     | Field | Value |
@@ -405,8 +410,8 @@ Now that you have data proving the signal is predictive and a live Salesforce co
 !!! success "Success Criteria"
     By the end of this step you should have:
 
-    1. Written a comment on the existing Salesforce case with telemetry correlation + slope evidence
-    2. Created a proactive Salesforce case backed by predictive data, not just a hunch
+    1. Written a comment on the existing Salesforce case with telemetry correlation
+    2. Potentially created a proactive Salesforce case if the signals matched
 
 ---
 
@@ -479,7 +484,7 @@ Build a recommendation model that identifies which accounts are ready to expand 
 1. In Snowsight, go to **Projects → Workspaces**
 2. Click **+ Add New** → **Upload Files**
 3. Select the notebook file CoCo generated
-4. Configure the service settings:
+4. Click **Connect** to configure the service settings:
 
     | Setting | Value |
     |---------|-------|
@@ -538,11 +543,11 @@ Add the recommendations table to your **sales semantic view** via Snowsight:
 3. Select the columns to include (search columns): SFDCF5_ACCT_ID, ACCT_NAME, RECOMMENDED_SKU, RECOMMENDATION_TYPE, CONFIDENCE_SCORE, RATIONALE, PRIORITY_RANK
 4. Once added, edit the table to configure:
     - Set primary key: `SFDCF5_ACCT_ID, RECOMMENDED_SKU` (composite)
-    - Review synonyms:
+    - Review column synonyms:
         - `RECOMMENDED_SKU` - `recommended product`, `suggestion`
         - `RECOMMENDATION_TYPE` - `type`, `cross-sell or upsell`
         - `RATIONALE` - `reason`, `why`
-    - Add metric: `EXPANSION_OPPORTUNITY_COUNT` = `COUNT(RECOMMENDED_SKU)`
+    - Add metric: name: `EXPANSION_OPPORTUNITY_COUNT` expression: `COUNT(RECOMMENDED_SKU)`
 5. Add relationship: `CROSS_SELL_RECOMMENDATIONS.SFDCF5_ACCT_ID` → `ACCOUNTS.SFDCF5_ACCT_ID` (many-to-one)
 6. Save the semantic view
 
@@ -574,7 +579,11 @@ Test the enhanced agent with expansion-focused questions:
 
 ---
 
-### Step 5: Customer Growth Dashboard
+## Module 3: Challenges
+
+---
+
+### Challenge 1: Customer Growth Dashboard
 
 `Challenge`{: .badge-manual }
 
@@ -603,6 +612,50 @@ You just received this Slack message from your VP of Customer Growth:
 
 !!! success "Success Criteria"
     Sarah can open the solution, pick an account, and quickly understand: what products should we pitch them, why, how confident are we, and when is their renewal window.
+
+---
+
+### Challenge 2: Break and Fix Your Semantic View
+
+`Challenge`{: .badge-manual }
+
+Your support/telemetry semantic view works for the questions you tested in Module 1. But how well does it handle questions you haven't seen before?
+
+**The task:** Test your `F5_SUPPORT_TELEMETRY_SEMANTIC_VIEW` with 10 new questions. Find where it fails, fix the view, and re-test.
+
+**Try these questions against your support agent (some will fail):**
+
+| # | Question | Why it might fail |
+|---|----------|-------------------|
+| 1 | "Which accounts have a declining health score AND an open P1 case?" | Priority value mismatch: view may generate `'P1 Critical'` instead of the actual value `'P1 - Critical'` |
+| 2 | "Show me accounts where telemetry started spiking 30 days before their most recent case was opened" | No temporal join pattern between telemetry observation dates and case creation dates |
+| 3 | "What is the RMA return rate by product for accounts with open cases?" | FACT_RMA_ORDER table likely isn't in the semantic view |
+| 4 | "Compare average resolution time for bot-defense accounts vs waf accounts" | No signal classification logic in the view to group accounts by their dominant telemetry signal |
+| 5 | "Which accounts have more than 5 cases in the last 90 days and utilization above 80%?" | May not know how to combine subscription utilization with case date filtering |
+
+**How to fix failures:**
+
+- **Wrong filter values** → Add `AI_SQL_GENERATION` instructions with exact enum values (e.g. "Priority values are: P1 - Critical, P2 - High, P3 - Medium, P4 - Low")
+- **Missing join patterns** → Add a VQR (verified query) that demonstrates the correct join
+- **Missing tables** → Add the table to the semantic view with proper relationships
+- **Ambiguous phrasing** → Add synonyms to dimensions so the view understands alternate names
+
+**Use CoCo to help:**
+
+!!! coco "Cortex Code Prompt"
+    ```
+    I tested my semantic view F5_PROD.FINAL.F5_SUPPORT_TELEMETRY_SEMANTIC_VIEW 
+    with this question: "[PASTE FAILING QUESTION]"
+    
+    It generated this SQL: [PASTE GENERATED SQL]
+    
+    But the results are wrong because [EXPLAIN WHAT'S WRONG].
+    
+    Fix the semantic view definition to handle this question correctly.
+    ```
+
+!!! success "Success Criteria"
+    Start with your baseline (how many of the 10 questions work correctly). Make fixes. End with a higher score. Document what you changed and why.
 
 ---
 

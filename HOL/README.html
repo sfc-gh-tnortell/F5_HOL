@@ -194,7 +194,12 @@
             <li><a href="#m2s2">Step 2: Review Recommendations (Manual)</a></li>
             <li><a href="#m2s3">Step 3: Add Recommendations to Sales Agent (Manual)</a></li>
             <li><a href="#m2s4">Step 4: Test Expansion Queries (Manual)</a></li>
-            <li><a href="#m2s5">Step 5: Customer Growth Dashboard (Challenge)</a></li>
+        </ul>
+    </li>
+    <li><a href="#module3">Module 3: Challenges</a>
+        <ul>
+            <li><a href="#m3c1">Challenge 1: Customer Growth Dashboard</a></li>
+            <li><a href="#m3c2">Challenge 2: Break and Fix Your Semantic View</a></li>
         </ul>
     </li>
     <li><a href="#data-summary">Data Summary</a></li>
@@ -364,11 +369,18 @@
 
 <p>We have 60 historical SQL queries written by different personas (Support Analyst, Data Engineer, Sales Ops, CSM, Executive). Analyze them to identify the most important patterns and distill them into 5 verified queries for a Cortex Skill.</p>
 
-<div class="coco">
-<p>Use the following prompt in CoCo:</p>
-<pre><code>Read the file at @F5_PROD.RAW.QUERY_REPOSITORY_STAGE/query_repository.sql
+<h4>Download the Query Repository</h4>
+<ol>
+    <li>Log in to Snowsight at your assigned account URL</li>
+    <li>Navigate to <strong>Data &rarr; Databases &rarr; F5_PROD &rarr; RAW &rarr; Stages &rarr; QUERY_REPOSITORY_STAGE</strong></li>
+    <li>Click on <code>query_repository.sql</code> and download the file</li>
+    <li>In CoCo Desktop, drag the downloaded file into your <code>F5_HOL</code> folder (or use Explorer &rarr; right-click &rarr; paste)</li>
+</ol>
 
-Analyze the 60 SQL queries in this file. These were written by different personas 
+<h4>Run the Analysis</h4>
+<div class="coco">
+<p>Open <code>query_repository.sql</code> in your F5_HOL folder and use the following prompt:</p>
+<pre><code>Analyze the 60 SQL queries in this file. These were written by different personas 
 to answer support and telemetry questions. I need you to:
 
 1. Identify the key dimensions, metrics, and join patterns used across all queries
@@ -377,7 +389,8 @@ to answer support and telemetry questions. I need you to:
    and recommend which calculation to standardize on
 4. Distill the top 5 most impactful queries that cover the broadest analytical needs
 5. For each of the 5 queries, write it as a clean SELECT statement with a comment 
-   explaining the business question it answers and which persona asks it
+   explaining the business question it answers and which persona asks it.
+   Save these to a file called verified_queries.sql in my project folder.
 
 These will be used as verified query representations (VQRs) when building 
 a semantic view. Write them as plain SELECT statements, not functions.
@@ -389,7 +402,7 @@ another domain. Install it to ~/.snowflake/cortex/skills/query-analysis/</code><
 
 <p><strong>Expected Output:</strong></p>
 <ul>
-    <li><code>HOL/verified_queries.sql</code> - 5 SELECT statements, each with business question + persona header</li>
+    <li><code>F5_HOL/verified_queries.sql</code> - 5 SELECT statements, each with business question + persona header</li>
     <li><code>~/.snowflake/cortex/skills/query-analysis/SKILL.md</code> - Reusable Cortex Code skill for any domain</li>
     <li>Analysis summary: table frequency, join patterns, identified inconsistencies with recommendations</li>
 </ul>
@@ -405,7 +418,7 @@ another domain. Install it to ~/.snowflake/cortex/skills/query-analysis/</code><
 <p>Open the verified queries file generated in Step 1 and use the following prompt:</p>
 
 <div class="coco">
-<pre><code>Using the verified queries in HOL/verified_queries.sql, create a semantic view 
+<pre><code>Using the verified queries in F5_HOL/verified_queries.sql, create a semantic view 
 for support and telemetry analysis. The queries show the tables, joins, 
 dimensions, and metrics that matter most.
 
@@ -420,7 +433,7 @@ Include the verified queries as VQRs in the semantic view definition.</code></pr
     <li>Navigate to <strong>AI &amp; ML &rarr; Cortex Analyst &rarr; Semantic Views</strong></li>
     <li>Click <strong>+ Create Semantic View</strong></li>
     <li>Select <strong>Generate from verified queries</strong></li>
-    <li>Upload or paste the contents of <code>HOL/verified_queries.sql</code></li>
+    <li>Upload or paste the contents of <code>F5_HOL/verified_queries.sql</code></li>
     <li>The auto-generator will infer tables, relationships, dimensions, metrics, and facts from the SQL</li>
     <li>Review the generated semantic view structure:
         <ul>
@@ -444,7 +457,7 @@ Include the verified queries as VQRs in the semantic view definition.</code></pr
 <p>Create the agent in the Snowflake UI that combines the semantic view with search and MCP tools.</p>
 
 <ol>
-    <li>Navigate to <strong>AI & ML &rarr; CoWork</strong></li>
+    <li>Navigate to <strong>AI & ML &rarr; Agents</strong></li>
     <li>Click <strong>+ Create Agent</strong></li>
     <li>Configure:
         <table>
@@ -489,10 +502,6 @@ where telemetry signals correlate with open support cases. When you find matches
     <tr><td>4</td><td>"Look at the telemetry trend for <strong>[YOUR ACCOUNT]</strong> over the past 6 months. Did the signal that matches their case category increase before the case was opened?"</td></tr>
 </table>
 
-<div class="success">
-<strong>Success Criteria:</strong> You should see that your customer's dominant telemetry signal matches the product category of their open support cases. For example, a bot-defense account will have elevated bot transactions AND open cases about Bot Defense/Bot Management.
-</div>
-
 <hr>
 
 <h3 id="m1s5">Step 5: Prove the Signal is Predictive <span class="badge badge-coco">CoCo</span></h3>
@@ -518,10 +527,6 @@ Output a summary table showing: signal name, current slope,
 pre-case average slope, and whether it's flagged.</code></pre>
 </div>
 
-<div class="success">
-<strong>Success Criteria:</strong> The output should show that the signal matching your account's case category had an elevated slope in the 30 days before the case was filed. This proves the telemetry is a leading indicator, not just a coincidence.
-</div>
-
 <hr>
 
 <h3 id="m1s6">Step 6: Connect Salesforce via MCP <span class="badge badge-manual">Manual</span></h3>
@@ -531,10 +536,12 @@ pre-case average slope, and whether it's flagged.</code></pre>
 <h4>6a: Snowflake MCP Connector Setup</h4>
 <ol>
     <li>Navigate to <strong>AI &amp; ML &rarr; Agents &rarr; Settings &rarr; Tools and Connectors</strong></li>
+    <li>Switch to <strong>ACCOUNTADMIN</strong> role</li>
     <li>Click <strong>Browse Connectors</strong> &rarr; select <strong>Salesforce</strong></li>
     <li>Fill in the following fields:
         <table>
             <tr><th>Field</th><th>Value</th></tr>
+            <tr><td>Location</td><td><code>F5_PROD.FINAL</code></td></tr>
             <tr><td>Server URL</td><td><code>https://api.salesforce.com/platform/mcp/v1/platform/sobject-all</code></td></tr>
             <tr><td>Token Endpoint</td><td><code>https://login.salesforce.com/services/oauth2/token</code></td></tr>
             <tr><td>Authorization Endpoint</td><td><code>https://login.salesforce.com/services/oauth2/authorize</code></td></tr>
@@ -543,17 +550,16 @@ pre-case average slope, and whether it's flagged.</code></pre>
             <tr><td>Scopes</td><td><code>mcp_api</code></td></tr>
         </table>
     </li>
-    <li>Select a database and schema (e.g., <code>F5_PROD.PUBLIC</code>)</li>
     <li>Click <strong>Add</strong></li>
 </ol>
 
 <h4>6b: Add to Agent and Authenticate</h4>
 <ol>
-    <li>Navigate to <strong>AI &amp; ML &rarr; CoWork</strong></li>
+    <li>Navigate to <strong>AI &amp; ML &rarr; Agents</strong></li>
     <li>Find <code>F5_SUPPORT_AGENT</code> &rarr; click <strong>Edit</strong></li>
     <li>Click <strong>+ Add Tool</strong> &rarr; select <strong>MCP</strong> &rarr; select <code>salesforce_mcp</code></li>
     <li>Click <strong>Save</strong></li>
-    <li>Open the agent in CoWork. In the <strong>Sources</strong> panel, click <strong>Connect</strong> next to Salesforce</li>
+    <li>Next to the prompt window, click <strong>+</strong> &rarr; <strong>Connectors</strong> &rarr; <strong>Salesforce</strong> to connect</li>
     <li>Sign in with the shared Salesforce credentials:
         <table>
             <tr><th>Field</th><th>Value</th></tr>
@@ -582,8 +588,8 @@ pre-case average slope, and whether it's flagged.</code></pre>
 <div class="success">
 <strong>Success Criteria:</strong> By the end of this step you should have:
 <ol>
-    <li>Written a comment on the existing Salesforce case with telemetry correlation + slope evidence</li>
-    <li>Created a proactive Salesforce case backed by predictive data, not just a hunch</li>
+    <li>Written a comment on the existing Salesforce case with telemetry correlation</li>
+    <li>Potentially created a proactive Salesforce case if the signals matched</li>
 </ol>
 </div>
 
@@ -655,7 +661,7 @@ Make each section a separate cell so I can run and review step by step.</code></
     <li>In Snowsight, go to <strong>Projects → Workspaces</strong></li>
     <li>Click <strong>+ Add New</strong> → <strong>Upload Files</strong></li>
     <li>Select the notebook file CoCo generated</li>
-    <li>Configure the service settings:
+    <li>Click <strong>Connect</strong> to configure the service settings:
         <table>
             <tr><th>Setting</th><th>Value</th></tr>
             <tr><td>Compute Pool</td><td><code>NOTEBOOK_POOL</code></td></tr>
@@ -710,14 +716,14 @@ ORDER BY CONFIDENCE_SCORE DESC;</code></pre>
     <li>Once added, edit the table to configure:
         <ul>
             <li>Set primary key: <code>SFDCF5_ACCT_ID, RECOMMENDED_SKU</code> (composite)</li>
-            <li>Review synonyms:
+            <li>Review column synonyms:
                 <ul>
                     <li><code>RECOMMENDED_SKU</code> - <code>recommended product</code>, <code>suggestion</code></li>
                     <li><code>RECOMMENDATION_TYPE</code> - <code>type</code>, <code>cross-sell or upsell</code></li>
                     <li><code>RATIONALE</code> - <code>reason</code>, <code>why</code></li>
                 </ul>
             </li>
-            <li>Add metric: <code>EXPANSION_OPPORTUNITY_COUNT</code> = <code>COUNT(RECOMMENDED_SKU)</code></li>
+            <li>Add metric: name: <code>EXPANSION_OPPORTUNITY_COUNT</code> expression: <code>COUNT(RECOMMENDED_SKU)</code></li>
         </ul>
     </li>
     <li>Add relationship: <code>CROSS_SELL_RECOMMENDATIONS.SFDCF5_ACCT_ID</code> → <code>ACCOUNTS.SFDCF5_ACCT_ID</code> (many-to-one)</li>
@@ -749,7 +755,11 @@ rationale behind each recommendation and prioritize by confidence score.</code><
 
 <hr>
 
-<h3 id="m2s5">Step 5: Customer Growth Dashboard <span class="badge badge-manual">Challenge</span></h3>
+<h2 id="module3">Module 3: Challenges</h2>
+
+<hr>
+
+<h3 id="m3c1">Challenge 1: Customer Growth Dashboard <span class="badge badge-manual">Challenge</span></h3>
 
 <p>You just received this Slack message from your VP of Customer Growth:</p>
 
@@ -776,6 +786,49 @@ Need a working prototype by end of day.<br><br>
 
 <div class="success">
 <strong>Success Criteria:</strong> Sarah can open the solution, pick an account, and quickly understand: what products should we pitch them, why, how confident are we, and when is their renewal window.
+</div>
+
+<hr>
+
+<h3 id="m3c2">Challenge 2: Break and Fix Your Semantic View <span class="badge badge-manual">Challenge</span></h3>
+
+<p>Your support/telemetry semantic view works for the questions you tested in Module 1. But how well does it handle questions you haven't seen before?</p>
+
+<p><strong>The task:</strong> Test your <code>F5_SUPPORT_TELEMETRY_SEMANTIC_VIEW</code> with 10 new questions. Find where it fails, fix the view, and re-test.</p>
+
+<h4>Try these questions against your support agent (some will fail):</h4>
+
+<table>
+    <tr><th>#</th><th>Question</th><th>Why it might fail</th></tr>
+    <tr><td>1</td><td>"Which accounts have a declining health score AND an open P1 case?"</td><td>Priority value mismatch: view may generate <code>'P1 Critical'</code> instead of the actual value <code>'P1 - Critical'</code></td></tr>
+    <tr><td>2</td><td>"Show me accounts where telemetry started spiking 30 days before their most recent case was opened"</td><td>No temporal join pattern between telemetry observation dates and case creation dates</td></tr>
+    <tr><td>3</td><td>"What is the RMA return rate by product for accounts with open cases?"</td><td>FACT_RMA_ORDER table likely isn't in the semantic view</td></tr>
+    <tr><td>4</td><td>"Compare average resolution time for bot-defense accounts vs waf accounts"</td><td>No signal classification logic in the view to group accounts by their dominant telemetry signal</td></tr>
+    <tr><td>5</td><td>"Which accounts have more than 5 cases in the last 90 days and utilization above 80%?"</td><td>May not know how to combine subscription utilization with case date filtering</td></tr>
+</table>
+
+<h4>How to fix failures:</h4>
+<ul>
+    <li><strong>Wrong filter values</strong> - Add <code>AI_SQL_GENERATION</code> instructions with exact enum values (e.g. "Priority values are: P1 - Critical, P2 - High, P3 - Medium, P4 - Low")</li>
+    <li><strong>Missing join patterns</strong> - Add a VQR (verified query) that demonstrates the correct join</li>
+    <li><strong>Missing tables</strong> - Add the table to the semantic view with proper relationships</li>
+    <li><strong>Ambiguous phrasing</strong> - Add synonyms to dimensions so the view understands alternate names</li>
+</ul>
+
+<h4>Use CoCo to help:</h4>
+<div class="coco">
+<pre><code>I tested my semantic view F5_PROD.FINAL.F5_SUPPORT_TELEMETRY_SEMANTIC_VIEW 
+with this question: "[PASTE FAILING QUESTION]"
+
+It generated this SQL: [PASTE GENERATED SQL]
+
+But the results are wrong because [EXPLAIN WHAT'S WRONG].
+
+Fix the semantic view definition to handle this question correctly.</code></pre>
+</div>
+
+<div class="success">
+<strong>Success Criteria:</strong> Start with your baseline (how many of the 10 questions work correctly). Make fixes. End with a higher score. Document what you changed and why.
 </div>
 
 <hr>
