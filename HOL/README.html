@@ -199,7 +199,7 @@
     <li><a href="#module3">Module 3: Challenges</a>
         <ul>
             <li><a href="#m3c1">Challenge 1: Customer Growth Dashboard</a></li>
-            <li><a href="#m3c2">Challenge 2: Break and Fix Your Semantic View</a></li>
+            <li><a href="#m3c2">Challenge 2: Secure Your Agent with Row-Level Access</a></li>
         </ul>
     </li>
     <li><a href="#data-summary">Data Summary</a></li>
@@ -215,8 +215,7 @@
     <li><strong>Support/Telemetry Semantic View</strong> derived from analyzing 60+ real SQL queries</li>
     <li><strong>Cortex Agent</strong> that queries telemetry + support cases + Salesforce via MCP</li>
     <li><strong>Cross-Sell/Upsell Model</strong> using Snowflake ML Feature Store + XGBoost + Model Registry</li>
-    <li><strong>Customer Growth Dashboard</strong> - interactive app with expansion opportunities and recommendations</li>
-    <li><strong>Proactive Case Detection</strong> using telemetry spikes to predict support issues before they're reported</li>
+    <li><strong>Salesforce Integration</strong> writing findings back to CRM via MCP connector</li>
 </ul>
 
 <h3>Architecture</h3>
@@ -499,7 +498,6 @@ where telemetry signals correlate with open support cases. When you find matches
     <tr><td>1</td><td>"What open support cases does <strong>[YOUR ACCOUNT]</strong> have? Show me the case title, priority, and product category."</td></tr>
     <tr><td>2</td><td>"What is the telemetry profile for <strong>[YOUR ACCOUNT]</strong>? Show me their average bot transactions, WAF usage, endpoint count, and load balancers over the last 60 days."</td></tr>
     <tr><td>3</td><td>"Compare the telemetry signals for <strong>[YOUR ACCOUNT]</strong> with their open case categories. Is there a correlation between what the telemetry shows and what they filed a case about?"</td></tr>
-    <tr><td>4</td><td>"Look at the telemetry trend for <strong>[YOUR ACCOUNT]</strong> over the past 6 months. Did the signal that matches their case category increase before the case was opened?"</td></tr>
 </table>
 
 <hr>
@@ -537,6 +535,7 @@ pre-case average slope, and whether it's flagged.</code></pre>
 <ol>
     <li>Navigate to <strong>AI &amp; ML &rarr; Agents &rarr; Settings &rarr; Tools and Connectors</strong></li>
     <li>Switch to <strong>ACCOUNTADMIN</strong> role</li>
+    <li><em>(Optional)</em> Toggle <strong>Web search</strong> ON to enable web search for agents</li>
     <li>Click <strong>Browse Connectors</strong> &rarr; select <strong>Salesforce</strong></li>
     <li>Fill in the following fields:
         <table>
@@ -744,9 +743,10 @@ rationale behind each recommendation and prioritize by confidence score.</code><
 <table>
     <tr><th>#</th><th>Question</th><th>Expected Insight</th></tr>
     <tr><td>1</td><td>"Which accounts are over 80% utilization and approaching renewal?"</td><td>Accounts that need capacity upgrades before their next renewal conversation</td></tr>
-    <tr><td>2</td><td>"What should we recommend to [YOUR ACCOUNT] based on their current products and telemetry?"</td><td>Specific product recommendations with rationale tied to their usage patterns</td></tr>
-    <tr><td>3</td><td>"Which accounts have high WAF telemetry but no Bot Defense product?"</td><td>Clear cross-sell gap where telemetry proves the need</td></tr>
-    <tr><td>4</td><td>"Show me the top 10 expansion opportunities by confidence score."</td><td>Prioritized list of accounts and products with the strongest signals</td></tr>
+    <tr><td>2</td><td>"What should we recommend to [YOUR ACCOUNT] based on their current products, telemetry, and recent call notes?"</td><td>Specific product recommendations with rationale tied to usage patterns and conversation context</td></tr>
+    <tr><td>3</td><td>"Search our recent calls with [YOUR ACCOUNT] - did they mention any upcoming projects or pain points that align with our expansion recommendations?"</td><td>Transcript insights that validate or add context to the model's recommendations</td></tr>
+    <tr><td>4</td><td>"Which accounts have high WAF telemetry but no Bot Defense product? Check if any recent calls mention security concerns or search the web for any recent public announcements about security incidents."</td><td>Cross-sell gap where telemetry proves the need, reinforced by customer conversations or public news</td></tr>
+    <tr><td>5</td><td>"Show me the top 10 expansion opportunities by confidence score, summarize any relevant call notes, and search for recent news or product announcements from those companies."</td><td>Prioritized list enriched with qualitative context from calls and public web sources</td></tr>
 </table>
 
 <div class="success">

@@ -27,7 +27,7 @@ Build a Cortex Agent that discovers hidden correlations between F5 Distributed C
     - [Step 4: Test Expansion Queries (Manual)](#step-4-test-expansion-queries)
 - [Module 3: Challenges](#module-3-challenges)
     - [Challenge 1: Customer Growth Dashboard](#challenge-1-customer-growth-dashboard)
-    - [Challenge 2: Break and Fix Your Semantic View](#challenge-2-break-and-fix-your-semantic-view)
+    - [Challenge 2: Secure Your Agent with Row-Level Access](#challenge-2-secure-your-agent-with-row-level-access)
 - [Data Summary](#data-summary)
 
 ---
@@ -37,8 +37,7 @@ Build a Cortex Agent that discovers hidden correlations between F5 Distributed C
 - **Support/Telemetry Semantic View** derived from analyzing 60+ real SQL queries
 - **Cortex Agent** that queries telemetry + support cases + Salesforce via MCP
 - **Cross-Sell/Upsell Model** using Snowflake ML Feature Store + XGBoost + Model Registry
-- **Customer Growth Dashboard** - interactive app with expansion opportunities and recommendations
-- **Proactive Case Detection** using telemetry spikes to predict support issues before they're reported
+- **Salesforce Integration** writing findings back to CRM via MCP connector
 
 ### Architecture
 
@@ -320,7 +319,6 @@ Replace `[YOUR ACCOUNT]` with your assigned customer name.
 | 1 | "What open support cases does **[YOUR ACCOUNT]** have? Show me the case title, priority, and product category." |
 | 2 | "What is the telemetry profile for **[YOUR ACCOUNT]**? Show me their average bot transactions, WAF usage, endpoint count, and load balancers over the last 60 days." |
 | 3 | "Compare the telemetry signals for **[YOUR ACCOUNT]** with their open case categories. Is there a correlation between what the telemetry shows and what they filed a case about?" |
-| 4 | "Look at the telemetry trend for **[YOUR ACCOUNT]** over the past 6 months. Did the signal that matches their case category increase before the case was opened?" |
 
 ---
 
@@ -362,8 +360,9 @@ Now you have predictive data. What do you do with it? Let's make this actionable
 
 1. Navigate to **AI & ML → Agents → Settings → Tools and Connectors**
 2. Switch to **ACCOUNTADMIN** role
-3. Click **Browse Connectors** → select **Salesforce**
-4. Fill in the following fields:
+3. *(Optional)* Toggle **Web search** ON to enable web search for agents
+4. Click **Browse Connectors** → select **Salesforce**
+5. Fill in the following fields:
 
     | Field | Value |
     |-------|-------|
@@ -375,7 +374,7 @@ Now you have predictive data. What do you do with it? Let's make this actionable
     | OAuth Client Secret | *Provided by instructor* |
     | Scopes | `mcp_api` |
 
-5. Click **Add**
+6. Click **Add**
 
 #### 6b: Add to Agent and Authenticate
 
@@ -570,9 +569,10 @@ Test the enhanced agent with expansion-focused questions:
 | # | Question | Expected Insight |
 |---|----------|-----------------|
 | 1 | "Which accounts are over 80% utilization and approaching renewal?" | Accounts that need capacity upgrades before their next renewal conversation |
-| 2 | "What should we recommend to [YOUR ACCOUNT] based on their current products and telemetry?" | Specific product recommendations with rationale tied to their usage patterns |
-| 3 | "Which accounts have high WAF telemetry but no Bot Defense product?" | Clear cross-sell gap where telemetry proves the need |
-| 4 | "Show me the top 10 expansion opportunities by confidence score." | Prioritized list of accounts and products with the strongest signals |
+| 2 | "What should we recommend to [YOUR ACCOUNT] based on their current products, telemetry, and recent call notes?" | Specific product recommendations with rationale tied to usage patterns and conversation context |
+| 3 | "Search our recent calls with [YOUR ACCOUNT] - did they mention any upcoming projects or pain points that align with our expansion recommendations?" | Transcript insights that validate or add context to the model's recommendations |
+| 4 | "Which accounts have high WAF telemetry but no Bot Defense product? Check if any recent calls mention security concerns or search the web for any recent public announcements about security incidents." | Cross-sell gap where telemetry proves the need, reinforced by customer conversations or public news |
+| 5 | "Show me the top 10 expansion opportunities by confidence score, summarize any relevant call notes, and search for recent news or product announcements from those companies." | Prioritized list enriched with qualitative context from calls and public web sources |
 
 !!! success "Success Criteria"
     The model identifies concrete product recommendations per account with clear rationale. Combined with the telemetry-support correlation from Module 1, the agent can now explain not just what's happening with an account but what to sell them next.
@@ -641,21 +641,24 @@ When Jessica Torres queries the agent, she should only see Walmart, Amazon, and 
 
 Consider:
 
-1. **What Snowflake objects do you need?**
-   - Row access policies on which tables? (Think about where `SFDCF5_ACCT_ID` appears)
-   - How do you map the current Snowflake user to their sales team identity?
-   - Do you need a mapping table, or can you use `CURRENT_USER()` / `CURRENT_ROLE()`?
+**What Snowflake objects do you need?**
 
-2. **What access levels make sense?**
-   - Individual contributor: sees only their assigned accounts
-   - Territory/District manager: sees all accounts in their territory
-   - Regional VP: sees their entire region
-   - Support/Ops: sees everything (current behavior)
+- Row access policies on which tables? (Think about where `SFDCF5_ACCT_ID` appears)
+- How do you map the current Snowflake user to their sales team identity?
+- Do you need a mapping table, or can you use `CURRENT_USER()` / `CURRENT_ROLE()`?
 
-3. **How does this affect the agent?**
-   - Semantic views inherit row access policies from underlying tables
-   - The agent's SQL runs as the querying user - policies apply automatically
-   - No changes needed to the semantic view or agent definition
+**What access levels make sense?**
+
+- Individual contributor: sees only their assigned accounts
+- Territory/District manager: sees all accounts in their territory
+- Regional VP: sees their entire region
+- Support/Ops: sees everything (current behavior)
+
+**How does this affect the agent?**
+
+- Semantic views inherit row access policies from underlying tables
+- The agent's SQL runs as the querying user - policies apply automatically
+- No changes needed to the semantic view or agent definition
 
 !!! note "Why this matters"
     Without row-level security, deploying this agent to 200 sales reps means everyone sees everyone's pipeline, support cases, and account health. That's a compliance and competitive issue. The row access policy is what makes AI assistants enterprise-ready.

@@ -6,6 +6,8 @@
 -- ============================================================
 
 -- Grant EXECUTE TASK for Cortex Analyst evaluation runs
+-- Enable web search for agents (must be done in Snowsight UI):
+--   AI & ML > Agents > Settings > toggle "Web search" ON
 USE ROLE ACCOUNTADMIN;
 GRANT EXECUTE TASK ON ACCOUNT TO ROLE SYSADMIN;
 
