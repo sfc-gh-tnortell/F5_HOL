@@ -790,45 +790,59 @@ Need a working prototype by end of day.<br><br>
 
 <hr>
 
-<h3 id="m3c2">Challenge 2: Break and Fix Your Semantic View <span class="badge badge-manual">Challenge</span></h3>
+<h3 id="m3c2">Challenge 2: Secure Your Agent with Row-Level Access <span class="badge badge-manual">Challenge</span></h3>
 
-<p>Your support/telemetry semantic view works for the questions you tested in Module 1. But how well does it handle questions you haven't seen before?</p>
+<p>Right now, every user who queries the sales agent sees <strong>all accounts and all opportunities</strong>. In production, an AE should only see their own accounts, an SE should only see accounts they're assigned to, and a regional manager should see their entire region but not other regions.</p>
 
-<p><strong>The task:</strong> Test your <code>F5_SUPPORT_TELEMETRY_SEMANTIC_VIEW</code> with 10 new questions. Find where it fails, fix the view, and re-test.</p>
+<p>Your task: Design and implement row-level access policies so the agent automatically filters results based on who's asking.</p>
 
-<h4>Try these questions against your support agent (some will fail):</h4>
+<h4>The Problem</h4>
 
-<table>
-    <tr><th>#</th><th>Question</th><th>Why it might fail</th></tr>
-    <tr><td>1</td><td>"Which accounts have a declining health score AND an open P1 case?"</td><td>Priority value mismatch: view may generate <code>'P1 Critical'</code> instead of the actual value <code>'P1 - Critical'</code></td></tr>
-    <tr><td>2</td><td>"Show me accounts where telemetry started spiking 30 days before their most recent case was opened"</td><td>No temporal join pattern between telemetry observation dates and case creation dates</td></tr>
-    <tr><td>3</td><td>"What is the RMA return rate by product for accounts with open cases?"</td><td>FACT_RMA_ORDER table likely isn't in the semantic view</td></tr>
-    <tr><td>4</td><td>"Compare average resolution time for bot-defense accounts vs waf accounts"</td><td>No signal classification logic in the view to group accounts by their dominant telemetry signal</td></tr>
-    <tr><td>5</td><td>"Which accounts have more than 5 cases in the last 90 days and utilization above 80%?"</td><td>May not know how to combine subscription utilization with case date filtering</td></tr>
-</table>
+<p>Look at <code>SALES_ACCOUNT_TEAM</code> - it maps every account to its assigned AE, SE, SDR, and CSM:</p>
 
-<h4>How to fix failures:</h4>
-<ul>
-    <li><strong>Wrong filter values</strong> - Add <code>AI_SQL_GENERATION</code> instructions with exact enum values (e.g. "Priority values are: P1 - Critical, P2 - High, P3 - Medium, P4 - Low")</li>
-    <li><strong>Missing join patterns</strong> - Add a VQR (verified query) that demonstrates the correct join</li>
-    <li><strong>Missing tables</strong> - Add the table to the semantic view with proper relationships</li>
-    <li><strong>Ambiguous phrasing</strong> - Add synonyms to dimensions so the view understands alternate names</li>
-</ul>
+<pre><code>| SFDCF5_ACCT_ID | AE_NAME         | SE_NAME        | TERRITORY_NAME     | REGION_NAME |
+|----------------|-----------------|----------------|--------------------|-------------|
+| ACC000001      | Jessica Torres  | Daniel Kim     | West Territory W3  | West        |
+| ACC000009      | Sarah Mitchell  | Kevin Nakamura | West Territory W1  | West        |
+| ACC000055      | Amanda Foster   | Chris Patel    | East Territory E2  | East        |</code></pre>
 
-<h4>Use CoCo to help:</h4>
-<div class="coco">
-<pre><code>I tested my semantic view F5_PROD.FINAL.F5_SUPPORT_TELEMETRY_SEMANTIC_VIEW 
-with this question: "[PASTE FAILING QUESTION]"
+<p>When Jessica Torres queries the agent, she should only see Walmart, Amazon, and her other accounts - not Alphabet or accounts in the East region.</p>
 
-It generated this SQL: [PASTE GENERATED SQL]
+<h4>Your Approach</h4>
 
-But the results are wrong because [EXPLAIN WHAT'S WRONG].
+<p>Consider:</p>
 
-Fix the semantic view definition to handle this question correctly.</code></pre>
+<ol>
+    <li><strong>What Snowflake objects do you need?</strong>
+        <ul>
+            <li>Row access policies on which tables? (Think about where <code>SFDCF5_ACCT_ID</code> appears)</li>
+            <li>How do you map the current Snowflake user to their sales team identity?</li>
+            <li>Do you need a mapping table, or can you use <code>CURRENT_USER()</code> / <code>CURRENT_ROLE()</code>?</li>
+        </ul>
+    </li>
+    <li><strong>What access levels make sense?</strong>
+        <ul>
+            <li>Individual contributor: sees only their assigned accounts</li>
+            <li>Territory/District manager: sees all accounts in their territory</li>
+            <li>Regional VP: sees their entire region</li>
+            <li>Support/Ops: sees everything (current behavior)</li>
+        </ul>
+    </li>
+    <li><strong>How does this affect the agent?</strong>
+        <ul>
+            <li>Semantic views inherit row access policies from underlying tables</li>
+            <li>The agent's SQL runs as the querying user - policies apply automatically</li>
+            <li>No changes needed to the semantic view or agent definition</li>
+        </ul>
+    </li>
+</ol>
+
+<div class="note">
+<strong>Why this matters:</strong> Without row-level security, deploying this agent to 200 sales reps means everyone sees everyone's pipeline, support cases, and account health. That's a compliance and competitive issue. The row access policy is what makes AI assistants enterprise-ready.
 </div>
 
 <div class="success">
-<strong>Success Criteria:</strong> Start with your baseline (how many of the 10 questions work correctly). Make fixes. End with a higher score. Document what you changed and why.
+<strong>Success Criteria:</strong> Query the sales agent as two different roles. Demonstrate that one role sees a subset of accounts and the other sees a different subset. The agent requires no modification - the policy enforces access transparently.
 </div>
 
 <hr>

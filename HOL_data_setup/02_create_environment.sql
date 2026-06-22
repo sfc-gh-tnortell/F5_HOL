@@ -5,6 +5,10 @@
 -- Run this first before loading data.
 -- ============================================================
 
+-- Grant EXECUTE TASK for Cortex Analyst evaluation runs
+USE ROLE ACCOUNTADMIN;
+GRANT EXECUTE TASK ON ACCOUNT TO ROLE SYSADMIN;
+
 USE ROLE SYSADMIN;
 
 -- Infrastructure
