@@ -1,4 +1,5 @@
 # <h1black>F5 Telemetry & Support Intelligence - </h1black><h1blue>Hands-On Lab</h1blue>
+# <h1sub>(Snowsight CoCo Edition)</h1sub>
 
 ### <h1sub>Overview</h1sub>
 
@@ -87,31 +88,17 @@ Build a Cortex Agent that discovers hidden correlations between F5 Distributed C
 
 ## Prerequisites
 
-### Download Cortex Code Desktop
+### Access Cortex Code in Snowsight
 
-Download and install CoCo Desktop from: [https://www.snowflake.com/en/product/snowflake-coco/downloads/](https://www.snowflake.com/en/product/snowflake-coco/downloads/)
-
-### Connect to Your Snowflake Account
-
-1. Open CoCo Desktop
-2. Click your **connection name** (top-left corner)
-3. Click **Manage Connections**
-4. Click **+ New Connection**
-5. Fill in:
-    - **Account**: Your assigned Snowflake account from the table below (e.g. `sfsehol-f5_hol_biabnl`)
-    - **Authentication**: Username and Password
+1. Log in to Snowsight at your assigned account URL (e.g. `https://app.snowflake.com/sfsehol/f5_hol_biabnl`)
+2. Use the credentials provided by your instructor:
     - **Username**: *Provided by instructor*
     - **Password**: *Provided by instructor*
-    - **Role**: `SYSADMIN`
-    - **Warehouse**: `COMPUTE_WH`
-6. Click **Connect**
+3. Set your role to **SYSADMIN** and warehouse to **COMPUTE_WH**
+4. Open the **Cortex Code** panel by clicking the CoCo icon in the left sidebar
 
-### Create Your Project Folder
-
-1. In CoCo Desktop, open **Explorer** in the sidebar
-2. Click **Open Folder**
-3. Click **New Folder** and name it `F5_HOL`
-4. This is where CoCo will save files it generates during the lab
+!!! note "No Download Required"
+    CoCo is available directly in Snowsight - no desktop application needed. The CoCo panel provides the same AI assistant capabilities used throughout this lab.
 
 ---
 
@@ -181,23 +168,22 @@ In this module you'll build a Cortex Agent specialized for customer support and 
 
 `CoCo`{: .badge-coco }
 
-We have 60 historical SQL queries written by different personas (Support Analyst, Data Engineer, Sales Ops, CSM, Executive). Analyze them to identify the most important patterns and distill them into 5 verified queries for a Cortex Skill.
+We have 60 historical SQL queries written by different personas (Support Analyst, Data Engineer, Sales Ops, CSM, Executive). Analyze them to identify the most important patterns and distill them into 5 verified queries.
 
-#### Download the Query Repository
+#### Load the Query Repository
 
-1. Log in to Snowsight at your assigned account URL
-2. Navigate to **Data → Databases → F5_PROD → RAW → Stages → QUERY_REPOSITORY_STAGE**
-3. Click on `query_repository.sql` and download the file
-4. In CoCo Desktop, drag the downloaded file into your `F5_HOL` folder (or use Explorer → right-click → paste)
+1. Navigate to **Data → Databases → F5_PROD → RAW → Stages → QUERY_REPOSITORY_STAGE**
+2. Click on `query_repository.sql` and download the file
+3. Open a new worksheet in Snowsight and paste the contents of the downloaded file
 
 #### Run the Analysis
 
 !!! coco "Cortex Code Prompt"
-    Open `query_repository.sql` in your F5_HOL folder and use the following prompt:
+    With the query_repository.sql contents in your worksheet, open the CoCo panel and use the following prompt:
 
     ```
-    Analyze the 60 SQL queries in this file. These were written by different personas 
-    to answer support and telemetry questions. I need you to:
+    Analyze the 60 SQL queries in my open worksheet. These were written by different 
+    personas to answer support and telemetry questions. I need you to:
 
     1. Identify the key dimensions, metrics, and join patterns used across all queries
     2. Group queries by intent (case analysis, telemetry correlation, SLA tracking, etc.)
@@ -205,21 +191,15 @@ We have 60 historical SQL queries written by different personas (Support Analyst
        and recommend which calculation to standardize on
     4. Distill the top 5 most impactful queries that cover the broadest analytical needs
     5. For each of the 5 queries, write it as a clean SELECT statement with a comment 
-       explaining the business question it answers and which persona asks it.
-       Save these to a file called verified_queries.sql in my project folder.
+       explaining the business question it answers and which persona asks it
 
     These will be used as verified query representations (VQRs) when building 
     a semantic view. Write them as plain SELECT statements, not functions.
-
-    Also create a reusable Cortex Code skill (SKILL.md) that captures this 
-    analysis workflow so I can repeat it on a different query repository in 
-    another domain. Install it to ~/.snowflake/cortex/skills/query-analysis/
     ```
 
 **Expected Output:**
 
-- `F5_HOL/verified_queries.sql` - 5 SELECT statements, each with business question + persona header
-- `~/.snowflake/cortex/skills/query-analysis/SKILL.md` - Reusable Cortex Code skill for any domain
+- 5 SELECT statements in the chat output, each with business question + persona header (copy these to a new worksheet named `verified_queries`)
 - Analysis summary: table frequency, join patterns, identified inconsistencies with recommendations
 
 ---
@@ -232,11 +212,11 @@ Using the verified queries from Step 1, create a semantic view. Choose one of th
 
 `CoCo`{: .badge-coco }
 
-Open the verified queries file generated in Step 1 and use the following prompt:
+Open the worksheet containing your verified queries from Step 1 and use the CoCo panel with the following prompt:
 
 !!! coco "Cortex Code Prompt"
     ```
-    Using the verified queries in F5_HOL/verified_queries.sql, create a semantic view 
+    Using the verified queries in my open worksheet, create a semantic view 
     for support and telemetry analysis. The queries show the tables, joins, 
     dimensions, and metrics that matter most.
 
@@ -252,7 +232,7 @@ Open the verified queries file generated in Step 1 and use the following prompt:
 1. Navigate to **AI & ML → Cortex Analyst → Semantic Views**
 2. Click **+ Create Semantic View**
 3. Select **Generate from verified queries**
-4. Upload or paste the contents of `F5_HOL/verified_queries.sql`
+4. Paste the contents of your `verified_queries` worksheet
 5. The auto-generator will infer tables, relationships, dimensions, metrics, and facts from the SQL
 6. Review the generated semantic view structure:
     - Confirm tables: DIM_SUPPORT_CASE, FACT_SUPPORT_CASE, COL_XC_TELEMETRY, COL_XC_PRODUCT_HEALTHSCORE, DIM_CUST_ACCT_SFDC
@@ -483,14 +463,11 @@ Build a recommendation model that identifies which accounts are ready to expand 
     ```
 
 !!! note "What you'll do"
-    Run each cell in the notebook, review the features, inspect which products get recommended to which accounts, and confirm the output table makes sense for your assigned account.
+    CoCo will create the notebook in Snowflake Workspaces. Run each cell, review the features, inspect which products get recommended to which accounts, and confirm the output table makes sense for your assigned account.
 
-#### Upload the Notebook to Snowflake Workspaces
+#### Configure and Run the Notebook
 
-1. In Snowsight, go to **Projects → Workspaces**
-2. Click **+ Add New** → **Upload Files**
-3. Select the notebook file CoCo generated
-4. Click **Connect** to configure the service settings:
+1. Once CoCo creates the notebook, configure the service settings:
 
     | Setting | Value |
     |---------|-------|
@@ -500,8 +477,8 @@ Build a recommendation model that identifies which accounts are ready to expand 
     | Database | `F5_PROD` |
     | Schema | `FINAL` |
 
-5. Click **Create** and wait for the compute pool to start (1-2 minutes on first use)
-6. Run cells one at a time (Shift+Enter) and review output at each step
+2. Wait for the compute pool to start (1-2 minutes on first use)
+3. Run cells one at a time (Shift+Enter) and review output at each step
 
 !!! note "Why Workspaces?"
     The model trains locally in the container (not on the warehouse). SQL queries still run on COMPUTE_WH for data prep.
